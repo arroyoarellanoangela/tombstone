@@ -1,0 +1,17 @@
+# Tool config only — dependencies live in requirements.txt / requirements-dev.txt.
+# This project isn't pip-installed as a package; src/ is imported directly
+# (from src.domain... etc), matching the rest of the Crata repos.
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "I"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+
+[tool.mypy]
+strict = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_default_fixture_loop_scope = "function"

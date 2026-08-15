@@ -1,0 +1,8 @@
+name: Banyan Software
+slug: banyan
+allowed_domains:
+  - news.banyansoftware.com
+primary_language: en
+source_type: press_room
+notes: >
+  Clean US/CA feed — second data point against the Volaris baseline.

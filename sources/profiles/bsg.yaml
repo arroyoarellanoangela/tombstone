@@ -1,0 +1,10 @@
+name: Business Software Group
+slug: bsg
+allowed_domains:
+  - bsg.site
+primary_language: es
+source_type: press_room
+notes: >
+  Spanish-language source. Quotes are extracted and verified in Spanish —
+  translation happens only for display, after extraction, so the Verifier
+  always matches against the actual page text (see agents/verifier.py).

@@ -1,0 +1,23 @@
+# Local full-stack run — live pipeline against the client's key + dashboard.
+# For the public read-only demo link, the frontend is instead deployed as a
+# static site reading the committed data/*.json directly (see docs/ARCHITECTURE_NOTE.html,
+# "Deployment"). This compose file is for local use only — never expose `api`
+# publicly, it can spend the client's prepaid credits on every request.
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+
+  web:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+    environment:
+      - VITE_API_URL=http://localhost:8000

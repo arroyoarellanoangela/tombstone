@@ -1,0 +1,60 @@
+# Checked by tombstone.utils.fetch before any request leaves the process.
+# A domain with no entry here is treated as disallowed by default (fail closed).
+# Every `allowed: false` row is surfaced in the dashboard's Omissions tab —
+# "if in doubt, leave it out and say so" as a UI artifact, not a README line.
+
+- domain: linkedin.com
+  allowed: false
+  reason: "ToS prohibits scraping — explicitly excluded by the client brief."
+
+- domain: mergermarket.com
+  allowed: false
+  reason: "Paywalled, restrictive ToS. Would be the obvious source for adviser data; documented as an omission instead of worked around."
+
+- domain: pitchbook.com
+  allowed: false
+  reason: "Paywalled, restrictive ToS."
+
+- domain: volarisgroup.com
+  allowed: true
+  reason: "Public press room, acquirer's own source."
+
+- domain: valsoftcorp.com
+  allowed: true
+  reason: "Public news page, acquirer's own source."
+
+- domain: everfield.com
+  allowed: true
+  reason: "Public knowledge-platform news tag, acquirer's own source."
+
+- domain: news.banyansoftware.com
+  allowed: true
+  reason: "Public press room, no scraping prohibition found."
+
+- domain: totalspecificsolutions.com
+  allowed: true
+  reason: "Public acquisitions page, acquirer's own source."
+
+- domain: topicus.com
+  allowed: true
+  reason: "Public news page, acquirer's own source."
+
+- domain: bsg.site
+  allowed: true
+  reason: "Public press page (Spanish-language), acquirer's own source."
+
+- domain: hawkinfinity.com
+  allowed: true
+  reason: "Legacy corporate site — kept for historical continuity, but Snowball's regulatory filings are primary (see profiles/snowball.yaml)."
+
+- domain: snowballsoftwaregroup.com
+  allowed: true
+  reason: "Current corporate site."
+
+- domain: newsweb.oslobors.no
+  allowed: true
+  reason: "Oslo Børs regulatory filing feed — primary source for Snowball per the client's own note."
+
+- domain: live.euronext.com
+  allowed: true
+  reason: "Euronext regulatory filing feed — primary source for Snowball per the client's own note."

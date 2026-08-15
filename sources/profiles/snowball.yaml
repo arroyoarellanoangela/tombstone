@@ -1,0 +1,12 @@
+name: Snowball Software Group
+slug: snowball
+allowed_domains:
+  - newsweb.oslobors.no
+  - live.euronext.com
+  - snowballsoftwaregroup.com
+primary_language: en
+source_type: regulatory_filing
+notes: >
+  Formerly Hawk Infinity Software. Per the client's own note, Oslo Børs /
+  Euronext filings are the primary source, not the corporate site — this
+  profile's source_type drives Discovery to search the filing feeds first.

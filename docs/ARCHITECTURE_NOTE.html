@@ -1,0 +1,512 @@
+<style>
+  :root {
+    --paper: #f6f7f3;
+    --paper-raised: #ffffff;
+    --ink: #17191a;
+    --ink-soft: #4b4f52;
+    --ink-faint: #7c807e;
+    --rule: #d8dad4;
+    --rule-strong: #b7bab2;
+    --accent: #1e3a5f;
+    --accent-soft: #e8edf2;
+    --verified: #1f6f54;
+    --verified-bg: #e6f0ea;
+    --undisclosed: #8a6d1f;
+    --undisclosed-bg: #f3ecd9;
+    --notfound: #8a3b3b;
+    --notfound-bg: #f3e4e2;
+    --font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', 'Consolas', 'Liberation Mono', monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #14161a;
+      --paper-raised: #1b1e22;
+      --ink: #e9eae6;
+      --ink-soft: #a7aca8;
+      --ink-faint: #74786f;
+      --rule: #2c2f31;
+      --rule-strong: #3c4043;
+      --accent: #7fa3c9;
+      --accent-soft: #1e2a33;
+      --verified: #5cb896;
+      --verified-bg: #16261f;
+      --undisclosed: #d3ac3b;
+      --undisclosed-bg: #2a2412;
+      --notfound: #d38686;
+      --notfound-bg: #2a1a19;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #14161a; --paper-raised: #1b1e22; --ink: #e9eae6; --ink-soft: #a7aca8; --ink-faint: #74786f;
+    --rule: #2c2f31; --rule-strong: #3c4043; --accent: #7fa3c9; --accent-soft: #1e2a33;
+    --verified: #5cb896; --verified-bg: #16261f; --undisclosed: #d3ac3b; --undisclosed-bg: #2a2412;
+    --notfound: #d38686; --notfound-bg: #2a1a19;
+  }
+  :root[data-theme="light"] {
+    --paper: #f6f7f3; --paper-raised: #ffffff; --ink: #17191a; --ink-soft: #4b4f52; --ink-faint: #7c807e;
+    --rule: #d8dad4; --rule-strong: #b7bab2; --accent: #1e3a5f; --accent-soft: #e8edf2;
+    --verified: #1f6f54; --verified-bg: #e6f0ea; --undisclosed: #8a6d1f; --undisclosed-bg: #f3ecd9;
+    --notfound: #8a3b3b; --notfound-bg: #f3e4e2;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+  .page {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  /* ---------- Masthead (tombstone-ad convention) ---------- */
+  .masthead {
+    border-top: 3px double var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 28px 0 22px;
+    text-align: center;
+  }
+  .masthead .kicker {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 14px;
+  }
+  .masthead h1 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(2.1rem, 5vw, 3rem);
+    letter-spacing: 0.02em;
+    margin: 0 0 8px;
+    text-wrap: balance;
+  }
+  .masthead .subtitle {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin: 0 0 56px;
+    font-size: 13px;
+  }
+  .facts div { background: var(--paper); padding: 12px 16px; }
+  .facts .label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 4px;
+  }
+  @media (max-width: 640px) { .facts { grid-template-columns: repeat(2, 1fr); } }
+
+  /* ---------- Section rhythm ---------- */
+  section { margin: 0 0 64px; }
+  section > .num-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    border-bottom: 1px solid var(--rule-strong);
+    padding-bottom: 10px;
+    margin-bottom: 22px;
+  }
+  .num-head .n {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent);
+    min-width: 1.6em;
+  }
+  .num-head h2 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.55rem;
+    margin: 0;
+    text-wrap: balance;
+  }
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.15rem;
+    margin: 28px 0 10px;
+  }
+  p { margin: 0 0 14px; max-width: 68ch; color: var(--ink); }
+  p.lede { font-size: 1.05rem; color: var(--ink-soft); max-width: 62ch; }
+  ul, ol { margin: 0 0 14px; padding-left: 1.3em; max-width: 66ch; }
+  li { margin-bottom: 8px; }
+  strong { color: var(--ink); }
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background: var(--accent-soft);
+    padding: 0.1em 0.4em;
+    border-radius: 2px;
+  }
+
+  /* ---------- Diagrams ---------- */
+  .diagram {
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    padding: 20px;
+    overflow-x: auto;
+    margin: 18px 0 8px;
+  }
+  .diagram-caption {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 24px;
+  }
+
+  /* ---------- Tables ---------- */
+  .table-wrap { overflow-x: auto; margin: 0 0 8px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+  caption { caption-side: bottom; text-align: left; font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint); padding-top: 8px; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  thead th {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    border-bottom: 1px solid var(--rule-strong);
+    font-weight: 500;
+  }
+  tbody tr:last-child td { border-bottom: 1px solid var(--rule-strong); }
+  td.dec { font-weight: 600; color: var(--ink); }
+
+  /* ---------- Status pills ---------- */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    padding: 3px 8px;
+    border: 1px solid currentColor;
+    border-radius: 2px;
+  }
+  .pill.verified { color: var(--verified); background: var(--verified-bg); }
+  .pill.undisclosed { color: var(--undisclosed); background: var(--undisclosed-bg); }
+  .pill.notfound { color: var(--notfound); background: var(--notfound-bg); }
+
+  /* ---------- Claim example ---------- */
+  .claim-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+    margin: 8px 0 8px;
+  }
+  @media (max-width: 720px) { .claim-block { grid-template-columns: 1fr; } }
+  pre.code {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.6;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    padding: 16px 18px;
+    overflow-x: auto;
+    margin: 0;
+  }
+  .cm { color: var(--ink-faint); }
+  .str { color: var(--accent); }
+
+  .status-table td:first-child { white-space: nowrap; }
+
+  /* ---------- Cut / risk lists ---------- */
+  .flag-list { list-style: none; padding: 0; margin: 0; }
+  .flag-list li {
+    padding: 12px 0 12px 0;
+    border-bottom: 1px solid var(--rule);
+    max-width: 72ch;
+  }
+  .flag-list li:first-child { padding-top: 0; }
+  .flag-list b { display: block; color: var(--ink); margin-bottom: 3px; }
+
+  /* ---------- Repo tree ---------- */
+  .repo-tree {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.9;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    padding: 20px 22px;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .repo-tree .dir { color: var(--accent); }
+  .repo-tree .note { color: var(--ink-faint); }
+
+  .dir-rationale dt {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent);
+    margin-top: 16px;
+  }
+  .dir-rationale dd { margin: 4px 0 0; max-width: 66ch; color: var(--ink-soft); }
+
+  footer {
+    border-top: 1px solid var(--ink);
+    padding-top: 20px;
+    margin-top: 80px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+</style>
+
+<div class="page">
+
+  <div class="masthead">
+    <p class="kicker">Architecture &amp; Reasoning Note · Private &amp; Confidential</p>
+    <h1>Tombstone</h1>
+    <p class="subtitle">A multi-agent competitor acquisition tracker for Abingdon Software Group</p>
+  </div>
+
+  <div class="facts">
+    <div><span class="label">Client</span>Abingdon Software Group</div>
+    <div><span class="label">Contact</span>Mario Bortolozzo</div>
+    <div><span class="label">Prepared by</span>Angela Arroyo</div>
+    <div><span class="label">Date</span>August 2026</div>
+  </div>
+
+  <section>
+    <div class="num-head"><span class="n">01</span><h2>What I built</h2></div>
+    <p class="lede">A pipeline of specialized agents — discovery, normalization, research, adviser lookup, verification, scoring — orchestrated by deterministic Python, ending in a filterable dashboard. No agent's output is trusted by default: every fact-bearing claim is re-checked by a downstream step before it is scored or published.</p>
+
+    <div class="diagram">
+      <pre class="mermaid">
+flowchart LR
+    subgraph Sources["Public Sources"]
+        S1[Acquirer press rooms]
+        S2[Sector press / local outlets]
+        S3[Adviser tombstones]
+        S4[Euronext / Oslo Børs filings]
+    end
+    T(("Tombstone"))
+    U["Abingdon team"]
+    A[["Claude API — client key"]]
+    Sources -- fetch, within ToS allowlist --> T
+    T -- extraction · verification · scoring --> A
+    T -- deal records + confidence + citations --> U
+      </pre>
+    </div>
+    <p class="diagram-caption">Fig. 1 — System context</p>
+
+    <div class="diagram">
+      <pre class="mermaid">
+flowchart TB
+    O["Orchestrator (deterministic)<br/>budget · cache · retries · run state"]
+    O --> D["1 · Discovery<br/>one per acquirer, parallel"]
+    D -->|candidates: url, date, snippet| N["2 · Normalizer<br/>dedup · window · deal definition"]
+    N -->|fan-out per deal| R["3 · Research<br/>one per deal, parallel"]
+    R -->|adviser empty?| A["4 · Adviser Hunter<br/>conditional delegation"]
+    A -->|lateral result| R
+    R -->|DealRecord of Claims| V["5 · Verifier<br/>re-fetches sources, quote-matches<br/>max 2 rounds back to Research"]
+    V --> SC["6 · Scorer<br/>deterministic rubric"]
+    SC --> OUT[("snapshot.json<br/>+ omissions.json")]
+    OUT --> DB["Dashboard"]
+      </pre>
+    </div>
+    <p class="diagram-caption">Fig. 2 — Agent roster &amp; orchestration</p>
+
+    <h3>Why each hand-off exists</h3>
+    <ul>
+      <li><strong>Discovery → Normalizer:</strong> discovery never judges what counts as a deal — it only returns candidates. Judgment (dedup, the acquisition definition, the time window) is centralized in one deterministic place, so it's testable and doesn't drift per-acquirer.</li>
+      <li><strong>Research → Adviser Hunter:</strong> triggered <em>only</em> when the adviser field is empty. A different search strategy (advisory-side sources, not acquirer-side) is handed the problem specifically because the first approach didn't work — this is the clearest real delegation in the system, not parallel effort run by default.</li>
+      <li><strong>Research → Verifier:</strong> the Verifier trusts nothing upstream. It re-fetches every cited source and can bounce a record back to Research, capped at two rounds to bound cost.</li>
+      <li><strong>Verifier → Scorer:</strong> confidence is computed from Verifier outcomes, never asserted by an agent — an LLM-reported confidence number would itself be an unverified claim.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="num-head"><span class="n">02</span><h2>The core mechanism</h2></div>
+    <p class="lede">The brief's grading line is explicit: a fabricated value is an automatic fail, a well-handled "undisclosed" is a pass. That line is encoded directly into the data model, not left as a prompt convention an agent might forget under pressure to fill a cell.</p>
+
+    <h3>Every field is a Claim, not a string</h3>
+    <div class="claim-block">
+<pre class="code"><span class="cm">// domain/models.py — Claim</span>
+{
+  "field": <span class="str">"purchase_price"</span>,
+  "status": <span class="str">"explicitly_undisclosed"</span>,
+  "value": null,
+  "source_url": <span class="str">"https://..."</span>,
+  "verbatim_quote": <span class="str">"financial terms of
+    the transaction were not disclosed"</span>,
+  "source_language": <span class="str">"en"</span>,
+  "verified": true
+}</pre>
+      <div>
+        <p style="margin-top:0">A validation hook rejects any agent output where a value has no accompanying verbatim quote — a structural gate, not a prompt instruction. The Verifier re-fetches the cited URL and checks the quote exists on the page by literal substring match: deterministic, and not gameable by a plausible-sounding hallucination, because a hallucinated quote does not exist on any real page.</p>
+      </div>
+    </div>
+
+    <h3>Three field states, not two</h3>
+    <div class="table-wrap">
+      <table class="status-table">
+        <thead><tr><th>Status</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill verified">verified</span></td><td>A value was extracted and the Verifier confirmed the quote supports it.</td></tr>
+          <tr><td><span class="pill undisclosed">explicitly_undisclosed</span></td><td>The source explicitly states the fact is not being disclosed — a positive, cited fact.</td></tr>
+          <tr><td><span class="pill notfound">not_found</span></td><td>No source addresses the field, or a claimed value failed verification.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Confidence is computed, never asserted</h3>
+    <pre class="code">confidence = w1·source_tier + w2·corroboration_count
+           + w3·verifier_pass_rate + w4·field_completeness</pre>
+    <p>Weights and source tiers live in one config file, reviewable independent of any model's behavior.</p>
+  </section>
+
+  <section>
+    <div class="num-head"><span class="n">03</span><h2>Key decisions</h2></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th style="width:34%">Decision</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td class="dec">Claude Agent SDK over LangGraph</td><td>The workflow is a bounded fan-out/fan-in with one conditional loop — not a complex stateful graph. Subagents, validation hooks and web search/fetch tools come built-in, billed against the client's own key, without an abstraction layer that needs its own justification.</td></tr>
+          <tr><td class="dec">Deterministic orchestrator for control flow</td><td>Budget, cache keys, retries and run state have single correct answers. Delegating them to an LLM adds cost and non-determinism with no upside.</td></tr>
+          <tr><td class="dec">Verifier does literal quote-matching, not a second model opinion</td><td>A second LLM call can hallucinate agreement with the first. A substring match against a freshly fetched page cannot.</td></tr>
+          <tr><td class="dec">Compliance allowlist enforced at the fetch layer</td><td>A prompt instruction ("don't scrape LinkedIn") is a suggestion a model can ignore under pressure. A network-layer gate cannot be talked past.</td></tr>
+          <tr><td class="dec">Committed, documented snapshot</td><td>Lets the client judge output quality — the thing actually being graded — without spending their key or waiting on a live run first.</td></tr>
+          <tr><td class="dec">Quotes stored verbatim in source language</td><td>Translating before extraction would break quote-grounding; the Verifier must match the actual page text, not a paraphrase.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="num-head"><span class="n">04</span><h2>What I cut</h2></div>
+    <ul class="flag-list">
+      <li><b>Mergermarket as a source.</b> Paywalled, restrictive ToS. Documented as an omission rather than worked around.</li>
+      <li><b>All seven acquirers up front.</b> The brief rewards depth over breadth directly — five acquirers, chosen to each stress a different part of the design (volume, Spanish-language, regulatory filings, edge-case deal definitions), rather than seven done flat.</li>
+      <li><b>Automatic conflict resolution.</b> When two sources disagree on a value, the Verifier surfaces the conflict. Resolving it silently would reintroduce the exact fabrication risk the design exists to prevent.</li>
+      <li><b>Real-time/streaming monitoring.</b> Acquisitions are announced, not ticking data. A scheduled or on-demand batch run covers the actual need without added infrastructure.</li>
+      <li><b>Whole-document translation.</b> Only extracted fields are translated for display — full-document translation adds a second place for meaning to drift from the verbatim quote.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="num-head"><span class="n">05</span><h2>Where it breaks</h2></div>
+    <ul class="flag-list">
+      <li><b>M&amp;A adviser will often stay empty.</b> Genuinely hard information even with lateral search — expected to be the sparsest field on the dashboard, by design rather than by failure.</li>
+      <li><b>Single-source claims.</b> Some legitimate facts, especially from smaller acquirers, only ever appear once. Marked with lower confidence, not discarded.</li>
+      <li><b>Site structure changes.</b> An acquirer reworking their press room mid-project degrades that Discovery instance to zero new candidates rather than failing loudly — mitigated by a minimum-yield check per run, not solved outright.</li>
+      <li><b>Verifier false negatives.</b> Legitimate paraphrased reporting that isn't a literal substring of any page is marked <code>not_found</code> rather than <code>verified</code> — a deliberate bias toward under-claiming over a looser match that risks a false positive.</li>
+      <li><b>Cost ceiling.</b> The Adviser Hunter and the two-round Verifier loop are the main cost drivers, both hard-capped — under budget pressure the system yields more <code>not_found</code> fields rather than exceeding spend.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="num-head"><span class="n">06</span><h2>Repository structure</h2></div>
+    <p class="lede">One private repository. The root itself <em>is</em> the backend — <code>src/</code> is flat, not a nested <code>src/tombstone/</code> package, matching the convention across the author's other production repos: not pip-installed, imported directly as <code>from src.domain...</code>. <code>frontend/</code> is the one subfolder outside <code>src/</code>. <code>domain/</code> holds pure logic with no framework imports, so the Claim model and scoring rubric are testable in isolation from FastAPI, the Agent SDK, or any network call.</p>
+
+    <div class="repo-tree">tombstone/
+├── README.md                    <span class="note"># quick start, runnable by the client</span>
+├── CLAUDE.md                    <span class="note"># directory rationale, NEVER-do list</span>
+├── docker-compose.yml           <span class="note"># local full stack — API + frontend, live run</span>
+├── requirements.txt
+├── requirements-dev.txt
+├── pyproject.toml               <span class="note"># tool config only — ruff/mypy/pytest, no packaging</span>
+│
+├── <span class="dir">docs/</span>
+│   ├── PROJECT_PROPOSAL.md      <span class="note"># brief, proposal, full architecture</span>
+│   └── ARCHITECTURE_NOTE.html   <span class="note"># this document</span>
+│
+├── <span class="dir">src/</span>
+│   ├── config.py                <span class="note"># pydantic-settings — only place env vars are read</span>
+│   ├── <span class="dir">domain/</span>                 <span class="note"># pure logic — no framework imports</span>
+│   │   ├── models.py            <span class="note"># Claim, DealRecord, AcquirerProfile</span>
+│   │   ├── scoring.py            <span class="note"># confidence rubric, pure function</span>
+│   │   └── deal_definition.py
+│   ├── <span class="dir">agents/</span>                 <span class="note"># one file per pipeline stage</span>
+│   │   ├── discovery.py
+│   │   ├── normalizer.py
+│   │   ├── research.py
+│   │   ├── adviser_hunter.py
+│   │   ├── verifier.py
+│   │   └── scorer.py
+│   ├── <span class="dir">orchestrator/</span>
+│   │   ├── run.py               <span class="note"># entrypoint, wires agents together</span>
+│   │   ├── cache.py             <span class="note"># SQLite, keyed by (agent, input hash)</span>
+│   │   └── budget.py            <span class="note"># cost ceiling + live tracking</span>
+│   ├── <span class="dir">api/</span>                    <span class="note"># FastAPI — thin, no business logic</span>
+│   └── <span class="dir">utils/</span>
+│       └── fetch.py             <span class="note"># only place a network request may originate</span>
+│
+├── <span class="dir">sources/</span>                     <span class="note"># Discovery's inputs — where and how to look</span>
+│   ├── allowlist.yaml           <span class="note"># ToS gate, enforced pre-fetch</span>
+│   └── profiles/                <span class="note"># one file per acquirer</span>
+│       ├── volaris.yaml
+│       ├── banyan.yaml
+│       ├── bsg.yaml              <span class="note"># language: es</span>
+│       ├── snowball.yaml         <span class="note"># source: Oslo Børs / Euronext filings</span>
+│       └── tss_topicus.yaml
+│
+├── <span class="dir">tests/</span>
+│   ├── unit/                    <span class="note"># scoring + Claim invariants</span>
+│   └── integration/             <span class="note"># Verifier quote-match, allowlist gate</span>
+│
+├── <span class="dir">frontend/</span>                    <span class="note"># React + Vite + Tailwind — static build for public deploy</span>
+│
+└── <span class="dir">data/</span>                        <span class="note"># Tombstone's outputs — what it found</span>
+    ├── snapshot_2026-08-15.json <span class="note"># committed reference run</span>
+    └── omissions.json           <span class="note"># blocked sources + reasons</span></div>
+
+    <dl class="dir-rationale">
+      <dt>src/domain/</dt>
+      <dd>The one directory every other layer depends on and that depends on nothing itself. If the Claim schema or scoring rubric needs to change, it changes here, with unit tests that don't spin up an agent or hit a network.</dd>
+      <dt>sources/</dt>
+      <dd>Config, not code — every acquirer's scope (allowed domains, language, source type) and the ToS gate live here as data, so extending coverage or auditing what's off-limits never requires reading Python. Deliberately separate from <code>data/</code>: <code>sources/</code> is what Discovery is told to look at, <code>data/</code> is what it found.</dd>
+      <dt>sources/profiles/</dt>
+      <dd>One acquirer, one file — language, allowed domains, source type. Adding an acquirer (Everfield, Valsoft) is a new profile, not a code change to Discovery.</dd>
+      <dt>sources/allowlist.yaml</dt>
+      <dd>Read by <code>utils/fetch.py</code> before any request leaves the process. LinkedIn and Mergermarket are listed here as <code>allowed: false</code> with a reason — the omission is data, not a comment.</dd>
+      <dt>data/</dt>
+      <dd>Only <code>snapshot_*.json</code> and <code>omissions.json</code> are committed. <code>cache.db</code> is local-only — it exists to make repeat runs cheap against the client's key, not to be shared state.</dd>
+      <dt>src/api/</dt>
+      <dd>Thin by design: serves the snapshot and can trigger a fresh run; it holds no business logic that isn't already in <code>domain/</code> or <code>agents/</code>.</dd>
+    </dl>
+
+    <h3>Deployment: two modes, same codebase</h3>
+    <p>The full stack (<code>docker compose up</code>) is what runs live, locally, for the walkthrough call. What's ever reachable from a public link is different on purpose: a static build of <code>frontend/</code> reading <code>data/snapshot_*.json</code> directly, no API involved. A publicly reachable API that could trigger the pipeline would let anyone who finds the link spend the client's prepaid credits — the static deployment removes that surface entirely rather than trying to secure it. Planned host: Vercel or Netlify's free tier, on a subdomain of the author's own domain. This is the last item on the build list, a bonus on top of the required deliverable, not a substitute for it — <code>docker compose up</code> alone already satisfies "runnable by us."</p>
+  </section>
+
+  <footer>
+    <span>Tombstone — Architecture &amp; Reasoning Note</span>
+    <span>Prepared for Abingdon Software Group · Angela Arroyo</span>
+  </footer>
+
+</div>

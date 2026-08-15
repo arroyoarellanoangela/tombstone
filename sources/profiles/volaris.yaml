@@ -1,0 +1,10 @@
+name: Volaris Group
+slug: volaris
+allowed_domains:
+  - volarisgroup.com
+primary_language: en
+source_type: press_room
+notes: >
+  High volume, clean press room — the baseline case. Announces many small
+  deals; deal_definition.classify() sees the sharpest edge cases here for
+  what counts as an in-scope acquisition.
