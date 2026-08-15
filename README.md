@@ -43,18 +43,19 @@ Full directory-by-directory rationale: [docs/ARCHITECTURE_NOTE.html](docs/ARCHIT
 
 ## Frontend
 
-Not yet scaffolded. Planned:
+React 18 + TypeScript + Vite + Tailwind. Every field is rendered with its status (`verified` / `undisclosed` / `not found`) and its verbatim source quote on hover — an empty cell means no source supported that field, never a guess. Filters by acquirer, minimum confidence, price-disclosure status, and whether an adviser was identified; a separate Omissions tab lists every source the pipeline deliberately excluded and why.
 
 ```bash
 cd frontend
-npm create vite@latest . -- --template react-ts
-npm install -D tailwindcss postcss autoprefixer
+npm install
+npm run dev     # dev server on :5173
+npm run build   # static production build into dist/
 ```
 
-React 18 + TypeScript + Vite + Tailwind. Filters by acquirer, geography, confidence, and price-disclosure status; an Omissions tab reads `data/omissions.json` directly. Two run modes, same codebase:
+Two run modes, same codebase:
 
-1. **Local dev**, against the live API (`docker-compose.yml` sets `VITE_API_URL=http://localhost:8000`) — can trigger a live pipeline run via `POST /runs`.
-2. **Static production build**, reading `data/snapshot_*.json` and `data/omissions.json` directly at build time, no API calls at runtime. This is the only mode ever deployed publicly — planned on Vercel/Netlify's free tier, on a subdomain of the author's own domain, with no backend involved, so nobody can spend Abingdon's API credits by finding the link. Last item on the build list, a bonus on top of the deliverable — `docker compose up` alone already satisfies "runnable by us."
+1. **Local dev**, against the live API — `docker-compose.yml` sets `VITE_API_URL=http://localhost:8000` and the dashboard reads `/deals` and `/omissions`.
+2. **Static production build** — with no `VITE_API_URL` set, a prebuild step copies the committed `data/snapshot_*.json` and `data/omissions.json` into `public/data/` and the built site fetches those as plain files. No API, no key, nothing anyone can spend. This is the only mode ever deployed publicly (Vercel/Netlify free tier).
 
 ## What this is not
 

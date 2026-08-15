@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+/* Same token system as docs/ARCHITECTURE_NOTE.html — the dashboard and the
+   architecture note are one visual identity. */
+:root {
+  --paper: #f6f7f3;
+  --paper-raised: #ffffff;
+  --ink: #17191a;
+  --ink-soft: #4b4f52;
+  --ink-faint: #7c807e;
+  --rule: #d8dad4;
+  --rule-strong: #b7bab2;
+  --accent: #1e3a5f;
+  --accent-soft: #e8edf2;
+  --verified: #1f6f54;
+  --verified-bg: #e6f0ea;
+  --undisclosed: #8a6d1f;
+  --undisclosed-bg: #f3ecd9;
+  --notfound: #8a3b3b;
+  --notfound-bg: #f3e4e2;
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #14161a;
+    --paper-raised: #1b1e22;
+    --ink: #e9eae6;
+    --ink-soft: #a7aca8;
+    --ink-faint: #74786f;
+    --rule: #2c2f31;
+    --rule-strong: #3c4043;
+    --accent: #7fa3c9;
+    --accent-soft: #1e2a33;
+    --verified: #5cb896;
+    --verified-bg: #16261f;
+    --undisclosed: #d3ac3b;
+    --undisclosed-bg: #2a2412;
+    --notfound: #d38686;
+    --notfound-bg: #2a1a19;
+  }
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-data {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.03em;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.pill-verified {
+  color: var(--verified);
+  background: var(--verified-bg);
+}
+
+.pill-undisclosed {
+  color: var(--undisclosed);
+  background: var(--undisclosed-bg);
+}
+
+.pill-notfound {
+  color: var(--notfound);
+  background: var(--notfound-bg);
+}
+
+/* Quote tooltip on claim cells */
+.claim-cell {
+  position: relative;
+}
+
+.claim-tooltip {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 120ms ease;
+  position: absolute;
+  z-index: 20;
+  left: 0;
+  top: 100%;
+  margin-top: 0.25rem;
+  width: 22rem;
+  max-width: 70vw;
+  background: var(--paper-raised);
+  color: var(--ink);
+  border: 1px solid var(--rule-strong);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.12);
+  padding: 0.6rem 0.75rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.claim-cell:hover .claim-tooltip,
+.claim-cell:focus-within .claim-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
