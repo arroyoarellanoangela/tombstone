@@ -77,3 +77,14 @@ class DealRecord(BaseModel):
     purchase_price: Claim
     confidence: float | None = None  # set by the Scorer, never by an agent
     source_urls: list[str] = Field(default_factory=list)
+
+
+class Omission(BaseModel):
+    """A candidate or source excluded on purpose — rendered in the dashboard's
+    Omissions tab, not just noted in a README. "If in doubt, leave it out and
+    say so" as a UI artifact, not a line of prose.
+    """
+
+    url: str
+    reason: str
+    stage: str  # e.g. "allowlist" | "deal_definition" | "window"

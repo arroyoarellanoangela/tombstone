@@ -85,6 +85,8 @@ def _parse_and_filter(raw_output: str, acquirer_slug: str) -> list[DealCandidate
         if item.get("published_at"):
             try:
                 published_at = datetime.fromisoformat(item["published_at"])
+                if published_at.tzinfo is None:
+                    published_at = published_at.replace(tzinfo=UTC)
             except ValueError:
                 pass
 

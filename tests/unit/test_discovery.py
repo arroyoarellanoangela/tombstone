@@ -78,3 +78,22 @@ async def test_malformed_json_returns_empty_list():
 async def test_empty_array_returns_empty_list():
     candidates = await discovery.run(VOLARIS_PROFILE, window_days=90, agent_caller=_fake_agent("[]"))
     assert candidates == []
+
+
+@pytest.mark.asyncio
+async def test_published_at_is_timezone_aware():
+    # The model returns a bare "YYYY-MM-DD" — datetime.fromisoformat() on
+    # that is naive, but the Normalizer compares it against an aware cutoff.
+    # A naive published_at here would raise TypeError downstream.
+    response = json.dumps(
+        [
+            {
+                "url": "https://volarisgroup.com/press-room/acme-acquisition",
+                "published_at": "2026-06-01",
+                "snippet": "Volaris Group acquires Acme Software.",
+            }
+        ]
+    )
+    candidates = await discovery.run(VOLARIS_PROFILE, window_days=90, agent_caller=_fake_agent(response))
+
+    assert candidates[0].published_at.tzinfo is not None

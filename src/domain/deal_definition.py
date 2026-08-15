@@ -21,14 +21,53 @@ class DealKind(StrEnum):
 IN_SCOPE = {DealKind.MAJORITY_ACQUISITION}
 
 
+_MINORITY_CUES = (
+    "minority stake",
+    "minority investment",
+    "strategic investment in",
+    "acquires a stake in",
+    "acquires a minority",
+    "takes a stake in",
+)
+
+_INTRA_PORTFOLIO_CUES = (
+    "portfolio companies merge",
+    "merges with sister company",
+    "combines its portfolio company",
+    "merger of its portfolio",
+    "consolidates its portfolio",
+)
+
+_ACQUISITION_CUES = (
+    "acquires",
+    "acquisition of",
+    "has acquired",
+    "acquired by",
+    "to acquire",
+    "completes acquisition",
+    "announces the acquisition",
+    "acquires the assets of",
+)
+
+
 def classify(candidate_snippet: str) -> DealKind:
     """Classify a raw candidate's kind from its source snippet.
 
-    Heuristic first pass (keyword cues for "minority stake", "joint venture",
-    "merges its portfolio company" etc.); ambiguous cases fall to UNKNOWN and
-    are surfaced for manual review rather than guessed into IN_SCOPE.
+    Keyword heuristic, checked in order of specificity: minority-stake and
+    intra-portfolio language are checked first because their snippets often
+    also contain generic acquisition-shaped words ("acquires a minority
+    stake" contains "acquires"). Ambiguous cases fall to UNKNOWN and are
+    excluded rather than guessed into IN_SCOPE — see is_in_scope.
     """
-    raise NotImplementedError
+    text = candidate_snippet.lower()
+
+    if any(cue in text for cue in _MINORITY_CUES):
+        return DealKind.MINORITY_INVESTMENT
+    if any(cue in text for cue in _INTRA_PORTFOLIO_CUES):
+        return DealKind.INTRA_PORTFOLIO_MERGER
+    if any(cue in text for cue in _ACQUISITION_CUES):
+        return DealKind.MAJORITY_ACQUISITION
+    return DealKind.UNKNOWN
 
 
 def is_in_scope(kind: DealKind) -> bool:

@@ -28,10 +28,35 @@ class Cache:
         self._init_schema()
 
     def _init_schema(self) -> None:
-        raise NotImplementedError
+        self._db_path.parent.mkdir(parents=True, exist_ok=True)
+        with sqlite3.connect(self._db_path) as conn:
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS cache (
+                    agent_name TEXT NOT NULL,
+                    input_hash TEXT NOT NULL,
+                    result TEXT NOT NULL,
+                    created_at TEXT NOT NULL,
+                    PRIMARY KEY (agent_name, input_hash)
+                )
+                """
+            )
 
     def get(self, agent_name: str, payload: Any) -> Any | None:
-        raise NotImplementedError
+        input_hash = _input_hash(payload)
+        with sqlite3.connect(self._db_path) as conn:
+            row = conn.execute(
+                "SELECT result FROM cache WHERE agent_name = ? AND input_hash = ?",
+                (agent_name, input_hash),
+            ).fetchone()
+        return json.loads(row[0]) if row else None
 
     def set(self, agent_name: str, payload: Any, result: Any) -> None:
-        raise NotImplementedError
+        from datetime import UTC, datetime
+
+        input_hash = _input_hash(payload)
+        with sqlite3.connect(self._db_path) as conn:
+            conn.execute(
+                "INSERT OR REPLACE INTO cache (agent_name, input_hash, result, created_at) VALUES (?, ?, ?, ?)",
+                (agent_name, input_hash, json.dumps(result, default=str), datetime.now(UTC).isoformat()),
+            )

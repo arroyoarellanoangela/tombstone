@@ -118,4 +118,6 @@ async def test_malformed_json_yields_all_not_found_without_crashing():
 
     assert record.target.status == ClaimStatus.NOT_FOUND
     assert record.purchase_price.status == ClaimStatus.NOT_FOUND
-    assert record.deal_id == "volaris-volaris"  # falls back to acquirer_slug when target is unknown
+    # Falls back to a URL-derived slug, not a bare acquirer slug, so two
+    # candidates that both fail extraction don't collide on deal_id.
+    assert record.deal_id == "volaris-unknown-acme-acquisition"

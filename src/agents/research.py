@@ -137,8 +137,14 @@ async def run(
     raw_output = await agent_caller(prompt=prompt, system_prompt=_SYSTEM_PROMPT, allowed_tools=[])
     claims = _parse(raw_output, candidate.url, language)
 
-    target_value = claims["target"].value or candidate.acquirer_slug
-    deal_id = f"{candidate.acquirer_slug}-{_slugify(target_value)}"
+    if claims["target"].value:
+        deal_id = f"{candidate.acquirer_slug}-{_slugify(claims['target'].value)}"
+    else:
+        # Target extraction failed — fall back to a slug of the URL's last
+        # path segment so multiple failed candidates for the same acquirer
+        # don't collapse into one colliding deal_id.
+        url_tail = candidate.url.rstrip("/").rsplit("/", 1)[-1]
+        deal_id = f"{candidate.acquirer_slug}-unknown-{_slugify(url_tail)}"
 
     return DealRecord(
         deal_id=deal_id,
