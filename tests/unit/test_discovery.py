@@ -37,7 +37,9 @@ async def test_allowed_candidate_is_kept():
             }
         ]
     )
-    candidates = await discovery.run(VOLARIS_PROFILE, window_days=90, agent_caller=_fake_agent(response))
+    candidates = await discovery.run(
+        VOLARIS_PROFILE, window_days=90, agent_caller=_fake_agent(response)
+    )
 
     assert len(candidates) == 1
     assert candidates[0].url == "https://volarisgroup.com/press-room/acme-acquisition"
@@ -60,7 +62,9 @@ async def test_disallowed_domain_is_dropped():
             },
         ]
     )
-    candidates = await discovery.run(VOLARIS_PROFILE, window_days=90, agent_caller=_fake_agent(response))
+    candidates = await discovery.run(
+        VOLARIS_PROFILE, window_days=90, agent_caller=_fake_agent(response)
+    )
 
     assert len(candidates) == 1
     assert candidates[0].url.startswith("https://volarisgroup.com")
@@ -76,7 +80,9 @@ async def test_malformed_json_returns_empty_list():
 
 @pytest.mark.asyncio
 async def test_empty_array_returns_empty_list():
-    candidates = await discovery.run(VOLARIS_PROFILE, window_days=90, agent_caller=_fake_agent("[]"))
+    candidates = await discovery.run(
+        VOLARIS_PROFILE, window_days=90, agent_caller=_fake_agent("[]")
+    )
     assert candidates == []
 
 
@@ -94,6 +100,8 @@ async def test_published_at_is_timezone_aware():
             }
         ]
     )
-    candidates = await discovery.run(VOLARIS_PROFILE, window_days=90, agent_caller=_fake_agent(response))
+    candidates = await discovery.run(
+        VOLARIS_PROFILE, window_days=90, agent_caller=_fake_agent(response)
+    )
 
     assert candidates[0].published_at.tzinfo is not None

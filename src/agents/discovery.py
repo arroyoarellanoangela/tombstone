@@ -19,7 +19,7 @@ from datetime import UTC, datetime, timedelta
 
 from src.domain.models import AcquirerProfile, DealCandidate
 from src.utils.fetch import is_allowed
-from src.utils.llm import run_agent, strip_json_fences
+from src.utils.llm import AgentCaller, run_agent, strip_json_fences
 
 logger = logging.getLogger(__name__)
 
@@ -104,7 +104,7 @@ def _parse_and_filter(raw_output: str, acquirer_slug: str) -> list[DealCandidate
 async def run(
     profile: AcquirerProfile,
     window_days: int,
-    agent_caller=run_agent,
+    agent_caller: AgentCaller = run_agent,
 ) -> list[DealCandidate]:
     """Search `profile`'s allowed sources for acquisitions announced within
     the last `window_days`. Returns candidates, not deals — see module docstring.

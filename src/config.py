@@ -12,4 +12,6 @@ class Settings(BaseSettings):
     max_verification_rounds: int = 2
 
 
-settings = Settings()
+# mypy can't see that pydantic-settings fills anthropic_api_key from the
+# environment at runtime — a genuinely missing key fails loudly here anyway.
+settings = Settings()  # type: ignore[call-arg]

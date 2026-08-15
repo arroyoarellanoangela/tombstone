@@ -11,12 +11,18 @@ _NOT_FOUND = Claim(field="_", status=ClaimStatus.NOT_FOUND)
 def _record(**overrides) -> DealRecord:
     fields = {
         "acquirer": Claim(
-            field="acquirer", status=ClaimStatus.VERIFIED, value="Volaris Group",
-            source_url="https://volarisgroup.com/x", verbatim_quote="Volaris Group",
+            field="acquirer",
+            status=ClaimStatus.VERIFIED,
+            value="Volaris Group",
+            source_url="https://volarisgroup.com/x",
+            verbatim_quote="Volaris Group",
         ),
         "target": Claim(
-            field="target", status=ClaimStatus.VERIFIED, value="Acme Software",
-            source_url="https://volarisgroup.com/x", verbatim_quote="Acme Software",
+            field="target",
+            status=ClaimStatus.VERIFIED,
+            value="Acme Software",
+            source_url="https://volarisgroup.com/x",
+            verbatim_quote="Acme Software",
         ),
         "date_announced": _NOT_FOUND,
         "target_description": _NOT_FOUND,
@@ -56,7 +62,12 @@ async def test_found_adviser_with_source_is_kept():
 async def test_verified_without_source_url_is_downgraded():
     # A claim the Verifier has nothing to re-fetch and check is not trusted.
     response = json.dumps(
-        {"status": "verified", "value": "Some Bank", "quote": "advised by Some Bank", "source_url": None}
+        {
+            "status": "verified",
+            "value": "Some Bank",
+            "quote": "advised by Some Bank",
+            "source_url": None,
+        }
     )
     claim = await adviser_hunter.run(_record(), agent_caller=_fake_agent(response))
 

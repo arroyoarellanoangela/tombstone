@@ -19,7 +19,9 @@ class NormalizeResult:
     omitted: list[Omission] = field(default_factory=list)
 
 
-def normalize(candidates: list[DealCandidate], window_days: int, now: datetime | None = None) -> NormalizeResult:
+def normalize(
+    candidates: list[DealCandidate], window_days: int, now: datetime | None = None
+) -> NormalizeResult:
     """Dedup + window-filter + apply the acquisition definition.
 
     Candidates excluded by the acquisition definition (minority stakes,

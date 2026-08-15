@@ -7,12 +7,24 @@ network or spend the client's key. See tests/unit/test_discovery.py for the patt
 
 import re
 import tempfile
+from collections.abc import Awaitable, Callable
 
-from claude_agent_sdk import AssistantMessage, ClaudeAgentOptions, ClaudeSDKClient, TextBlock
+from claude_agent_sdk import (
+    AssistantMessage,
+    ClaudeAgentOptions,
+    ClaudeSDKClient,
+    ResultMessage,
+    TextBlock,
+)
 
 from src.config import settings
+from src.orchestrator.budget import RunBudget
 
 _CODE_FENCE = re.compile(r"^```(?:json)?\s*|\s*```$", re.MULTILINE)
+
+# The signature every agent's injectable `agent_caller` must satisfy —
+# run_agent below is the real implementation, tests pass fakes.
+AgentCaller = Callable[..., Awaitable[str]]
 
 # The SDK shells out to the `claude` CLI as a subprocess. If that CLI finds a
 # stored OAuth session under the caller's home directory (e.g. a developer's
@@ -31,8 +43,18 @@ async def run_agent(
     system_prompt: str,
     allowed_tools: list[str] | None = None,
     model: str | None = None,
+    budget: RunBudget | None = None,
 ) -> str:
-    """Runs one agentic turn and returns its concatenated final text output."""
+    """Runs one agentic turn and returns its concatenated final text output.
+
+    When a `budget` is passed (the orchestrator binds one via
+    functools.partial, so individual agents never handle money), the ceiling
+    is checked *before* spawning the call — raising BudgetExceeded instead
+    of starting work that would overspend — and the actual cost the SDK
+    reports on completion is recorded against it.
+    """
+    if budget is not None:
+        budget.check()
     options = ClaudeAgentOptions(
         system_prompt=system_prompt,
         allowed_tools=allowed_tools or [],
@@ -71,6 +93,9 @@ async def run_agent(
                 for block in message.content:
                     if isinstance(block, TextBlock):
                         chunks.append(block.text)
+            elif isinstance(message, ResultMessage):
+                if budget is not None and message.total_cost_usd:
+                    budget.record_spend(message.total_cost_usd)
     return "".join(chunks)
 
 

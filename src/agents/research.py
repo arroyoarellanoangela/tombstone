@@ -17,10 +17,11 @@ deal to adviser_hunter. See _needs_adviser_hunt.
 import json
 import logging
 import re
+from typing import Any
 
 from src.domain.models import Claim, ClaimStatus, DealCandidate, DealRecord
-from src.utils.fetch import fetch
-from src.utils.llm import run_agent, strip_json_fences
+from src.utils.fetch import Fetcher, fetch
+from src.utils.llm import AgentCaller, run_agent, strip_json_fences
 
 logger = logging.getLogger(__name__)
 
@@ -81,14 +82,10 @@ def _build_prompt(acquirer_name: str, url: str, page_text: str) -> str:
     # and news articles fit comfortably within this; a truncated page yields
     # more not_found fields rather than a runaway-cost prompt.
     excerpt = page_text[:12000]
-    return (
-        f"Acquirer: {acquirer_name}\n"
-        f"Source URL: {url}\n\n"
-        f"Page text:\n{excerpt}"
-    )
+    return f"Acquirer: {acquirer_name}\n" f"Source URL: {url}\n\n" f"Page text:\n{excerpt}"
 
 
-def _claim(field: str, item: dict, url: str, language: str) -> Claim:
+def _claim(field: str, item: dict[str, Any], url: str, language: str) -> Claim:
     status_raw = item.get("status", "not_found")
     try:
         status = ClaimStatus(status_raw)
@@ -123,8 +120,8 @@ async def run(
     candidate: DealCandidate,
     acquirer_name: str,
     language: str = "en",
-    agent_caller=run_agent,
-    fetcher=fetch,
+    agent_caller: AgentCaller = run_agent,
+    fetcher: Fetcher = fetch,
 ) -> DealRecord:
     """Produce a DealRecord for `candidate`. Fields with no supporting quote
     are emitted as status=NOT_FOUND, never fabricated.
@@ -157,7 +154,3 @@ async def run(
         purchase_price=claims["purchase_price"],
         source_urls=[candidate.url],
     )
-
-
-def _needs_adviser_hunt(adviser_claim: Claim) -> bool:
-    return adviser_claim.status == ClaimStatus.NOT_FOUND

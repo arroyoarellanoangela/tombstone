@@ -17,7 +17,7 @@ import logging
 
 from src.config import settings
 from src.domain.models import Claim, ClaimStatus, DealRecord
-from src.utils.fetch import fetch
+from src.utils.fetch import Fetcher, fetch
 
 logger = logging.getLogger(__name__)
 
@@ -45,12 +45,10 @@ def _quote_present(source_text: str, claim: Claim) -> bool:
     return claim.verbatim_quote.strip() in source_text
 
 
-async def _fetch_sources(record: DealRecord, fetcher) -> dict[str, str | None]:
+async def _fetch_sources(record: DealRecord, fetcher: Fetcher) -> dict[str, str | None]:
     """One fetch per distinct source_url on the record, not one per claim."""
     urls = {
-        getattr(record, field).source_url
-        for field in _FIELDS
-        if getattr(record, field).source_url
+        getattr(record, field).source_url for field in _FIELDS if getattr(record, field).source_url
     }
     pages: dict[str, str | None] = {}
     for url in urls:
@@ -62,7 +60,9 @@ async def _fetch_sources(record: DealRecord, fetcher) -> dict[str, str | None]:
     return pages
 
 
-async def verify(record: DealRecord, round_number: int, fetcher=fetch) -> VerificationResult:
+async def verify(
+    record: DealRecord, round_number: int, fetcher: Fetcher = fetch
+) -> VerificationResult:
     """Re-fetch and quote-match every claim in `record`.
 
     `fetcher` defaults to the real allowlist-gated fetch; tests inject a
@@ -96,4 +96,6 @@ async def verify(record: DealRecord, round_number: int, fetcher=fetch) -> Verifi
     verified_record = record.model_copy(update=updated)
     needs_rework = bool(conflicts) and round_number < settings.max_verification_rounds
 
-    return VerificationResult(record=verified_record, needs_rework=needs_rework, conflicts=conflicts)
+    return VerificationResult(
+        record=verified_record, needs_rework=needs_rework, conflicts=conflicts
+    )

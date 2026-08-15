@@ -17,7 +17,7 @@ import json
 import logging
 
 from src.domain.models import Claim, ClaimStatus, DealRecord
-from src.utils.llm import run_agent, strip_json_fences
+from src.utils.llm import AgentCaller, run_agent, strip_json_fences
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +81,7 @@ def _parse(raw_output: str) -> Claim:
     )
 
 
-async def run(record: DealRecord, agent_caller=run_agent) -> Claim:
+async def run(record: DealRecord, agent_caller: AgentCaller = run_agent) -> Claim:
     """Lateral search for `record`'s M&A adviser. Returns a Claim —
     status=NOT_FOUND (not a guess) if no source names one.
     """

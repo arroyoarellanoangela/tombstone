@@ -11,10 +11,16 @@ Only data/snapshot_*.json and data/omissions.json are committed.
 import hashlib
 import json
 import sqlite3
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 DB_PATH = Path(__file__).resolve().parents[2] / "data" / "cache.db"
+
+_INSERT = (
+    "INSERT OR REPLACE INTO cache (agent_name, input_hash, result, created_at) "
+    "VALUES (?, ?, ?, ?)"
+)
 
 
 def _input_hash(payload: Any) -> str:
@@ -52,11 +58,14 @@ class Cache:
         return json.loads(row[0]) if row else None
 
     def set(self, agent_name: str, payload: Any, result: Any) -> None:
-        from datetime import UTC, datetime
-
         input_hash = _input_hash(payload)
         with sqlite3.connect(self._db_path) as conn:
             conn.execute(
-                "INSERT OR REPLACE INTO cache (agent_name, input_hash, result, created_at) VALUES (?, ?, ?, ?)",
-                (agent_name, input_hash, json.dumps(result, default=str), datetime.now(UTC).isoformat()),
+                _INSERT,
+                (
+                    agent_name,
+                    input_hash,
+                    json.dumps(result, default=str),
+                    datetime.now(UTC).isoformat(),
+                ),
             )

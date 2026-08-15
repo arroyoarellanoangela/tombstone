@@ -9,6 +9,18 @@ never exceeded spend.
 from dataclasses import dataclass, field
 
 
+class BudgetExceeded(Exception):
+    """Raised by utils.llm.run_agent before spawning a new agent call once
+    the ceiling is spent. The orchestrator catches it, stops issuing work,
+    and finishes the run with what it has.
+    """
+
+    def __init__(self, ceiling_usd: float, spent_usd: float):
+        self.ceiling_usd = ceiling_usd
+        self.spent_usd = spent_usd
+        super().__init__(f"run budget exhausted: ${spent_usd:.2f} spent of ${ceiling_usd:.2f}")
+
+
 @dataclass
 class RunBudget:
     ceiling_usd: float
@@ -17,8 +29,9 @@ class RunBudget:
     def remaining(self) -> float:
         return max(0.0, self.ceiling_usd - self.spent_usd)
 
-    def can_afford(self, estimated_cost_usd: float) -> bool:
-        return self.remaining() >= estimated_cost_usd
-
     def record_spend(self, actual_cost_usd: float) -> None:
         self.spent_usd += actual_cost_usd
+
+    def check(self) -> None:
+        if self.remaining() <= 0:
+            raise BudgetExceeded(self.ceiling_usd, self.spent_usd)

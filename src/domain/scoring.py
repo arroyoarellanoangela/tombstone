@@ -39,23 +39,6 @@ _FIELDS = [
 _DEFAULT_TIER = "aggregator"
 
 
-def score_claim(claim: Claim, source_tier: str, corroborating_domains: int) -> float:
-    """Per-field confidence, folded into the DealRecord-level score by `score_deal`.
-
-    A failing claim (NOT_FOUND) scores 0 outright — no tier or corroboration
-    can rescue a field with nothing behind it. `claim.verified` (set only by
-    the Verifier's quote-match, not asserted by any agent) is weighted
-    separately from the source tier: a top-tier source the Verifier hasn't
-    actually confirmed yet is worth less than one it has.
-    """
-    if not _is_pass(claim):
-        return 0.0
-    tier_score = SOURCE_TIER_WEIGHTS.get(source_tier, SOURCE_TIER_WEIGHTS[_DEFAULT_TIER])
-    corroboration_score = min(corroborating_domains / 2, 1.0)
-    confirmation_score = 1.0 if claim.verified else 0.5
-    return round(0.6 * tier_score + 0.2 * corroboration_score + 0.2 * confirmation_score, 4)
-
-
 def score_deal(record: DealRecord, source_tiers: dict[str, str]) -> float:
     """Aggregate confidence for a DealRecord.
 
@@ -71,14 +54,17 @@ def score_deal(record: DealRecord, source_tiers: dict[str, str]) -> float:
     `source_tiers` maps field name -> tier string (see SOURCE_TIER_WEIGHTS);
     a field with no entry defaults to the lowest tier, "aggregator".
     """
-    passing_fields = [f for f in _FIELDS if _is_pass(getattr(record, f))]
+    claims: dict[str, Claim] = {f: getattr(record, f) for f in _FIELDS}
+    passing_fields = [f for f in _FIELDS if _is_pass(claims[f])]
     completeness = len(passing_fields) / len(_FIELDS)
 
-    verifier_pass_rate = sum(getattr(record, f).verified for f in _FIELDS) / len(_FIELDS)
+    verifier_pass_rate = sum(claims[f].verified for f in _FIELDS) / len(_FIELDS)
 
     if passing_fields:
         tier_scores = [
-            SOURCE_TIER_WEIGHTS.get(source_tiers.get(f, _DEFAULT_TIER), SOURCE_TIER_WEIGHTS[_DEFAULT_TIER])
+            SOURCE_TIER_WEIGHTS.get(
+                source_tiers.get(f, _DEFAULT_TIER), SOURCE_TIER_WEIGHTS[_DEFAULT_TIER]
+            )
             for f in passing_fields
         ]
         avg_source_tier = sum(tier_scores) / len(tier_scores)

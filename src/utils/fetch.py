@@ -7,13 +7,20 @@ pressure to find data. A blocked domain is logged to data/omissions.json
 with its reason instead of raising silently.
 """
 
+from collections.abc import Awaitable, Callable
+from functools import lru_cache
 from pathlib import Path
+from typing import Any
 from urllib.parse import urlparse
 
 import httpx
 import yaml
 
 ALLOWLIST_PATH = Path(__file__).resolve().parents[2] / "sources" / "allowlist.yaml"
+
+# The signature every injectable `fetcher` must satisfy — fetch below is the
+# real implementation, tests pass fakes.
+Fetcher = Callable[[str], Awaitable[str]]
 
 
 class BlockedByAllowlist(Exception):
@@ -23,8 +30,11 @@ class BlockedByAllowlist(Exception):
         super().__init__(f"{domain} is not allowed: {reason}")
 
 
-def _load_allowlist() -> dict[str, dict]:
-    entries = yaml.safe_load(ALLOWLIST_PATH.read_text())
+@lru_cache(maxsize=1)
+def _load_allowlist() -> dict[str, dict[str, Any]]:
+    # Read once per process — every candidate URL goes through is_allowed(),
+    # and the allowlist only changes with a code change + restart anyway.
+    entries = yaml.safe_load(ALLOWLIST_PATH.read_text(encoding="utf-8"))
     return {e["domain"]: e for e in entries}
 
 
@@ -33,7 +43,7 @@ def is_allowed(url: str) -> tuple[bool, str]:
     entry = _load_allowlist().get(domain)
     if entry is None:
         return False, "domain not in allowlist — treated as disallowed by default"
-    return entry["allowed"], entry["reason"]
+    return bool(entry["allowed"]), str(entry["reason"])
 
 
 async def fetch(url: str) -> str:

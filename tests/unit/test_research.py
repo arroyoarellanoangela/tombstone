@@ -39,7 +39,11 @@ async def test_verified_and_undisclosed_fields_are_extracted():
                 "value": "Volaris Group",
                 "quote": "Volaris Group today announced",
             },
-            "target": {"status": "verified", "value": "Acme Software", "quote": "acquired Acme Software"},
+            "target": {
+                "status": "verified",
+                "value": "Acme Software",
+                "quote": "acquired Acme Software",
+            },
             "date_announced": {
                 "status": "verified",
                 "value": "2026-06-01",

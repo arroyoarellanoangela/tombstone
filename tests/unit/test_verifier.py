@@ -72,7 +72,9 @@ async def test_quote_not_on_page_downgrades_to_not_found():
             verbatim_quote="a quote that never appears on the real page",
         )
     )
-    result = await verifier.verify(record, round_number=1, fetcher=_fake_fetcher("Completely different content."))
+    result = await verifier.verify(
+        record, round_number=1, fetcher=_fake_fetcher("Completely different content.")
+    )
 
     assert result.record.target.status == ClaimStatus.NOT_FOUND
     assert len(result.conflicts) == 1
@@ -105,7 +107,9 @@ async def test_explicitly_undisclosed_with_matching_quote_stays():
         )
     )
     result = await verifier.verify(
-        record, round_number=1, fetcher=_fake_fetcher("The terms were not disclosed by either party.")
+        record,
+        round_number=1,
+        fetcher=_fake_fetcher("The terms were not disclosed by either party."),
     )
 
     assert result.record.purchase_price.status == ClaimStatus.EXPLICITLY_UNDISCLOSED
@@ -132,7 +136,11 @@ async def test_fetch_failure_downgrades_claim():
 async def test_needs_rework_true_under_round_limit_with_conflicts():
     record = _record(
         target=Claim(
-            field="target", status=ClaimStatus.VERIFIED, value="X", source_url=URL, verbatim_quote="missing"
+            field="target",
+            status=ClaimStatus.VERIFIED,
+            value="X",
+            source_url=URL,
+            verbatim_quote="missing",
         )
     )
     result = await verifier.verify(record, round_number=1, fetcher=_fake_fetcher("nothing matches"))
@@ -143,7 +151,11 @@ async def test_needs_rework_true_under_round_limit_with_conflicts():
 async def test_needs_rework_false_once_round_limit_reached():
     record = _record(
         target=Claim(
-            field="target", status=ClaimStatus.VERIFIED, value="X", source_url=URL, verbatim_quote="missing"
+            field="target",
+            status=ClaimStatus.VERIFIED,
+            value="X",
+            source_url=URL,
+            verbatim_quote="missing",
         )
     )
     # settings.max_verification_rounds defaults to 2 (see .env.example)
@@ -161,7 +173,11 @@ async def test_one_fetch_per_distinct_url_not_per_claim():
 
     record = _record(
         target=Claim(
-            field="target", status=ClaimStatus.VERIFIED, value="Acme", source_url=URL, verbatim_quote="Acme was acquired"
+            field="target",
+            status=ClaimStatus.VERIFIED,
+            value="Acme",
+            source_url=URL,
+            verbatim_quote="Acme was acquired",
         ),
         purchase_price=Claim(
             field="purchase_price",
