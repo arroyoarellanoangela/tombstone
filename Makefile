@@ -1,4 +1,4 @@
-.PHONY: install dev run test lint format typecheck check up down static
+.PHONY: install dev run test lint format typecheck check up down static launcher
 
 install:
 	pip install -r requirements-dev.txt
@@ -16,15 +16,20 @@ test:
 	pytest tests/ -v --cov=src
 
 lint:
-	ruff check src/ tests/
-	ruff format --check src/ tests/
+	ruff check src/ tests/ launcher/
+	ruff format --check src/ tests/ launcher/
 
 format:
-	ruff check --fix src/ tests/
-	ruff format src/ tests/
+	ruff check --fix src/ tests/ launcher/
+	ruff format src/ tests/ launcher/
 
 typecheck:
-	mypy src/
+	mypy src/ launcher/
+
+# Rebuilds Tombstone.exe (the double-click launcher) at the repo root.
+# Windows only — PyInstaller emits a binary for the OS it runs on.
+launcher:
+	python -m PyInstaller launcher/tombstone.spec --noconfirm --distpath . --workpath build/pyinstaller
 
 # Everything CI runs, in one command — run this before pushing.
 check: lint typecheck test

@@ -23,6 +23,15 @@ frontend/dist/
 frontend/public/data/
 frontend/tsconfig.tsbuildinfo
 
+# PyInstaller working directories. Tombstone.exe itself IS committed, at the
+# repo root: the launcher starts the stack described by docker-compose.yml and
+# finds it by walking up from its own location, so it only works from inside
+# the project. Shipping it separately would be shipping something that cannot
+# run. Rebuild it with `make launcher`.
+build/
+dist/
+*.spec.bak
+
 # OS / editor
 .DS_Store
 .vscode/

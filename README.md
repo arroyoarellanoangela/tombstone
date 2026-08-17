@@ -6,12 +6,18 @@ Prepared for Abingdon Software Group by Angela Arroyo. Full reasoning and archit
 
 ## Quick start
 
-Two ways to look at this, depending on what you want:
+Three ways to look at this, easiest first:
 
-**Just browse the results (no setup, no cost)**
+**1. Double-click `Tombstone.exe` (Windows)**
+
+Prompts for your Anthropic API key, writes it into `.env`, starts the stack and opens the dashboard. Press Enter at the key prompt to skip it and browse the committed results read-only — that costs nothing and needs no key.
+
+Requires [Docker Desktop](https://www.docker.com/products/docker-desktop/) running; the launcher checks and tells you if it isn't. Keep the `.exe` inside the project folder — it starts the stack described by `docker-compose.yml` and finds it relative to itself. Source: [`launcher/tombstone_launcher.py`](launcher/tombstone_launcher.py); rebuild with `make launcher`.
+
+**2. Just browse the results (no setup, no cost)**
 Open the dashboard link in the walkthrough invite — it's a static site reading the committed `data/snapshot_*.json`, no API key required, no cost to you.
 
-**Run the full pipeline yourself**
+**3. Run the full pipeline yourself**
 
 ```bash
 cp .env.example .env        # add your ANTHROPIC_API_KEY
@@ -35,9 +41,11 @@ The repo root itself is the backend — a flat `src/` (not pip-installed; import
 
 ```
 tombstone/
+├── Tombstone.exe    # double-click launcher (Windows) — see Quick start
 ├── src/             # agent pipeline, orchestrator, FastAPI dashboard API
 ├── sources/         # ToS allowlist + one profile per acquirer
 ├── tests/
+├── launcher/        # source + PyInstaller spec for Tombstone.exe
 ├── frontend/        # React + Vite + Tailwind — the dashboard
 ├── data/            # committed snapshot + omissions log (the only data/ files tracked)
 ├── docs/            # proposal, architecture note

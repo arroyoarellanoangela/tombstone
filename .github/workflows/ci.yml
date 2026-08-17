@@ -20,9 +20,9 @@ jobs:
           cache: pip
           cache-dependency-path: requirements-dev.txt
       - run: pip install -r requirements-dev.txt
-      - run: ruff check src/ tests/
-      - run: ruff format --check src/ tests/
-      - run: mypy src/
+      - run: ruff check src/ tests/ launcher/
+      - run: ruff format --check src/ tests/ launcher/
+      - run: mypy src/ launcher/
       - run: pytest tests/ --cov=src --cov-report=xml
 
   # The dashboard is half the deliverable — a type error or a broken build
