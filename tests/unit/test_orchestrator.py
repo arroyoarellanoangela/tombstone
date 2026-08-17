@@ -5,6 +5,7 @@ writing), not the agents themselves — those have their own tests.
 """
 
 import json
+from datetime import date
 
 import pytest
 
@@ -14,6 +15,7 @@ from src.domain.models import (
     ClaimStatus,
     DealCandidate,
     DealRecord,
+    Omission,
 )
 from src.orchestrator import run as orchestrator
 from src.orchestrator.budget import BudgetExceeded, RunBudget
@@ -66,7 +68,7 @@ def offline_pipeline(monkeypatch, tmp_path):
 
     async def fake_discovery(profile, window_days, agent_caller=None):
         calls["discovery"] += 1
-        return [CANDIDATE]
+        return orchestrator.discovery.DiscoveryResult(candidates=[CANDIDATE])
 
     async def fake_research(
         candidate, acquirer_name, language="en", agent_caller=None, fetcher=None
@@ -76,7 +78,9 @@ def offline_pipeline(monkeypatch, tmp_path):
 
     async def fake_adviser_hunter(record, agent_caller=None):
         calls["adviser_hunter"] += 1
-        return Claim(field="adviser", status=ClaimStatus.NOT_FOUND)
+        return orchestrator.adviser_hunter.AdviserResult(
+            claim=Claim(field="adviser", status=ClaimStatus.NOT_FOUND)
+        )
 
     async def fake_verify_clean(record, round_number, fetcher=None):
         calls["verify"] += 1
@@ -154,3 +158,75 @@ async def test_budget_exhaustion_mid_run_keeps_completed_deals(
     assert records == []
     snapshots = list(tmp_path.glob("snapshot_*.json"))
     assert json.loads(snapshots[0].read_text(encoding="utf-8")) == []
+
+    # ...and it's disclosed rather than silently vanishing.
+    omissions = json.loads((tmp_path / "omissions.json").read_text(encoding="utf-8"))
+    assert [o["stage"] for o in omissions] == ["budget_exhausted"]
+
+
+@pytest.mark.asyncio
+async def test_discovery_stage_omissions_reach_the_omissions_file(
+    offline_pipeline, monkeypatch, tmp_path
+):
+    """A lead Discovery found outside the allowlist (ranging beyond the
+    starting domains, per the brief) must be disclosed, not just dropped —
+    "if in doubt, leave it out and say so" as a file the client can read."""
+
+    async def fake_discovery_with_omission(profile, window_days, agent_caller=None):
+        return orchestrator.discovery.DiscoveryResult(
+            candidates=[CANDIDATE],
+            omitted=[
+                Omission(
+                    url="https://sector-press.example.com/volaris-deal",
+                    reason="domain not in allowlist — treated as disallowed by default",
+                    stage="allowlist",
+                )
+            ],
+        )
+
+    monkeypatch.setattr(orchestrator.discovery, "run", fake_discovery_with_omission)
+
+    await orchestrator.run_for_acquirer(
+        "volaris", RunBudget(ceiling_usd=1.00), Cache(tmp_path / "c.db")
+    )
+
+    omissions = json.loads((tmp_path / "omissions.json").read_text(encoding="utf-8"))
+    assert [o["stage"] for o in omissions] == ["allowlist"]
+    assert omissions[0]["url"] == "https://sector-press.example.com/volaris-deal"
+
+
+@pytest.mark.asyncio
+async def test_all_not_found_record_becomes_an_omission_not_a_deal(
+    offline_pipeline, monkeypatch, tmp_path
+):
+    """A candidate we discovered but could extract nothing from is an
+    omission to disclose, not an all-empty row implying a known deal."""
+    not_found = Claim(field="_", status=ClaimStatus.NOT_FOUND)
+
+    async def empty_research(
+        candidate, acquirer_name, language="en", agent_caller=None, fetcher=None
+    ):
+        return DealRecord(
+            deal_id="volaris-unknown-acme",
+            acquirer=not_found,
+            target=not_found,
+            date_announced=not_found,
+            target_description=not_found,
+            geography=not_found,
+            adviser=not_found,
+            purchase_price=not_found,
+            source_urls=[CANDIDATE.url],
+        )
+
+    monkeypatch.setattr(orchestrator.research, "run", empty_research)
+
+    records = await orchestrator.run_for_acquirer(
+        "volaris", RunBudget(ceiling_usd=1.00), Cache(tmp_path / "c.db")
+    )
+
+    assert records == []
+    assert json.loads((tmp_path / f"snapshot_{date.today().isoformat()}.json").read_text()) == []
+
+    omissions = json.loads((tmp_path / "omissions.json").read_text(encoding="utf-8"))
+    assert [o["stage"] for o in omissions] == ["extraction_failed"]
+    assert omissions[0]["url"] == CANDIDATE.url

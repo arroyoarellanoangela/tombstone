@@ -37,17 +37,22 @@ async def test_allowed_candidate_is_kept():
             }
         ]
     )
-    candidates = await discovery.run(
+    result = await discovery.run(
         VOLARIS_PROFILE, window_days=90, agent_caller=_fake_agent(response)
     )
 
-    assert len(candidates) == 1
-    assert candidates[0].url == "https://volarisgroup.com/press-room/acme-acquisition"
-    assert candidates[0].acquirer_slug == "volaris"
+    assert len(result.candidates) == 1
+    assert result.candidates[0].url == "https://volarisgroup.com/press-room/acme-acquisition"
+    assert result.candidates[0].acquirer_slug == "volaris"
+    assert result.omitted == []
 
 
 @pytest.mark.asyncio
-async def test_disallowed_domain_is_dropped():
+async def test_disallowed_domain_is_dropped_but_disclosed():
+    # Ranging beyond the profile's starting domains (per the brief) means
+    # Discovery will surface leads outside the allowlist — those must be
+    # excluded from candidates but still disclosed as an Omission, not just
+    # logged and forgotten. "If in doubt, leave it out and say so."
     response = json.dumps(
         [
             {
@@ -62,28 +67,31 @@ async def test_disallowed_domain_is_dropped():
             },
         ]
     )
-    candidates = await discovery.run(
+    result = await discovery.run(
         VOLARIS_PROFILE, window_days=90, agent_caller=_fake_agent(response)
     )
 
-    assert len(candidates) == 1
-    assert candidates[0].url.startswith("https://volarisgroup.com")
+    assert len(result.candidates) == 1
+    assert result.candidates[0].url.startswith("https://volarisgroup.com")
+    assert len(result.omitted) == 1
+    assert result.omitted[0].url == "https://linkedin.com/posts/some-acquisition-rumor"
+    assert result.omitted[0].stage == "allowlist"
 
 
 @pytest.mark.asyncio
-async def test_malformed_json_returns_empty_list():
-    candidates = await discovery.run(
+async def test_malformed_json_returns_empty_result():
+    result = await discovery.run(
         VOLARIS_PROFILE, window_days=90, agent_caller=_fake_agent("not json at all")
     )
-    assert candidates == []
+    assert result.candidates == []
+    assert result.omitted == []
 
 
 @pytest.mark.asyncio
-async def test_empty_array_returns_empty_list():
-    candidates = await discovery.run(
-        VOLARIS_PROFILE, window_days=90, agent_caller=_fake_agent("[]")
-    )
-    assert candidates == []
+async def test_empty_array_returns_empty_result():
+    result = await discovery.run(VOLARIS_PROFILE, window_days=90, agent_caller=_fake_agent("[]"))
+    assert result.candidates == []
+    assert result.omitted == []
 
 
 @pytest.mark.asyncio
@@ -100,8 +108,8 @@ async def test_published_at_is_timezone_aware():
             }
         ]
     )
-    candidates = await discovery.run(
+    result = await discovery.run(
         VOLARIS_PROFILE, window_days=90, agent_caller=_fake_agent(response)
     )
 
-    assert candidates[0].published_at.tzinfo is not None
+    assert result.candidates[0].published_at.tzinfo is not None

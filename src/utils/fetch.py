@@ -7,6 +7,7 @@ pressure to find data. A blocked domain is logged to data/omissions.json
 with its reason instead of raising silently.
 """
 
+import re
 from collections.abc import Awaitable, Callable
 from functools import lru_cache
 from pathlib import Path
@@ -15,6 +16,17 @@ from urllib.parse import urlparse
 
 import httpx
 import yaml
+
+# Strips <script>/<style>/<head>/<nav>/<footer> wholesale (never useful —
+# tracking JS, anti-devtools code, boilerplate chrome), then every remaining
+# tag, then collapses whitespace. Measured on a real press page: raw HTML
+# ~30x noisier than this by char count, which is what agents actually pay
+# for in tokens — html_to_text() is what both Research (what it reads) and
+# the Verifier (what it re-checks quotes against) should see, so a quote
+# extracted from one is a literal substring of the other.
+_STRIP_BLOCKS = re.compile(r"(?is)<(script|style|head|nav|footer)[^>]*>.*?</\1>")
+_STRIP_TAGS = re.compile(r"(?s)<[^>]+>")
+_COLLAPSE_WS = re.compile(r"\s+")
 
 ALLOWLIST_PATH = Path(__file__).resolve().parents[2] / "sources" / "allowlist.yaml"
 
@@ -39,10 +51,27 @@ def _load_allowlist() -> dict[str, dict[str, Any]]:
 
 
 def is_allowed(url: str) -> tuple[bool, str]:
+    """Match `url`'s domain against the allowlist, subdomains included.
+
+    An entry covers its subdomains, so `banyansoftware.com` also governs
+    `news.banyansoftware.com`. Without that, a live run dropped acquirers'
+    own press coverage purely because search surfaced the apex domain while
+    the allowlist happened to name the news subdomain (or vice versa).
+
+    Suffix matching is anchored on a dot, so `notbanyansoftware.com` does
+    not match `banyansoftware.com`. Where several entries match, the most
+    specific wins — a blocked subdomain stays blocked under an allowed
+    parent, and an allowed subdomain still works under a blocked parent.
+    """
     domain = urlparse(url).netloc.removeprefix("www.")
-    entry = _load_allowlist().get(domain)
-    if entry is None:
+    matches = [
+        (candidate, entry)
+        for candidate, entry in _load_allowlist().items()
+        if domain == candidate or domain.endswith(f".{candidate}")
+    ]
+    if not matches:
         return False, "domain not in allowlist — treated as disallowed by default"
+    _, entry = max(matches, key=lambda pair: len(pair[0]))
     return bool(entry["allowed"]), str(entry["reason"])
 
 
@@ -50,8 +79,19 @@ async def fetch(url: str) -> str:
     allowed, reason = is_allowed(url)
     if not allowed:
         raise BlockedByAllowlist(urlparse(url).netloc, reason)
-    async with httpx.AsyncClient(timeout=15.0) as client:
+    # Redirects are followed because not following them breaks ordinary
+    # sources — http→https, trailing-slash canonicalisation and legacy
+    # .html paths are all 301s, and a real acquirer press room was being
+    # dropped entirely over one. The allowlist is then re-checked against
+    # the URL actually served: a redirect is a domain change, and clearing
+    # the gate on the requested URL says nothing about where it landed.
+    async with httpx.AsyncClient(timeout=15.0, follow_redirects=True) as client:
         response = await client.get(url)
+        final_url = str(response.url)
+        if final_url != url:
+            allowed, reason = is_allowed(final_url)
+            if not allowed:
+                raise BlockedByAllowlist(urlparse(final_url).netloc, f"redirected here — {reason}")
         response.raise_for_status()
         # httpx's encoding auto-detection guesses wrong often enough on real
         # sites (accented characters silently corrupt to U+FFFD) to not be
@@ -62,3 +102,13 @@ async def fetch(url: str) -> str:
             return response.content.decode("utf-8")
         except UnicodeDecodeError:
             return response.text
+
+
+def html_to_text(html: str) -> str:
+    """Visible-text view of a fetched page — tags and boilerplate stripped,
+    whitespace collapsed. Not HTML-aware parsing (no BeautifulSoup dependency
+    for a regex-shaped problem); good enough because we only need the text a
+    reader would see, not a DOM."""
+    body = _STRIP_BLOCKS.sub(" ", html)
+    body = _STRIP_TAGS.sub(" ", body)
+    return _COLLAPSE_WS.sub(" ", body).strip()

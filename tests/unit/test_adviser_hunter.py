@@ -42,7 +42,7 @@ def _fake_agent(response_json: str):
 
 
 @pytest.mark.asyncio
-async def test_found_adviser_with_source_is_kept():
+async def test_found_adviser_on_an_allowlisted_source_is_kept():
     response = json.dumps(
         {
             "status": "verified",
@@ -51,11 +51,33 @@ async def test_found_adviser_with_source_is_kept():
             "source_url": "https://houlihanlokey.com/transactions/acme",
         }
     )
-    claim = await adviser_hunter.run(_record(), agent_caller=_fake_agent(response))
+    result = await adviser_hunter.run(_record(), agent_caller=_fake_agent(response))
 
-    assert claim.status == ClaimStatus.VERIFIED
-    assert claim.value == "Houlihan Lokey"
-    assert claim.source_url == "https://houlihanlokey.com/transactions/acme"
+    assert result.claim.status == ClaimStatus.VERIFIED
+    assert result.claim.value == "Houlihan Lokey"
+    assert result.claim.source_url == "https://houlihanlokey.com/transactions/acme"
+    assert result.omitted == []
+
+
+@pytest.mark.asyncio
+async def test_adviser_found_outside_the_allowlist_is_dropped_but_disclosed():
+    """A real adviser on a source we're not permitted to verify against is
+    still a real find — reporting it would be unverifiable, hiding it would
+    look like the hunter simply failed. It gets disclosed instead."""
+    response = json.dumps(
+        {
+            "status": "verified",
+            "value": "Clairfield",
+            "quote": "Clairfield conseille la cession d'IVES",
+            "source_url": "https://www.fusacq.com/buzz/clairfield-conseille-a260173",
+        }
+    )
+    result = await adviser_hunter.run(_record(), agent_caller=_fake_agent(response))
+
+    assert result.claim.status == ClaimStatus.NOT_FOUND
+    assert len(result.omitted) == 1
+    assert result.omitted[0].stage == "adviser_allowlist"
+    assert "names an M&A adviser" in result.omitted[0].reason
 
 
 @pytest.mark.asyncio
@@ -69,21 +91,21 @@ async def test_verified_without_source_url_is_downgraded():
             "source_url": None,
         }
     )
-    claim = await adviser_hunter.run(_record(), agent_caller=_fake_agent(response))
+    result = await adviser_hunter.run(_record(), agent_caller=_fake_agent(response))
 
-    assert claim.status == ClaimStatus.NOT_FOUND
+    assert result.claim.status == ClaimStatus.NOT_FOUND
 
 
 @pytest.mark.asyncio
 async def test_not_found_is_the_expected_common_case():
     response = json.dumps({"status": "not_found", "value": None, "quote": None, "source_url": None})
-    claim = await adviser_hunter.run(_record(), agent_caller=_fake_agent(response))
+    result = await adviser_hunter.run(_record(), agent_caller=_fake_agent(response))
 
-    assert claim.status == ClaimStatus.NOT_FOUND
-    assert claim.field == "adviser"
+    assert result.claim.status == ClaimStatus.NOT_FOUND
+    assert result.claim.field == "adviser"
 
 
 @pytest.mark.asyncio
 async def test_malformed_json_does_not_crash():
-    claim = await adviser_hunter.run(_record(), agent_caller=_fake_agent("not json"))
-    assert claim.status == ClaimStatus.NOT_FOUND
+    result = await adviser_hunter.run(_record(), agent_caller=_fake_agent("not json"))
+    assert result.claim.status == ClaimStatus.NOT_FOUND

@@ -4,24 +4,37 @@ Receives a declarative AcquirerProfile (allowed domains, language, source
 type — see sources/profiles/). Returns raw DealCandidates only: url, date,
 snippet. Never interprets or judges what counts as a deal — that's the
 Normalizer's job, so the acquisition definition lives in one testable place.
+The client's given sources are starting points, not a boundary ("you are
+free and expected to range beyond them") — the prompt asks for a second,
+broader search past the profile's listed domains.
 
 WebSearch is an Anthropic-hosted tool — it runs outside this process, so it
 never passes through utils.fetch's allowlist gate. To keep the "nothing
 gets acted on outside the allowlist" guarantee, every candidate URL the
 model surfaces is re-checked against sources/allowlist.yaml here, in
 Python, before it's ever returned as a DealCandidate. A disallowed URL is
-dropped and logged, not silently trusted because the model found it.
+never trusted just because the model found it while ranging beyond the
+starting domains — but per "if in doubt, leave it out and say so," it's
+disclosed as an Omission, not just dropped and logged.
 """
 
 import json
 import logging
+from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 
-from src.domain.models import AcquirerProfile, DealCandidate
+from src.domain.models import AcquirerProfile, DealCandidate, Omission
 from src.utils.fetch import is_allowed
 from src.utils.llm import AgentCaller, run_agent, strip_json_fences
 
 logger = logging.getLogger(__name__)
+
+
+@dataclass
+class DiscoveryResult:
+    candidates: list[DealCandidate] = field(default_factory=list)
+    omitted: list[Omission] = field(default_factory=list)
+
 
 _SYSTEM_PROMPT = """You are the discovery agent for Tombstone, a competitive-\
 intelligence system tracking software company acquisitions for Abingdon \
@@ -34,11 +47,17 @@ acquisition (minority stake vs. majority acquisition, etc.); that \
 distinction is made downstream. Include anything that looks like an \
 acquisition announcement.
 
-You only have WebSearch — you cannot fetch or browse full pages. Base your \
-answer entirely on the titles, URLs and snippets WebSearch returns. Do not \
-attempt to visit, fetch, or verify any page. Run WebSearch once or twice at \
-most, then immediately give your final answer — do not narrate your plan \
-or say what you're about to do next.
+The listed domains are starting points, not a boundary — run one search \
+restricted to them, then a second, broader search for sector press or \
+local coverage of this acquirer's deals that the official domains may not \
+have posted yet. Report every candidate you find either way, even from a \
+domain outside the list — a downstream compliance gate decides what's \
+actually trusted, that is not your call to make by omission.
+
+You only have WebSearch — you cannot fetch or browse full pages, so base \
+your answer entirely on the titles, URLs and snippets it returns. After \
+your two searches, respond immediately with your final answer; skip \
+narrating your plan first, since only the JSON array below is used.
 
 Your final message must be ONLY a JSON array, no prose before or after, no \
 markdown code fences, each item shaped:
@@ -53,13 +72,13 @@ def _build_prompt(profile: AcquirerProfile, window_days: int) -> str:
         f"Acquirer: {profile.name}\n"
         f"Search in: {profile.primary_language}\n"
         f"Primary source type: {profile.source_type}\n"
-        f"Restrict search to: {site_filters}\n"
+        f"Starting domains: {site_filters}\n"
         f"Only include announcements dated on or after {cutoff}.\n"
         f"Context: {profile.notes or 'none'}\n"
     )
 
 
-def _parse_and_filter(raw_output: str, acquirer_slug: str) -> list[DealCandidate]:
+def _parse_and_filter(raw_output: str, acquirer_slug: str) -> DiscoveryResult:
     try:
         items = json.loads(strip_json_fences(raw_output))
     except json.JSONDecodeError:
@@ -68,9 +87,9 @@ def _parse_and_filter(raw_output: str, acquirer_slug: str) -> list[DealCandidate
             acquirer_slug,
             raw_output[:200],
         )
-        return []
+        return DiscoveryResult()
 
-    candidates: list[DealCandidate] = []
+    result = DiscoveryResult()
     for item in items:
         url = item.get("url")
         if not url:
@@ -78,7 +97,13 @@ def _parse_and_filter(raw_output: str, acquirer_slug: str) -> list[DealCandidate
 
         allowed, reason = is_allowed(url)
         if not allowed:
+            # Ranging beyond the starting domains (per the brief) means this
+            # agent will surface leads outside the allowlist — "if in doubt,
+            # leave it out and say so" requires the saying-so to reach the
+            # client, not just a log line, so this is a disclosed omission
+            # like any other, not a silent drop.
             logger.info("Dropping candidate outside allowlist: %s (%s)", url, reason)
+            result.omitted.append(Omission(url=url, reason=reason, stage="allowlist"))
             continue
 
         published_at = None
@@ -90,7 +115,7 @@ def _parse_and_filter(raw_output: str, acquirer_slug: str) -> list[DealCandidate
             except ValueError:
                 pass
 
-        candidates.append(
+        result.candidates.append(
             DealCandidate(
                 acquirer_slug=acquirer_slug,
                 url=url,
@@ -98,16 +123,18 @@ def _parse_and_filter(raw_output: str, acquirer_slug: str) -> list[DealCandidate
                 snippet=item.get("snippet", ""),
             )
         )
-    return candidates
+    return result
 
 
 async def run(
     profile: AcquirerProfile,
     window_days: int,
     agent_caller: AgentCaller = run_agent,
-) -> list[DealCandidate]:
-    """Search `profile`'s allowed sources for acquisitions announced within
-    the last `window_days`. Returns candidates, not deals — see module docstring.
+) -> DiscoveryResult:
+    """Search `profile`'s starting sources — and beyond them, per the brief —
+    for acquisitions announced within the last `window_days`. Returns
+    candidates, not deals — see module docstring — plus every lead the
+    compliance gate excluded, disclosed rather than silently dropped.
 
     `agent_caller` defaults to the real Claude Agent SDK wrapper; tests pass
     a fake async callable with the same signature to run this without

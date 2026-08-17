@@ -77,6 +77,12 @@ class DealRecord(BaseModel):
     purchase_price: Claim
     confidence: float | None = None  # set by the Scorer, never by an agent
     source_urls: list[str] = Field(default_factory=list)
+    # Every claim the Verifier rejected, and why. Carried on the record
+    # itself so a rejection is visible in the snapshot and the dashboard —
+    # the system under-claiming is the feature being demonstrated, and a
+    # downgrade that only ever reached a server log would be invisible
+    # exactly where it matters most.
+    conflicts: list[str] = Field(default_factory=list)
 
 
 class Omission(BaseModel):

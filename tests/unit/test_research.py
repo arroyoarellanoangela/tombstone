@@ -112,6 +112,27 @@ async def test_missing_quote_becomes_not_found_even_if_status_says_verified():
 
 
 @pytest.mark.asyncio
+async def test_uses_haiku_not_the_default_model():
+    """Extraction from text we already fetched needs no search or judgment
+    — the Verifier catches a bad quote regardless of which model wrote it —
+    so this must not silently run on the (pricier) SDK default."""
+    seen_models = []
+
+    async def _capturing_agent(prompt, system_prompt, allowed_tools=None, model=None):
+        seen_models.append(model)
+        return json.dumps({field: {"status": "not_found"} for field in research._FIELDS})
+
+    await research.run(
+        CANDIDATE,
+        acquirer_name="Volaris Group",
+        agent_caller=_capturing_agent,
+        fetcher=_fake_fetcher("irrelevant"),
+    )
+
+    assert seen_models == ["claude-haiku-4-5"]
+
+
+@pytest.mark.asyncio
 async def test_malformed_json_yields_all_not_found_without_crashing():
     record = await research.run(
         CANDIDATE,

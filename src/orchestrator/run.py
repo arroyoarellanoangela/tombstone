@@ -57,6 +57,11 @@ def _load_profile(acquirer_slug: str) -> AcquirerProfile:
     return AcquirerProfile(**yaml.safe_load(path.read_text(encoding="utf-8")))
 
 
+def _has_no_usable_fields(record: DealRecord) -> bool:
+    """True when every field is NOT_FOUND — nothing was extracted at all."""
+    return all(getattr(record, field).status == ClaimStatus.NOT_FOUND for field in _FIELDS)
+
+
 def _source_tiers(profile: AcquirerProfile, record: DealRecord) -> dict[str, str]:
     base_tier = (
         "regulatory_filing"
@@ -99,24 +104,38 @@ def _append_omissions(omissions: list[Omission]) -> None:
 
 async def _discover(
     profile: AcquirerProfile, cache: Cache, agent_caller: AgentCaller
-) -> list[DealCandidate]:
+) -> discovery.DiscoveryResult:
     """Discovery, cached per (acquirer, window, day) — re-running the same
-    acquirer on the same day is free."""
+    acquirer on the same day is free. Caches the full result, omissions
+    included, so a cache hit still discloses what the compliance gate
+    excluded rather than only replaying the kept candidates."""
     cache_key = {
         "slug": profile.slug,
         "window": settings.tracking_window_days,
         "day": date.today().isoformat(),
     }
-    if (hit := cache.get("discovery", cache_key)) is not None:
+    # A cache file outlives the code that wrote it. An entry from a build
+    # before omissions were cached is shaped differently, and crashing on
+    # someone else's stale cache is a worse failure than paying to redo one
+    # search — so an unrecognised shape is simply a miss.
+    if isinstance(hit := cache.get("discovery", cache_key), dict):
         logger.info("Discovery (cache hit): %s", profile.name)
-        return [DealCandidate.model_validate(c) for c in hit]
+        return discovery.DiscoveryResult(
+            candidates=[DealCandidate.model_validate(c) for c in hit["candidates"]],
+            omitted=[Omission.model_validate(o) for o in hit["omitted"]],
+        )
 
     logger.info("Discovery: %s", profile.name)
-    candidates = await discovery.run(
-        profile, settings.tracking_window_days, agent_caller=agent_caller
+    result = await discovery.run(profile, settings.tracking_window_days, agent_caller=agent_caller)
+    cache.set(
+        "discovery",
+        cache_key,
+        {
+            "candidates": [json.loads(c.model_dump_json()) for c in result.candidates],
+            "omitted": [json.loads(o.model_dump_json()) for o in result.omitted],
+        },
     )
-    cache.set("discovery", cache_key, [json.loads(c.model_dump_json()) for c in candidates])
-    return candidates
+    return result
 
 
 async def _research_deal(
@@ -158,7 +177,9 @@ async def _enrich(
     record = await _research_deal(candidate, profile, cache, agent_caller, use_cache=use_cache)
     if record.adviser.status == ClaimStatus.NOT_FOUND:
         logger.info("Adviser Hunter: %s x %s", profile.name, record.target.value)
-        record.adviser = await adviser_hunter.run(record, agent_caller=agent_caller)
+        adviser_result = await adviser_hunter.run(record, agent_caller=agent_caller)
+        record.adviser = adviser_result.claim
+        _append_omissions(adviser_result.omitted)
     return record
 
 
@@ -205,12 +226,13 @@ async def run_for_acquirer(acquirer_slug: str, budget: RunBudget, cache: Cache) 
     agent_caller = functools.partial(run_agent, budget=budget)
 
     try:
-        candidates = await _discover(profile, cache, agent_caller)
+        discovery_result = await _discover(profile, cache, agent_caller)
     except BudgetExceeded as exc:
         logger.warning("Stopping before discovery of %s: %s", profile.name, exc)
         return []
 
-    norm_result = normalizer.normalize(candidates, settings.tracking_window_days)
+    _append_omissions(discovery_result.omitted)
+    norm_result = normalizer.normalize(discovery_result.candidates, settings.tracking_window_days)
     _append_omissions(norm_result.omitted)
     logger.info("Normalizer: %d kept, %d omitted", len(norm_result.kept), len(norm_result.omitted))
 
@@ -224,14 +246,39 @@ async def run_for_acquirer(acquirer_slug: str, budget: RunBudget, cache: Cache) 
     )
 
     records: list[DealRecord] = []
+    failures: list[Omission] = []
     for candidate, outcome in zip(norm_result.kept, outcomes):
         if isinstance(outcome, BudgetExceeded):
-            logger.warning("Budget exhausted before %s completed — dropped", candidate.url)
+            logger.warning(
+                "Budget exhausted before %s completed — recorded as omission", candidate.url
+            )
+            failures.append(
+                Omission(url=candidate.url, reason=str(outcome), stage="budget_exhausted")
+            )
         elif isinstance(outcome, BaseException):
             logger.error("Deal %s failed: %s", candidate.url, outcome)
+            failures.append(
+                Omission(url=candidate.url, reason=f"processing failed: {outcome}", stage="error")
+            )
+        elif _has_no_usable_fields(outcome):
+            # Every field came back not_found — the candidate was discovered
+            # but nothing could be extracted or verified from it. That's an
+            # omission to disclose, not a deal to report: an all-empty row in
+            # the snapshot would imply we found a deal and knew nothing about
+            # it, when in fact we never confirmed there was one.
+            logger.warning("No usable fields for %s — recorded as omission", candidate.url)
+            failures.append(
+                Omission(
+                    url=candidate.url,
+                    reason="discovered as a candidate, but no field could be "
+                    "extracted and verified",
+                    stage="extraction_failed",
+                )
+            )
         else:
             records.append(outcome)
 
+    _append_omissions(failures)
     _write_snapshot(records)
     logger.info(
         "%s done: %d deal(s), $%.4f spent of $%.2f",

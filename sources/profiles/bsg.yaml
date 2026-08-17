@@ -5,6 +5,8 @@ allowed_domains:
 primary_language: es
 source_type: press_room
 notes: >
-  Spanish-language source. Quotes are extracted and verified in Spanish —
-  translation happens only for display, after extraction, so the Verifier
-  always matches against the actual page text (see agents/verifier.py).
+  Spanish-language source. Values and quotes are extracted, verified, and
+  displayed in Spanish end-to-end — no translation step exists anywhere in
+  the pipeline, so the Verifier always matches against the actual page text
+  and nothing can drift between the quote and what's shown (see
+  agents/verifier.py).

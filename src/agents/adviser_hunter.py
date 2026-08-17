@@ -15,8 +15,10 @@ by the Verifier against the actual page before being trusted.
 
 import json
 import logging
+from dataclasses import dataclass, field
 
-from src.domain.models import Claim, ClaimStatus, DealRecord
+from src.domain.models import Claim, ClaimStatus, DealRecord, Omission
+from src.utils.fetch import is_allowed
 from src.utils.llm import AgentCaller, run_agent, strip_json_fences
 
 logger = logging.getLogger(__name__)
@@ -56,12 +58,20 @@ def _build_prompt(acquirer_name: str, target_name: str) -> str:
     return f"Acquirer: {acquirer_name}\nTarget: {target_name}\n"
 
 
-def _parse(raw_output: str) -> Claim:
+@dataclass
+class AdviserResult:
+    claim: Claim
+    omitted: list[Omission] = field(default_factory=list)
+
+
+def _parse(raw_output: str) -> AdviserResult:
+    not_found = Claim(field="adviser", status=ClaimStatus.NOT_FOUND)
+
     try:
         item = json.loads(strip_json_fences(raw_output))
     except json.JSONDecodeError:
         logger.warning("Adviser Hunter returned non-JSON output: %r", raw_output[:200])
-        return Claim(field="adviser", status=ClaimStatus.NOT_FOUND)
+        return AdviserResult(claim=not_found)
 
     quote = item.get("quote")
     source_url = item.get("source_url")
@@ -70,20 +80,44 @@ def _parse(raw_output: str) -> Claim:
     # A claim this agent can't point back to a checkable source isn't worth
     # keeping — the Verifier has nothing to re-fetch and confirm.
     if status_raw != "verified" or not quote or not source_url:
-        return Claim(field="adviser", status=ClaimStatus.NOT_FOUND)
+        return AdviserResult(claim=not_found)
 
-    return Claim(
-        field="adviser",
-        status=ClaimStatus.VERIFIED,
-        value=item.get("value"),
-        source_url=source_url,
-        verbatim_quote=quote,
+    # This agent searches adviser-side sources by design, and those are
+    # exactly the domains an allowlist built from acquirer press rooms does
+    # not contain. Checking here rather than letting the Verifier discover
+    # it later matters twice over: the Verifier's re-fetch would be blocked
+    # anyway, and the resulting "conflict" would bounce the deal back to
+    # Research — a retry that cannot possibly succeed, paid for in full.
+    allowed, reason = is_allowed(source_url)
+    if not allowed:
+        logger.info("Adviser found at a source outside the allowlist: %s (%s)", source_url, reason)
+        return AdviserResult(
+            claim=not_found,
+            omitted=[
+                Omission(
+                    url=source_url,
+                    reason=f"names an M&A adviser, but {reason}",
+                    stage="adviser_allowlist",
+                )
+            ],
+        )
+
+    return AdviserResult(
+        claim=Claim(
+            field="adviser",
+            status=ClaimStatus.VERIFIED,
+            value=item.get("value"),
+            source_url=source_url,
+            verbatim_quote=quote,
+        )
     )
 
 
-async def run(record: DealRecord, agent_caller: AgentCaller = run_agent) -> Claim:
+async def run(record: DealRecord, agent_caller: AgentCaller = run_agent) -> AdviserResult:
     """Lateral search for `record`'s M&A adviser. Returns a Claim —
-    status=NOT_FOUND (not a guess) if no source names one.
+    status=NOT_FOUND (not a guess) if no source names one — plus any
+    adviser-naming source the compliance gate excluded, so a genuine find we
+    are not allowed to use is disclosed rather than looking like a miss.
     """
     acquirer_name = record.acquirer.value or record.deal_id.split("-")[0]
     target_name = record.target.value or "the target company"

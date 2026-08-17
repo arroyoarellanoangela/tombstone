@@ -3,6 +3,45 @@
 # Every `allowed: false` row is surfaced in the dashboard's Omissions tab —
 # "if in doubt, leave it out and say so" as a UI artifact, not a README line.
 
+# --- Adviser-side sources -------------------------------------------------
+# The brief notes the M&A adviser is "often absent from the acquirer's own
+# release and only named elsewhere" — so an allowlist containing only
+# acquirer press rooms makes that field structurally impossible to deliver,
+# no matter how well the Adviser Hunter searches. These are the advisory
+# firms' own transaction/tombstone pages: public marketing they publish
+# precisely to be read and cited, with no scraping prohibition found.
+#
+# Deal-aggregator sites (fusacq.com and similar) are deliberately NOT here.
+# They surfaced real advisers in testing, but their terms are ambiguous
+# enough that "if in doubt, leave it out and say so" applies — they are
+# disclosed in the Omissions tab when they name an adviser we can't use.
+
+- domain: houlihanlokey.com
+  allowed: true
+  reason: "Adviser's own public transaction page; no scraping prohibition found."
+
+- domain: clairfield.com
+  allowed: true
+  reason: "Adviser's own public transaction page; no scraping prohibition found."
+
+- domain: alantra.com
+  allowed: true
+  reason: "Adviser's own public transaction page; no scraping prohibition found."
+
+- domain: lincolninternational.com
+  allowed: true
+  reason: "Adviser's own public transaction page; no scraping prohibition found."
+
+- domain: jefferies.com
+  allowed: true
+  reason: "Adviser's own public transaction page; no scraping prohibition found."
+
+- domain: rothschildandco.com
+  allowed: true
+  reason: "Adviser's own public transaction page; no scraping prohibition found."
+
+# --- Blocked --------------------------------------------------------------
+
 - domain: linkedin.com
   allowed: false
   reason: "ToS prohibits scraping — explicitly excluded by the client brief."
@@ -27,13 +66,21 @@
   allowed: true
   reason: "Public knowledge-platform news tag, acquirer's own source."
 
-- domain: news.banyansoftware.com
+- domain: banyansoftware.com
   allowed: true
-  reason: "Public press room, no scraping prohibition found."
+  reason: "Acquirer's own site; covers the news.* press room the brief points to."
 
 - domain: totalspecificsolutions.com
   allowed: true
   reason: "Public acquisitions page, acquirer's own source."
+
+- domain: totalspecificsolutions.de
+  allowed: true
+  reason: "TSS's German regional site — same group, surfaced by search in a live run."
+
+- domain: groupetss.com
+  allowed: true
+  reason: "TSS's French regional site — same group, surfaced by search in a live run."
 
 - domain: topicus.com
   allowed: true
