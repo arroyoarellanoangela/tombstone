@@ -4,6 +4,9 @@ import { DealDetail } from "./components/DealDetail";
 import { DealsTable } from "./components/DealsTable";
 import { EMPTY_FILTERS, Filters, type FilterState } from "./components/Filters";
 import { OmissionsTable } from "./components/OmissionsTable";
+import { Timeline } from "./components/Timeline";
+import { VerticalDonut } from "./components/VerticalDonut";
+import { dealVertical } from "./lib/vertical";
 import { dataMode, loadDeals, loadOmissions } from "./services/data";
 import type { Deal, Omission } from "./types";
 
@@ -90,7 +93,10 @@ export default function App() {
     [deals],
   );
 
-  const visible = useMemo(
+  // Everything except the vertical filter — the donut computes its slices
+  // from this set, so clicking "Banyan" first narrows what the donut shows
+  // before you've touched a vertical at all, matching every other filter.
+  const filteredExceptVertical = useMemo(
     () =>
       deals.filter((d) => {
         if (filters.acquirer !== "all" && acquirerSlugOf(d) !== filters.acquirer) return false;
@@ -101,6 +107,14 @@ export default function App() {
         return true;
       }),
     [deals, filters],
+  );
+
+  const visible = useMemo(
+    () =>
+      filteredExceptVertical.filter(
+        (d) => filters.vertical === "all" || dealVertical(d) === filters.vertical,
+      ),
+    [filteredExceptVertical, filters.vertical],
   );
 
   return (
@@ -166,6 +180,17 @@ export default function App() {
           {tab === "deals" && (
             <>
               <Filters acquirers={acquirers} value={filters} onChange={setFilters} />
+
+              <Timeline deals={visible} onSelect={setSelectedDeal} />
+
+              <div className="py-5" style={{ borderBottom: "1px solid var(--rule)" }}>
+                <VerticalDonut
+                  deals={filteredExceptVertical}
+                  selected={filters.vertical === "all" ? null : filters.vertical}
+                  onSelect={(v) => setFilters({ ...filters, vertical: v ?? "all" })}
+                />
+              </div>
+
               <DealsTable deals={visible} onSelect={setSelectedDeal} />
               <p className="font-data text-[0.65rem] mt-4" style={{ color: "var(--ink-faint)" }}>
                 Hover any cell for the source quote inline, or open Evidence for the full picture.

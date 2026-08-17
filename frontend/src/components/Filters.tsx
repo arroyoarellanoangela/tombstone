@@ -1,7 +1,9 @@
+import type { Vertical } from "../lib/vertical";
 import type { ClaimStatus } from "../types";
 
 export interface FilterState {
   acquirer: string;
+  vertical: Vertical | "all";
   minConfidence: number;
   priceStatus: ClaimStatus | "any";
   advisersOnly: boolean;
@@ -9,6 +11,7 @@ export interface FilterState {
 
 export const EMPTY_FILTERS: FilterState = {
   acquirer: "all",
+  vertical: "all",
   minConfidence: 0,
   priceStatus: "any",
   advisersOnly: false,
