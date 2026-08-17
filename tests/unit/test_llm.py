@@ -87,7 +87,7 @@ class TestAccountFailureDetection:
         # short, bare refusals should stop the run.
         text = (
             '{"target": {"status": "verified", "value": "Acme", "quote": "the group '
-            'noted its credit balance is too low to fund further acquisitions this '
+            "noted its credit balance is too low to fund further acquisitions this "
             'year, according to the filing published alongside the announcement"}}'
         )
         assert _account_failure(text) is None

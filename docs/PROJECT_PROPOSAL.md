@@ -1,12 +1,12 @@
 ---
 title: Tombstone — Project Proposal & Architecture
 type: proposal
-status: proposed
+status: implemented
 client: Abingdon Software Group
 tech: [python, claude-agent-sdk, fastapi, react, sqlite, docker]
 owner: Angela Arroyo
 created: 2026-08-15
-updated: 2026-08-15
+updated: 2026-08-17
 ---
 
 # Tombstone
@@ -19,7 +19,7 @@ updated: 2026-08-15
 | **Prepared by** | Angela Arroyo |
 | **Context** | Technical case study — AI/Agent Engineer interview exercise |
 | **Date** | August 2026 |
-| **Status** | Proposed → In Progress |
+| **Status** | Implemented |
 
 ---
 
@@ -29,7 +29,7 @@ Abingdon Software Group acquires and operates vertical-market software businesse
 
 **Tombstone** is a multi-agent system that monitors named competitors, discovers acquisitions announced in a rolling window, researches each deal across primary and secondary sources, cross-verifies every extracted fact against its cited source, and publishes the result to a filterable dashboard.
 
-The brief is explicit that the deliverable under evaluation is **agentic system design**, not data coverage: an orchestrated workflow where subagents delegate, hand off work, and check each other — not a single script that scrapes and calls a model once. This document proposes that architecture, states the reasoning behind each design decision, and defines what is deliberately out of scope.
+The brief is explicit that the deliverable under evaluation is **agentic system design**, not data coverage: an orchestrated workflow where subagents delegate, hand off work, and check each other — not a single script that scrapes and calls a model once. This document describes the implemented architecture, states the reasoning behind each design decision, and defines what is deliberately out of scope.
 
 The single hardest constraint in the brief — *"a fabricated value is an automatic fail; a well-handled 'undisclosed' is a pass"* — is treated as the organizing design principle, not an afterthought. It drives three structural choices: every extracted field is a **Claim** carrying its verbatim source quote, not a bare value; a dedicated **Verifier** agent re-fetches every cited source and checks the quote exists before a claim is accepted; and fields carry a **three-state status** (`verified` / `explicitly_undisclosed` / `not_found`), so "the price is not public" is captured as a positive fact rather than a null.
 
@@ -101,7 +101,7 @@ Persistence is treated as core architecture, not an add-on: the system supports 
 
 ---
 
-## 5. Proposed Solution — Approach Overview
+## 5. Implemented Solution — Approach Overview
 
 Tombstone is built as a **pipeline of specialized, cooperating agents** orchestrated by deterministic Python, following a discovery → normalize → research → verify → score flow. The guiding split of responsibility:
 
@@ -139,8 +139,8 @@ flowchart LR
 flowchart TB
     O["Orchestrator (deterministic Python)\nbudget · cache · retries · run state"]
 
-    O --> D["1 · Discovery agent\n(one per acquirer, parallel)"]
-    D -->|raw candidates: url, date, snippet| N["2 · Normalizer\n(mostly code + 1 cheap call)\ndedup, window filter, deal definition"]
+    O --> D["1 · Discovery agent\n(one per configured acquirer)"]
+    D -->|raw candidates: url, date, snippet| N["2 · Normalizer\n deterministic code\ndedup, window filter, deal definition"]
     N -->|fan-out per deal| R["3 · Research agent\n(one per deal, parallel)"]
     R -->|adviser field empty?| A["4 · Adviser Hunter\n(conditional delegation)"]
     A -->|lateral result| R
@@ -150,7 +150,7 @@ flowchart TB
     OUT --> DB["Dashboard (FastAPI + React)"]
 ```
 
-**1 · Discovery** (one instance per acquirer, run in parallel). Each instance receives a declarative source profile — allowed domains, language, source type. Snowball's profile points at Oslo Børs / Euronext filings, not the corporate site, per the client's own note. BSG's profile is read in Spanish, unmodified. Discovery's output is *candidates*, never deals — url, date, snippet. It does not interpret.
+**1 · Discovery** (one instance per configured acquirer when that acquirer is run). Each instance receives a declarative source profile — allowed domains, language, source type. Snowball's profile points at Oslo Børs / Euronext filings, not the corporate site, per the client's own note. BSG's profile is read in Spanish, unmodified. Discovery's output is *candidates*, never deals — url, date, snippet. It does not interpret. The orchestrator can run all profiles, but it processes profiles sequentially and fans out per-deal work inside each profile to keep cost and concurrency bounded.
 
 **2 · Normalizer.** Largely deterministic code. Collapses duplicates into a canonical `deal_id`, applies the window filter, and applies the acquisition definition from Section 4 — encoded as config, not prompt text, so it's testable and auditable.
 
@@ -158,7 +158,7 @@ flowchart TB
 
 **4 · Adviser Hunter.** A specialist subagent, invoked **only when Research leaves the adviser field empty** — the brief notes this field is "often absent from the acquirer's own release." This conditionality is the clearest demonstration of real delegation in the system: different search strategy (advisory-side, not acquirer-side sources — tombstones, sector press, the target's own release in its local language), different budget, different failure mode than the agent that triggered it.
 
-**5 · Verifier.** Receives the `DealRecord` and trusts none of it. For every claim, it re-fetches the cited URL and checks the verbatim quote appears in the page content via literal substring match — deterministic, not model-graded, and not gameable by a plausible-sounding hallucination, because a hallucinated quote does not exist on any real page. A claim that fails the check is downgraded to `not_found`, not silently kept. The Verifier also flags single-sourced claims and conflicting values across sources — **conflicts are surfaced, never silently resolved.** It can bounce a `DealRecord` back to Research, capped at two rounds to bound cost.
+**5 · Verifier.** Receives the `DealRecord` and trusts none of it. For every claim, it re-fetches the cited URL and checks the verbatim quote appears in the page content via literal substring match — deterministic, not model-graded, and not gameable by a plausible-sounding hallucination, because a hallucinated quote does not exist on any real page. A claim that fails the check is downgraded to `not_found`, not silently kept. Rejections are carried on the `DealRecord.conflicts` list and surfaced in the dashboard. It can bounce a `DealRecord` back to Research for retryable failures, capped at two rounds to bound cost.
 
 **6 · Scorer.** A deterministic rubric — never an LLM-produced number. Inputs: source tier (primary filing/press release = 1.0 → aggregator = 0.4), count of independent corroborating domains, Verifier quote-match outcome, field completeness.
 
@@ -186,6 +186,8 @@ flowchart TB
 | `not_found` | No source addresses the field, or a claimed value failed verification | *(no quote)* |
 
 This is the direct implementation of the brief's grading line: an `explicitly_undisclosed` price is a **first-class, correctly-handled outcome**, not a gap.
+
+`DealRecord` also has an optional `valuation_estimate` object. It is intentionally separate from `purchase_price`: the brief asks for the actual deal price, while public sources often expose only revenue estimates, valuation ranges, or modelled signals. Those can be useful context, but they are not treated as verified purchase prices.
 
 ### 6.4 Confidence Scoring
 
@@ -221,7 +223,7 @@ Every blocked domain a Discovery agent would otherwise have used is logged to `o
 
 | Decision | Why |
 |---|---|
-| **Claude Agent SDK over LangGraph** | The workflow is a bounded fan-out/fan-in with one conditional loop (Verifier ↔ Research) — not a complex stateful graph. The SDK gives subagents, validation hooks, and built-in web search/fetch tools billed directly against the client's provided key, without an abstraction layer that would need its own justification. |
+| **Claude Agent SDK over LangGraph** | The workflow is a bounded fan-out/fan-in with one conditional loop (Verifier ↔ Research) — not a complex stateful graph. The SDK gives tool-using agent turns, including WebSearch where useful, billed directly against the client's provided key; deterministic HTTP fetches stay in `src/utils/fetch.py` so the allowlist is enforced in code. |
 | **Deterministic orchestrator, not an agent, for control flow** | Budget limits, caching keys, retry counts and run state have single correct answers. Delegating them to an LLM adds cost and non-determinism with no upside. |
 | **Claim, not string, as the atomic data type** | The brief's automatic-fail condition is fabrication. A bare string can't be checked for provenance; a Claim with a mandatory verbatim quote can be — and is, by the Verifier. |
 | **Verifier re-fetches and does literal quote matching, not a second model opinion** | A second LLM call can hallucinate agreement with the first. A substring match against a freshly fetched page cannot — the quote either exists on a real page or it doesn't. |
@@ -238,17 +240,17 @@ Every blocked domain a Discovery agent would otherwise have used is logged to `o
 ## 8. Scope: What I Am Not Building, and Why
 
 - **Not scraping Mergermarket**, despite it being the obvious source for adviser data. It's paywalled with a restrictive ToS; the brief explicitly rewards documenting an omission over quietly working around one.
-- **Not attempting all seven acquirers up front.** The brief states this directly — coverage cut before design cut. See Section 9.
-- **Not building automatic conflict resolution** when two sources disagree on a value (e.g. two different reported prices). The Verifier surfaces the conflict; resolving it silently would reintroduce exactly the fabrication risk the design exists to prevent.
+- **Not forcing a non-empty row for every acquirer.** All seven named acquirers have profiles, but the committed snapshot only includes deals where the pipeline found usable, verified fields. A zero-deal acquirer is shown in the dashboard's Competitors view rather than padded with an empty or guessed row.
+- **Not building automatic conflict resolution** when a claim cannot be verified. The Verifier surfaces rejected claims and downgrades them to `not_found`; inventing a replacement or silently choosing among weak signals would reintroduce exactly the fabrication risk the design exists to prevent.
 - **Not fine-tuning or using a second model provider.** The brief restricts spend to the provided Claude key; a second provider would also need separate justification for zero benefit here.
 - **Not building real-time/streaming monitoring.** Competitor acquisitions are announced, not ticking data — a scheduled or on-demand batch run covers the actual need. Continuous polling would add infrastructure cost against a use case that doesn't require it.
 - **Not translating anything, source or extracted.** Values and quotes from non-English sources (BSG) display exactly as extracted — in Spanish, tagged with `source_language` — with no translation step at all. Even translating just the extracted field would be a second place for meaning to drift from the verbatim quote it's grounded in.
 
 ---
 
-## 9. Coverage Plan
+## 9. Coverage Snapshot
 
-Five acquirers, chosen so each stresses a different part of the design rather than being five instances of the same case:
+All seven acquirers from the brief are configured in `sources/profiles/`. The committed `snapshot_2026-08-17.json` contains 20 researched deals across five acquirers; BSG and Snowball remain visible in the dashboard as named competitors with no current verified deal row in the snapshot. That is intentional: coverage gaps are surfaced as absence plus omissions, not filled by inference.
 
 | Acquirer | What it stress-tests |
 |---|---|
@@ -257,8 +259,10 @@ Five acquirers, chosen so each stresses a different part of the design rather th
 | Business Software Group (BSG) | Spanish-language pipeline, non-English quote grounding |
 | Snowball Software Group (ex-Hawk Infinity) | Regulatory filings (Euronext/Oslo Børs) instead of a corporate press page |
 | TSS / Topicus | High volume and the sharpest edge cases for "what counts as an acquisition" (Section 4) |
+| Everfield | Additional European serial acquirer coverage once real candidate URLs were available |
+| Valsoft | Additional North American serial acquirer coverage once real candidate URLs were available |
 
-Everfield and Valsoft are the first to be added if time allows beyond the five — deliberately deferred, not forgotten.
+The reference snapshot is conservative in exactly the way the brief asks for: purchase prices are left `not_found` when no source supports them, M&A advisers are verified only when an allowed source names a financial adviser, and blocked/ambiguous sources are recorded in `data/omissions.json`.
 
 ---
 
@@ -277,7 +281,7 @@ Everfield and Valsoft are the first to be added if time allows beyond the five �
 
 - **Adviser field will still be frequently empty.** Even with lateral search, this is genuinely hard information; the system should fail to `not_found` cleanly rather than guess, and it's expected to show up empty on the dashboard more often than any other field.
 - **Single-source claims.** Some legitimate facts (especially from smaller acquirers) will only ever appear in one place. These are marked with lower confidence, not discarded — but the client should expect to see them.
-- **Site structure changes.** If an acquirer changes their press room layout mid-project, Discovery for that acquirer degrades to zero new candidates rather than failing loudly. Detecting a silent zero-yield run is a known gap, mitigated by a minimum-candidate-count check per run, not solved outright.
+- **Site structure changes.** If an acquirer changes their press room layout or search visibility mid-project, Discovery for that acquirer can degrade to zero new candidates rather than failing loudly. Detecting a silent zero-yield run is a known gap.
 - **Non-English sources beyond Spanish.** The multilingual handling is validated against BSG (Spanish). If Discovery encounters other languages incidentally, extraction quality is unverified.
 - **Verifier false negatives.** Legitimate paraphrased reporting (a claim technically true but not a literal substring of any single page) will be marked `not_found` rather than `verified`. This is a deliberate bias toward under-claiming over the alternative of a looser match that risks a false positive.
 - **Cost ceiling.** The Adviser Hunter's lateral search and the two-round Verifier loop are the main cost drivers; both are hard-capped, so under budget pressure the system degrades to more `not_found` fields rather than exceeding spend.
@@ -326,13 +330,12 @@ tombstone/
 │   └── profiles/                (one YAML per acquirer)
 │
 ├── tests/
-│   ├── unit/
-│   └── integration/
+│   └── unit/                    (95 tests; every agent's parsing and every gate)
 │
 ├── frontend/                    (React + Vite + Tailwind — static build for public deploy)
 │
 └── data/
-    ├── snapshot_2026-08-15.json (committed reference output)
+    ├── snapshot_2026-08-17.json (committed reference output)
     └── omissions.json
 ```
 

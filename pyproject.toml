@@ -6,7 +6,12 @@
 line-length = 100
 
 [tool.ruff.lint]
-select = ["E", "F", "I"]
+# BLE (blind-except) is deliberately on: this pipeline talks to the live web
+# and a subprocess, so a bare `except Exception` is sometimes correct — but it
+# should have to be justified with a noqa and a reason, never appear by
+# accident. PTH/UP/B/SIM/C4/RUF are the low-noise correctness and modernisation
+# sets; the codebase passes all of them clean.
+select = ["E", "F", "I", "W", "UP", "B", "SIM", "C4", "RUF", "BLE", "PTH", "PIE"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["src"]

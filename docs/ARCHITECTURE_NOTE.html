@@ -303,7 +303,7 @@
 
   <section>
     <div class="num-head"><span class="n">01</span><h2>What I built</h2></div>
-    <p class="lede">A pipeline of specialized agents — discovery, normalization, research, adviser lookup, verification, scoring — orchestrated by deterministic Python, ending in a filterable dashboard. No agent's output is trusted by default: every fact-bearing claim is re-checked by a downstream step before it is scored or published.</p>
+    <p class="lede">A pipeline of specialized agents — discovery, normalization, research, adviser lookup, verification, scoring — orchestrated by deterministic Python, ending in a filterable dashboard. No agent's output is trusted by default: every fact-bearing claim is re-checked by a downstream step before it is scored or published. The committed snapshot currently contains 20 researched deals across five of the seven named acquirers, with the remaining acquirers still visible in the dashboard rather than hidden.</p>
 
     <div class="diagram">
       <pre class="mermaid">
@@ -328,7 +328,7 @@ flowchart LR
       <pre class="mermaid">
 flowchart TB
     O["Orchestrator (deterministic)<br/>budget · cache · retries · run state"]
-    O --> D["1 · Discovery<br/>one per acquirer, parallel"]
+    O --> D["1 · Discovery<br/>one per configured acquirer"]
     D -->|candidates: url, date, snippet| N["2 · Normalizer<br/>dedup · window · deal definition"]
     N -->|fan-out per deal| R["3 · Research<br/>one per deal, parallel"]
     R -->|adviser empty?| A["4 · Adviser Hunter<br/>conditional delegation"]
@@ -343,9 +343,9 @@ flowchart TB
 
     <h3>Why each hand-off exists</h3>
     <ul>
-      <li><strong>Discovery → Normalizer:</strong> discovery never judges what counts as a deal — it only returns candidates. Judgment (dedup, the acquisition definition, the time window) is centralized in one deterministic place, so it's testable and doesn't drift per-acquirer.</li>
+      <li><strong>Discovery → Normalizer:</strong> discovery never judges what counts as a deal — it only returns candidates. Judgment (dedup, the acquisition definition, the time window) is centralized in deterministic code, so it's testable and doesn't drift per-acquirer.</li>
       <li><strong>Research → Adviser Hunter:</strong> triggered <em>only</em> when the adviser field is empty. A different search strategy (advisory-side sources, not acquirer-side) is handed the problem specifically because the first approach didn't work — this is the clearest real delegation in the system, not parallel effort run by default.</li>
-      <li><strong>Research → Verifier:</strong> the Verifier trusts nothing upstream. It re-fetches every cited source and can bounce a record back to Research, capped at two rounds to bound cost.</li>
+      <li><strong>Research → Verifier:</strong> the Verifier trusts nothing upstream. It re-fetches every cited source, quote-matches each claim, records rejected claims on the deal itself, and can bounce a record back to Research for retryable failures, capped at two rounds to bound cost.</li>
       <li><strong>Verifier → Scorer:</strong> confidence is computed from Verifier outcomes, never asserted by an agent — an LLM-reported confidence number would itself be an unverified claim.</li>
     </ul>
   </section>
@@ -388,6 +388,9 @@ flowchart TB
     <pre class="code">confidence = w1·source_tier + w2·corroboration_count
            + w3·verifier_pass_rate + w4·field_completeness</pre>
     <p>Weights and source tiers live in one config file, reviewable independent of any model's behavior.</p>
+
+    <h3>Valuation signals stay separate from deal price</h3>
+    <p>Some public sources expose revenue estimates, valuation ranges or modelled company signals. The repo stores those as an optional <code>valuation_estimate</code>, separate from <code>purchase_price</code>, so a useful context signal never masquerades as the actual deal value the brief asked for.</p>
   </section>
 
   <section>
@@ -396,7 +399,7 @@ flowchart TB
       <table>
         <thead><tr><th style="width:34%">Decision</th><th>Why</th></tr></thead>
         <tbody>
-          <tr><td class="dec">Claude Agent SDK over LangGraph</td><td>The workflow is a bounded fan-out/fan-in with one conditional loop — not a complex stateful graph. Subagents, validation hooks and web search/fetch tools come built-in, billed against the client's own key, without an abstraction layer that needs its own justification.</td></tr>
+          <tr><td class="dec">Claude Agent SDK over LangGraph</td><td>The workflow is a bounded fan-out/fan-in with one conditional loop — not a complex stateful graph. The SDK handles tool-using agent turns such as WebSearch, billed against the client's own key; deterministic page fetches stay in <code>src/utils/fetch.py</code> so the allowlist is enforced in code.</td></tr>
           <tr><td class="dec">Deterministic orchestrator for control flow</td><td>Budget, cache keys, retries and run state have single correct answers. Delegating them to an LLM adds cost and non-determinism with no upside.</td></tr>
           <tr><td class="dec">Verifier does literal quote-matching, not a second model opinion</td><td>A second LLM call can hallucinate agreement with the first. A substring match against a freshly fetched page cannot.</td></tr>
           <tr><td class="dec">Compliance allowlist enforced at the fetch layer</td><td>A prompt instruction ("don't scrape LinkedIn") is a suggestion a model can ignore under pressure. A network-layer gate cannot be talked past.</td></tr>
@@ -411,7 +414,7 @@ flowchart TB
     <div class="num-head"><span class="n">04</span><h2>What I cut</h2></div>
     <ul class="flag-list">
       <li><b>Mergermarket as a source.</b> Paywalled, restrictive ToS. Documented as an omission rather than worked around.</li>
-      <li><b>All seven acquirers up front.</b> The brief rewards depth over breadth directly — five acquirers, chosen to each stress a different part of the design (volume, Spanish-language, regulatory filings, edge-case deal definitions), rather than seven done flat.</li>
+      <li><b>Forcing a non-empty row for every acquirer.</b> All seven named acquirers are configured, but the snapshot only includes rows where the pipeline found usable, verified fields. Acquirers with no verified current-window deal stay visible in the Competitors view rather than being padded with empty or guessed rows.</li>
       <li><b>Automatic conflict resolution.</b> When two sources disagree on a value, the Verifier surfaces the conflict. Resolving it silently would reintroduce the exact fabrication risk the design exists to prevent.</li>
       <li><b>Real-time/streaming monitoring.</b> Acquisitions are announced, not ticking data. A scheduled or on-demand batch run covers the actual need without added infrastructure.</li>
       <li><b>Translation, anywhere.</b> Values and quotes from non-English sources (BSG) display exactly as extracted — in Spanish, tagged with <code>source_language</code> — with no translation step at all. Even translating just the extracted field would be a second place for meaning to drift from the verbatim quote it's grounded in.</li>
@@ -472,8 +475,10 @@ flowchart TB
 │       ├── volaris.yaml
 │       ├── banyan.yaml
 │       ├── bsg.yaml              <span class="note"># language: es</span>
+│       ├── everfield.yaml
 │       ├── snowball.yaml         <span class="note"># source: Oslo Børs / Euronext filings</span>
-│       └── tss_topicus.yaml
+│       ├── tss_topicus.yaml
+│       └── valsoft.yaml
 │
 ├── <span class="dir">tests/</span>
 │   ├── unit/                    <span class="note"># scoring + Claim invariants</span>
@@ -482,7 +487,7 @@ flowchart TB
 ├── <span class="dir">frontend/</span>                    <span class="note"># React + Vite + Tailwind — static build for public deploy</span>
 │
 └── <span class="dir">data/</span>                        <span class="note"># Tombstone's outputs — what it found</span>
-    ├── snapshot_2026-08-15.json <span class="note"># committed reference run</span>
+    ├── snapshot_2026-08-17.json <span class="note"># committed reference run</span>
     └── omissions.json           <span class="note"># blocked sources + reasons</span></div>
 
     <dl class="dir-rationale">
@@ -491,7 +496,7 @@ flowchart TB
       <dt>sources/</dt>
       <dd>Config, not code — every acquirer's scope (allowed domains, language, source type) and the ToS gate live here as data, so extending coverage or auditing what's off-limits never requires reading Python. Deliberately separate from <code>data/</code>: <code>sources/</code> is what Discovery is told to look at, <code>data/</code> is what it found.</dd>
       <dt>sources/profiles/</dt>
-      <dd>One acquirer, one file — language, allowed domains, source type. Adding an acquirer (Everfield, Valsoft) is a new profile, not a code change to Discovery.</dd>
+      <dd>One acquirer, one file — language, allowed domains, source type. All seven acquirers from the brief are represented here; adding another one later is a new profile, not a code change to Discovery.</dd>
       <dt>sources/allowlist.yaml</dt>
       <dd>Read by <code>utils/fetch.py</code> before any request leaves the process. LinkedIn and Mergermarket are listed here as <code>allowed: false</code> with a reason — the omission is data, not a comment.</dd>
       <dt>data/</dt>

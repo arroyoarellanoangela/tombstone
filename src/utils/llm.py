@@ -78,6 +78,7 @@ def _is_transient_spawn_failure(exc: Exception) -> bool:
     message = str(exc).lower()
     return any(marker in message for marker in _TRANSIENT_SPAWN_MARKERS)
 
+
 # The signature every agent's injectable `agent_caller` must satisfy —
 # run_agent below is the real implementation, tests pass fakes.
 AgentCaller = Callable[..., Awaitable[str]]
@@ -169,9 +170,12 @@ async def run_agent(
                         for block in message.content:
                             if isinstance(block, TextBlock):
                                 chunks.append(block.text)
-                    elif isinstance(message, ResultMessage):
-                        if budget is not None and message.total_cost_usd:
-                            budget.record_spend(message.total_cost_usd)
+                    elif (
+                        isinstance(message, ResultMessage)
+                        and budget is not None
+                        and message.total_cost_usd
+                    ):
+                        budget.record_spend(message.total_cost_usd)
             response = "".join(chunks)
             if (marker := _account_failure(response)) is not None:
                 raise AgentAccountError(
@@ -179,7 +183,7 @@ async def run_agent(
                     f"rather than reporting an empty result. Full response: {response!r}"
                 )
             return response
-        except Exception as exc:  # noqa: BLE001 — re-raised below if not transient
+        except Exception as exc:
             if not _is_transient_spawn_failure(exc) or attempt == _SPAWN_ATTEMPTS - 1:
                 raise
             last_error = exc

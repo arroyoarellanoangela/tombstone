@@ -1,4 +1,4 @@
-.PHONY: install dev run test lint typecheck build up down
+.PHONY: install dev run test lint format typecheck check up down static
 
 install:
 	pip install -r requirements-dev.txt
@@ -17,9 +17,18 @@ test:
 
 lint:
 	ruff check src/ tests/
+	ruff format --check src/ tests/
+
+format:
+	ruff check --fix src/ tests/
+	ruff format src/ tests/
 
 typecheck:
 	mypy src/
+
+# Everything CI runs, in one command — run this before pushing.
+check: lint typecheck test
+	cd frontend && npm run lint
 
 # Full local stack: API + orchestrator, wired to the frontend dev server.
 up:

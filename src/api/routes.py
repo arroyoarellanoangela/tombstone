@@ -69,6 +69,8 @@ async def trigger_run(acquirer: str) -> dict[str, Any]:
         records = await run_for_acquirer(
             acquirer, RunBudget(ceiling_usd=settings.run_budget_usd), Cache()
         )
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail=f"No profile for acquirer '{acquirer}'")
+    except FileNotFoundError as exc:
+        raise HTTPException(
+            status_code=404, detail=f"No profile for acquirer '{acquirer}'"
+        ) from exc
     return {"acquirer": acquirer, "deals": len(records)}
