@@ -21,7 +21,13 @@ docker compose up --build
 - Dashboard: [http://localhost:5173](http://localhost:5173)
 - API: [http://localhost:8000](http://localhost:8000)
 
-This runs the live agent pipeline against the key in `.env` and will spend against it — see `RUN_BUDGET_USD` in `.env.example` for the hard ceiling. To browse without spending anything, run `make dev` instead: it serves the dashboard against the last committed snapshot only, no LLM calls.
+Starting the stack spends nothing: it serves the API and the dashboard against the committed snapshot. A live run is triggered explicitly, and only then does it spend against the key in `.env`:
+
+```bash
+curl -X POST "http://localhost:8000/runs?acquirer=volaris"
+```
+
+`RUN_BUDGET_USD` in `.env.example` is the hard ceiling per run. One acquirer costs roughly $0.50–$1.00 and takes a few minutes; the ceiling stops new agent calls once reached, so the run degrades to `not_found` fields rather than overspending. To browse with no API at all, run `make dev` — dashboard only, reading the last committed snapshot.
 
 ## Repository layout
 

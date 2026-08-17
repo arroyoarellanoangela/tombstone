@@ -231,7 +231,7 @@ Every blocked domain a Discovery agent would otherwise have used is logged to `o
 | **Compliance allowlist enforced at the fetch layer** | A prompt instruction ("don't scrape LinkedIn") is a suggestion a model can ignore under pressure to find data. A network-layer gate cannot be talked past. |
 | **Per-(agent, input-hash) caching in SQLite** | Keeps repeat runs cheap against the client's prepaid key, and makes the two-round Verifier↔Research loop cost-bounded rather than open-ended. |
 | **Committed, documented data snapshot** | Lets the client evaluate output quality (the thing they're actually grading) by opening the dashboard, without spending their key or waiting ~10–15 minutes for a live run first. |
-| **Quotes stored verbatim in source language, translated separately** | Translating before extraction would break quote-grounding — the Verifier needs to match against the actual page text, not a paraphrase. |
+| **Quotes stored and displayed verbatim in their source language, never translated** | Translation anywhere in the chain breaks quote-grounding — the Verifier matches against the actual page text, and a translated value shown next to a Spanish quote is a second place for meaning to drift. Non-English values carry a `source_language` tag instead. |
 
 ---
 
@@ -242,7 +242,7 @@ Every blocked domain a Discovery agent would otherwise have used is logged to `o
 - **Not building automatic conflict resolution** when two sources disagree on a value (e.g. two different reported prices). The Verifier surfaces the conflict; resolving it silently would reintroduce exactly the fabrication risk the design exists to prevent.
 - **Not fine-tuning or using a second model provider.** The brief restricts spend to the provided Claude key; a second provider would also need separate justification for zero benefit here.
 - **Not building real-time/streaming monitoring.** Competitor acquisitions are announced, not ticking data — a scheduled or on-demand batch run covers the actual need. Continuous polling would add infrastructure cost against a use case that doesn't require it.
-- **Not translating source documents wholesale.** Only the fields being extracted are translated for display; full-document translation adds cost and a second place for meaning to drift from the verbatim quote.
+- **Not translating anything, source or extracted.** Values and quotes from non-English sources (BSG) display exactly as extracted — in Spanish, tagged with `source_language` — with no translation step at all. Even translating just the extracted field would be a second place for meaning to drift from the verbatim quote it's grounded in.
 
 ---
 

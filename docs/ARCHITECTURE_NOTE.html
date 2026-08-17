@@ -414,7 +414,7 @@ flowchart TB
       <li><b>All seven acquirers up front.</b> The brief rewards depth over breadth directly — five acquirers, chosen to each stress a different part of the design (volume, Spanish-language, regulatory filings, edge-case deal definitions), rather than seven done flat.</li>
       <li><b>Automatic conflict resolution.</b> When two sources disagree on a value, the Verifier surfaces the conflict. Resolving it silently would reintroduce the exact fabrication risk the design exists to prevent.</li>
       <li><b>Real-time/streaming monitoring.</b> Acquisitions are announced, not ticking data. A scheduled or on-demand batch run covers the actual need without added infrastructure.</li>
-      <li><b>Whole-document translation.</b> Only extracted fields are translated for display — full-document translation adds a second place for meaning to drift from the verbatim quote.</li>
+      <li><b>Translation, anywhere.</b> Values and quotes from non-English sources (BSG) display exactly as extracted — in Spanish, tagged with <code>source_language</code> — with no translation step at all. Even translating just the extracted field would be a second place for meaning to drift from the verbatim quote it's grounded in.</li>
     </ul>
   </section>
 
