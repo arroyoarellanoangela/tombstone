@@ -1,53 +1,72 @@
 @import "tailwindcss";
 
-/* Same token system as docs/ARCHITECTURE_NOTE.html — the dashboard and the
-   architecture note are one visual identity. */
 :root {
-  --paper: #f6f7f3;
-  --paper-raised: #ffffff;
-  --ink: #17191a;
-  --ink-soft: #4b4f52;
-  --ink-faint: #7c807e;
-  --rule: #d8dad4;
-  --rule-strong: #b7bab2;
-  --accent: #1e3a5f;
-  --accent-soft: #e8edf2;
-  --verified: #1f6f54;
-  --verified-bg: #e6f0ea;
-  --undisclosed: #8a6d1f;
-  --undisclosed-bg: #f3ecd9;
-  --notfound: #8a3b3b;
-  --notfound-bg: #f3e4e2;
-  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
-  --font-mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+  --black: #000000;
+  --charcoal: #2c2c2c;
+  --white: #ffffff;
+  --coral: #ff5e5e;
+
+  --paper: var(--white);
+  --paper-raised: var(--white);
+  --ink: var(--black);
+  --ink-soft: var(--charcoal);
+  --ink-faint: #747474;
+  --rule: #d8d8d8;
+  --rule-strong: var(--black);
+  --accent: var(--coral);
+  --accent-hover: #ff7777;
+  --accent-soft: #fff0f0;
+
+  --verified: var(--charcoal);
+  --verified-bg: var(--white);
+  --undisclosed: var(--coral);
+  --undisclosed-bg: var(--white);
+  --notfound: #8a8a8a;
+  --notfound-bg: var(--white);
+  --derived: var(--charcoal);
+  --derived-bg: var(--white);
+
+  --font-display: "Source Serif 4", serif;
+  --font-sans: "Schibsted Grotesk", sans-serif;
+  --font-mono: "Schibsted Grotesk", sans-serif;
+
+  --page-gutter: 104px;
+  --container-max: 1233px;
+  --content-max: 815px;
+  --header-height: 120px;
+  --section-padding-top: 32px;
+  --section-padding-bottom: 120px;
+  --action-height: 30px;
+  --action-icon-space: 45px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #14161a;
-    --paper-raised: #1b1e22;
-    --ink: #e9eae6;
-    --ink-soft: #a7aca8;
-    --ink-faint: #74786f;
-    --rule: #2c2f31;
-    --rule-strong: #3c4043;
-    --accent: #7fa3c9;
-    --accent-soft: #1e2a33;
-    --verified: #5cb896;
-    --verified-bg: #16261f;
-    --undisclosed: #d3ac3b;
-    --undisclosed-bg: #2a2412;
-    --notfound: #d38686;
-    --notfound-bg: #2a1a19;
-  }
+*,
+*::before,
+*::after {
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 body {
+  margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 32px;
+  letter-spacing: 0.2px;
   -webkit-font-smoothing: antialiased;
+}
+
+button,
+select,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
 }
 
 .font-display {
@@ -55,39 +74,146 @@ body {
 }
 
 .font-data {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
+}
+
+.site-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 30;
+  height: var(--header-height);
+  padding: 20px var(--page-gutter);
+  background: var(--white);
+  border-bottom: 1px solid var(--black);
+}
+
+.page-shell {
+  width: 100%;
+  padding-inline: var(--page-gutter);
+}
+
+.page-inner {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+}
+
+.content-column {
+  width: 100%;
+  max-width: var(--content-max);
+}
+
+.page-main {
+  padding-top: var(--header-height);
+}
+
+.page-main--with-sidebar {
+  display: flex;
+  align-items: stretch;
+}
+
+/* Full-page rail, not a content-column control — fixed below the header,
+   spanning the full remaining viewport height, the same shell as the
+   HolaCamp marketing dashboard's sidebar. */
+.app-sidebar {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  bottom: 0;
+  width: 260px;
+  padding: 32px 24px;
+  overflow-y: auto;
+  border-right: 1px solid var(--black);
+  background: var(--white);
+  z-index: 15;
+}
+
+.page-main--with-sidebar > main {
+  margin-left: 260px;
+}
+
+.dashboard-section {
+  padding-top: var(--section-padding-top);
+  padding-bottom: var(--section-padding-bottom);
+}
+
+.section-title {
+  font-family: var(--font-sans);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 32px;
+  letter-spacing: 0.2px;
+}
+
+.section-copy {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 32px;
+  letter-spacing: 0.2px;
+  color: var(--ink-soft);
+}
+
+.action-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--action-height);
+  padding: 0 var(--action-icon-space) 0 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 1.12px;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.action-link::after {
+  content: "->";
+  margin-left: 14px;
+  color: var(--accent);
+}
+
+.action-link:hover,
+.action-link:focus-visible {
+  color: var(--accent);
 }
 
 .pill {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.03em;
-  padding: 0.15rem 0.45rem;
-  border: 1px solid currentColor;
-  border-radius: 2px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink-faint);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: 0.88px;
+  text-transform: uppercase;
   white-space: nowrap;
 }
 
 .pill-verified {
-  color: var(--verified);
-  background: var(--verified-bg);
+  color: var(--charcoal);
 }
 
 .pill-undisclosed {
-  color: var(--undisclosed);
-  background: var(--undisclosed-bg);
+  color: var(--coral);
 }
 
 .pill-notfound {
-  color: var(--notfound);
-  background: var(--notfound-bg);
+  color: var(--ink-faint);
 }
 
-/* Quote tooltip on claim cells */
+.pill-derived {
+  color: var(--charcoal);
+}
+
 .claim-cell {
   position: relative;
 }
@@ -100,22 +226,38 @@ body {
   z-index: 20;
   left: 0;
   top: 100%;
-  margin-top: 0.25rem;
-  width: 22rem;
+  margin-top: 12px;
+  width: 360px;
   max-width: 70vw;
-  background: var(--paper-raised);
+  background: var(--white);
   color: var(--ink);
-  border: 1px solid var(--rule-strong);
-  box-shadow: 0 4px 16px rgb(0 0 0 / 0.12);
-  padding: 0.6rem 0.75rem;
-  font-size: 0.75rem;
-  line-height: 1.5;
+  border: 1px solid var(--black);
+  padding: 16px;
+  font-size: 14px;
+  line-height: 24px;
 }
 
 .claim-cell:hover .claim-tooltip,
 .claim-cell:focus-within .claim-tooltip {
   visibility: visible;
   opacity: 1;
+}
+
+table {
+  font-size: 14px;
+  line-height: 22px;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --page-gutter: 24px;
+    --header-height: 104px;
+  }
+
+  body {
+    font-size: 17px;
+    line-height: 28px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

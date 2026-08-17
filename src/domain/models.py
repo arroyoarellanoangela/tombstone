@@ -44,6 +44,23 @@ class Claim(BaseModel):
         return self
 
 
+class ValuationEstimate(BaseModel):
+    """A non-authoritative company/deal valuation signal.
+
+    Kept separate from purchase_price because the brief asks for deal price,
+    while public databases often expose only ranges, revenue estimates, or
+    modelled values. Mixing those into purchase_price would make the system
+    look more certain than the evidence supports.
+    """
+
+    value: str
+    kind: str  # e.g. "deal_value_range" | "estimated_revenue"
+    method: str
+    source_url: str
+    verbatim_quote: str | None = None
+    confidence: str = "medium"
+
+
 class AcquirerProfile(BaseModel):
     """Declarative Discovery config for one acquirer — no logic, just scope."""
 
@@ -75,6 +92,7 @@ class DealRecord(BaseModel):
     geography: Claim
     adviser: Claim
     purchase_price: Claim
+    valuation_estimate: ValuationEstimate | None = None
     confidence: float | None = None  # set by the Scorer, never by an agent
     source_urls: list[str] = Field(default_factory=list)
     # Every claim the Verifier rejected, and why. Carried on the record

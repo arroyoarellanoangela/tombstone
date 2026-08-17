@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { CLAIM_FIELDS, type Claim, type Deal } from "../types";
+import { dealVertical } from "../lib/vertical";
+import { CLAIM_FIELDS, type Claim, type Deal, type ValuationEstimate } from "../types";
 import { StatusPill } from "./StatusPill";
 
 const FIELD_LABELS: Record<(typeof CLAIM_FIELDS)[number], string> = {
@@ -46,14 +47,57 @@ function FieldEvidence({ label, claim }: { label: string; claim: Claim }) {
                 href={claim.source_url}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="font-data text-[0.7rem] underline"
-                style={{ color: "var(--accent)" }}
+                className="action-link mt-2"
               >
-                Open source ↗
+                Open source
               </a>
             )}
           </div>
         </div>
+      )}
+    </div>
+  );
+}
+
+function ValuationEvidence({ estimate }: { estimate: ValuationEstimate | null }) {
+  return (
+    <div className="py-4" style={{ borderBottom: "1px solid var(--rule)" }}>
+      <div className="flex items-baseline justify-between gap-3 mb-1.5">
+        <span className="font-data text-[0.65rem] uppercase tracking-wider" style={{ color: "var(--ink-faint)" }}>
+          Valuation signal
+        </span>
+        <span className="pill pill-derived">estimate</span>
+      </div>
+
+      {estimate ? (
+        <>
+          <p className="text-[0.95rem] leading-snug mb-1.5">{estimate.value}</p>
+          <p className="text-[0.8rem] leading-relaxed" style={{ color: "var(--ink-soft)" }}>
+            {estimate.method}
+          </p>
+          {estimate.verbatim_quote && (
+            <p className="italic text-[0.8rem] leading-relaxed mt-2" style={{ color: "var(--ink-soft)" }}>
+              "{estimate.verbatim_quote}"
+            </p>
+          )}
+          <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+            <span className="font-data text-[0.6rem] uppercase tracking-wider" style={{ color: "var(--ink-faint)" }}>
+              {estimate.kind.replaceAll("_", " ")} · {estimate.confidence} confidence
+            </span>
+            <a
+              href={estimate.source_url}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="action-link mt-2"
+            >
+              Open source
+            </a>
+          </div>
+        </>
+      ) : (
+        <p className="text-[0.95rem] leading-snug" style={{ color: "var(--ink-faint)" }}>
+          No public valuation signal located.
+        </p>
       )}
     </div>
   );
@@ -77,25 +121,24 @@ export function DealDetail({ deal, onClose }: { deal: Deal; onClose: () => void 
         aria-label="Close"
         onClick={onClose}
         className="absolute inset-0"
-        style={{ background: "rgb(0 0 0 / 0.35)" }}
+        style={{ background: "rgb(0 0 0 / 0.22)" }}
       />
       <div
-        className="relative h-full w-full max-w-[30rem] overflow-y-auto px-7 py-8"
-        style={{ background: "var(--paper-raised)", borderLeft: "1px solid var(--rule-strong)" }}
+        className="relative h-full w-full max-w-[607px] overflow-y-auto px-12 py-10"
+        style={{ background: "var(--white)", borderLeft: "1px solid var(--black)" }}
       >
         <button
           type="button"
           onClick={onClose}
-          className="font-data text-[0.7rem] uppercase tracking-wider mb-6"
-          style={{ color: "var(--ink-faint)" }}
+          className="action-link mb-8"
         >
-          ← Close
+          Close
         </button>
 
         <p className="font-data text-[0.65rem] uppercase tracking-wider mb-1" style={{ color: "var(--ink-faint)" }}>
-          Acquired by {deal.acquirer.value ?? "—"}
+          Acquired by {deal.acquirer.value ?? "-"}
         </p>
-        <h2 className="font-display text-2xl mb-4">{deal.target.value ?? deal.deal_id}</h2>
+        <h2 className="font-display text-[40px] leading-[48px] font-normal mb-8">{deal.target.value ?? deal.deal_id}</h2>
 
         <div className="flex items-center gap-5 mb-6 pb-5" style={{ borderBottom: "1px solid var(--rule-strong)" }}>
           <div>
@@ -122,6 +165,19 @@ export function DealDetail({ deal, onClose }: { deal: Deal; onClose: () => void 
           </div>
         </div>
 
+        <div className="py-4" style={{ borderBottom: "1px solid var(--rule)" }}>
+          <div className="flex items-baseline justify-between gap-3 mb-1.5">
+            <span className="font-data text-[0.65rem] uppercase tracking-wider" style={{ color: "var(--ink-faint)" }}>
+              Target vertical
+            </span>
+            <span className="pill pill-derived">◇ derived</span>
+          </div>
+          <p className="text-[0.95rem] leading-snug">{dealVertical(deal)}</p>
+          <p className="font-data text-[0.6rem] uppercase tracking-wider mt-1" style={{ color: "var(--ink-faint)" }}>
+            From the verified description below — never asked of the model
+          </p>
+        </div>
+
         {deal.conflicts.length > 0 && (
           <div
             className="mb-6 px-3 py-2.5 text-[0.8rem]"
@@ -138,6 +194,8 @@ export function DealDetail({ deal, onClose }: { deal: Deal; onClose: () => void 
         {CLAIM_FIELDS.map((field) => (
           <FieldEvidence key={field} label={FIELD_LABELS[field]} claim={deal[field]} />
         ))}
+
+        <ValuationEvidence estimate={deal.valuation_estimate} />
       </div>
     </div>
   );

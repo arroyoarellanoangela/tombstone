@@ -116,7 +116,8 @@ export function Competitors({
       {activeVerticals.length > 0 && (
         <div className="overflow-x-auto">
           <p className="font-data text-[0.65rem] uppercase tracking-wider mb-3" style={{ color: "var(--ink-faint)" }}>
-            Competitor × vertical <span className="normal-case">· ◇ derived, not verified</span>
+            Competitor × vertical{" "}
+            <span className="normal-case" style={{ color: "var(--derived)" }}>· ◇ derived, not verified</span>
           </p>
           <table className="border-collapse text-sm">
             <thead>

@@ -1,10 +1,5 @@
 import { useMemo, useState } from "react";
 import type { Deal } from "../types";
-import { colorForAcquirer } from "../lib/vertical";
-
-function acquirerSlugOf(deal: Deal): string {
-  return deal.deal_id.split("-")[0];
-}
 
 /** One dot per dated deal, positioned on a real day-scale axis (not bucketed
  * into months) so a burst of activity in a two-week window — the thing
@@ -20,11 +15,6 @@ export function Timeline({
   onSelect: (deal: Deal) => void;
 }) {
   const [hovered, setHovered] = useState<string | null>(null);
-
-  const acquirerSlugs = useMemo(
-    () => [...new Set(deals.map(acquirerSlugOf))].sort(),
-    [deals],
-  );
 
   const dated = useMemo(
     () =>
@@ -65,10 +55,7 @@ export function Timeline({
   }, [dated, minTime, span]);
 
   return (
-    <div className="py-5" style={{ borderBottom: "1px solid var(--rule)" }}>
-      <p className="font-data text-[0.65rem] uppercase tracking-wider mb-3" style={{ color: "var(--ink-faint)" }}>
-        Acquisition timeline
-      </p>
+    <div>
       <div className="relative" style={{ height: "5.5rem" }}>
         <div className="absolute left-0 right-0" style={{ top: "2.75rem", height: "1px", background: "var(--rule-strong)" }} />
 
@@ -82,7 +69,7 @@ export function Timeline({
         ))}
 
         {positioned.map(({ deal, date, xPct, row }) => {
-          const color = colorForAcquirer(acquirerSlugOf(deal), acquirerSlugs);
+          const color = "var(--accent)";
           const isHovered = hovered === deal.deal_id;
           return (
             <button
@@ -91,7 +78,7 @@ export function Timeline({
               onClick={() => onSelect(deal)}
               onMouseEnter={() => setHovered(deal.deal_id)}
               onMouseLeave={() => setHovered(null)}
-              className="absolute rounded-full"
+              className="absolute"
               style={{
                 left: `${xPct}%`,
                 top: `${2.75 - row * 0.55}rem`,
@@ -99,7 +86,7 @@ export function Timeline({
                 height: isHovered ? "0.6rem" : "0.5rem",
                 background: color,
                 transform: "translate(-50%, -50%)",
-                boxShadow: isHovered ? `0 0 0 3px ${color}33` : "none",
+                border: isHovered ? "2px solid var(--black)" : "0",
                 zIndex: isHovered ? 10 : 1,
               }}
               aria-label={`${deal.acquirer.value ?? "Unknown acquirer"} acquires ${deal.target.value ?? deal.deal_id}, ${date.toDateString()}`}
@@ -113,7 +100,6 @@ export function Timeline({
                     transform: "translateX(-50%)",
                     background: "var(--paper-raised)",
                     border: "1px solid var(--rule-strong)",
-                    boxShadow: "0 4px 16px rgb(0 0 0 / 0.12)",
                     color: "var(--ink)",
                   }}
                 >

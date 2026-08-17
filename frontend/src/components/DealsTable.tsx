@@ -12,8 +12,59 @@ const COLUMNS: { key: ClaimField; label: string }[] = [
   { key: "purchase_price", label: "Price" },
 ];
 
+function ValuationCell({ deal }: { deal: Deal }) {
+  const estimate = deal.valuation_estimate;
+  if (!estimate) {
+    return (
+      <span className="text-sm" style={{ color: "var(--ink-faint)" }}>
+        —
+      </span>
+    );
+  }
+
+  return (
+    <div className="claim-cell" tabIndex={0}>
+      <div className="flex flex-col gap-1 items-start">
+        <span className="text-sm leading-snug">{estimate.value}</span>
+        <span className="pill pill-derived">estimate</span>
+      </div>
+      <div className="claim-tooltip" role="note">
+        <p
+          className="font-data text-[0.65rem] uppercase tracking-wider mb-1"
+          style={{ color: "var(--ink-faint)" }}
+        >
+          {estimate.kind.replaceAll("_", " ")} · {estimate.confidence} confidence
+        </p>
+        <p>{estimate.method}</p>
+        {estimate.verbatim_quote && <p className="italic mt-2">"{estimate.verbatim_quote}"</p>}
+        <a
+          href={estimate.source_url}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="block mt-2 underline break-all text-[0.7rem]"
+          style={{ color: "var(--accent)" }}
+        >
+          {estimate.source_url}
+        </a>
+      </div>
+    </div>
+  );
+}
+
+// null means the Scorer never ran on this record, not "zero confidence" —
+// those are different claims, and rendering one as the other would be a
+// small, silent instance of exactly the fabrication this system exists to
+// avoid. In practice the Scorer always runs, so this is a defensive
+// display rule more than an expected state.
 function ConfidenceBar({ value }: { value: number | null }) {
-  const pct = Math.round((value ?? 0) * 100);
+  if (value === null) {
+    return (
+      <span className="font-data text-xs" style={{ color: "var(--ink-faint)" }}>
+        — Unscored
+      </span>
+    );
+  }
+  const pct = Math.round(value * 100);
   return (
     <div className="flex items-center gap-2 min-w-[5.5rem]">
       <div
@@ -79,6 +130,15 @@ export function DealsTable({
                 borderBottom: "1px solid var(--rule-strong)",
               }}
             >
+              Valuation signal
+            </th>
+            <th
+              className="font-data text-[0.65rem] uppercase tracking-wider font-medium text-left px-3 py-2 align-bottom"
+              style={{
+                color: "var(--ink-faint)",
+                borderBottom: "1px solid var(--rule-strong)",
+              }}
+            >
               <span className="sr-only">Evidence</span>
             </th>
           </tr>
@@ -118,13 +178,22 @@ export function DealsTable({
                       : "1px solid var(--rule)",
                   }}
                 >
+                  <ValuationCell deal={deal} />
+                </td>
+                <td
+                  className="px-3 py-3 align-top"
+                  style={{
+                    borderBottom: deal.conflicts.length
+                      ? "none"
+                      : "1px solid var(--rule)",
+                  }}
+                >
                   <button
                     type="button"
                     onClick={() => onSelect(deal)}
-                    className="font-data text-[0.7rem] underline whitespace-nowrap"
-                    style={{ color: "var(--accent)" }}
+                    className="action-link whitespace-nowrap"
                   >
-                    Evidence →
+                    Evidence
                   </button>
                 </td>
               </tr>
@@ -134,7 +203,7 @@ export function DealsTable({
                       rejected claim is a different story, and the one worth
                       telling — so it's stated, not left to be inferred. */}
                   <td
-                    colSpan={COLUMNS.length + 2}
+                    colSpan={COLUMNS.length + 3}
                     className="px-3 pb-3 align-top"
                     style={{ borderBottom: "1px solid var(--rule)" }}
                   >

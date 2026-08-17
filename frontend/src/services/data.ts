@@ -24,7 +24,11 @@ export async function loadDeals(): Promise<Deal[]> {
   // written before `conflicts` existed is still perfectly valid data, and
   // the client may well open the dashboard against an older committed run.
   // Normalising here means the rest of the app can trust the type.
-  return deals.map((deal) => ({ ...deal, conflicts: deal.conflicts ?? [] }));
+  return deals.map((deal) => ({
+    ...deal,
+    conflicts: deal.conflicts ?? [],
+    valuation_estimate: deal.valuation_estimate ?? null,
+  }));
 }
 
 export function loadOmissions(): Promise<Omission[]> {

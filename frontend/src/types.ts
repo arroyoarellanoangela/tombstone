@@ -14,6 +14,15 @@ export interface Claim {
   verified: boolean;
 }
 
+export interface ValuationEstimate {
+  value: string;
+  kind: "deal_value_range" | "estimated_revenue" | "implied_valuation_range" | string;
+  method: string;
+  source_url: string;
+  verbatim_quote: string | null;
+  confidence: "low" | "medium" | "high" | string;
+}
+
 export const CLAIM_FIELDS = [
   "acquirer",
   "target",
@@ -30,6 +39,7 @@ export type Deal = {
   deal_id: string;
   confidence: number | null;
   source_urls: string[];
+  valuation_estimate: ValuationEstimate | null;
   // Claims the Verifier rejected, and why. Surfaced in the UI rather than
   // hidden: a field that reads empty because a quote failed re-checking is
   // a different story from one no source ever mentioned.

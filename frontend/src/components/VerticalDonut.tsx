@@ -2,20 +2,7 @@ import { useMemo } from "react";
 import { dealVertical, type Vertical } from "../lib/vertical";
 import type { Deal } from "../types";
 
-const SLICE_COLORS = [
-  "#1e3a5f",
-  "#8a6d1f",
-  "#1f6f54",
-  "#8a3b3b",
-  "#5c4a8a",
-  "#2f6b8a",
-  "#8a5c2f",
-  "#3f6b3f",
-  "#6b3f6b",
-  "#3f3f6b",
-  "#6b6b3f",
-  "#7c807e",
-];
+const SLICE_COLORS = ["#ff5e5e", "#000000", "#2c2c2c", "#747474", "#a0a0a0", "#d8d8d8"];
 
 function arcPath(cx: number, cy: number, r: number, startAngle: number, endAngle: number): string {
   const start = { x: cx + r * Math.cos(startAngle), y: cy + r * Math.sin(startAngle) };
@@ -24,10 +11,6 @@ function arcPath(cx: number, cy: number, r: number, startAngle: number, endAngle
   return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArc} 1 ${end.x} ${end.y}`;
 }
 
-/** What kind of software the competition is buying — derived from
- * target_description, never asked of the model (see lib/vertical.ts). A
- * label reading "Other" is the honest outcome for a description too vague
- * to place in the closed taxonomy, not a bug to hide. */
 export function VerticalDonut({
   deals,
   selected,
@@ -49,10 +32,11 @@ export function VerticalDonut({
   if (deals.length === 0) return null;
 
   const total = deals.length;
-  const cx = 60;
-  const cy = 60;
-  const rOuter = 56;
-  const rInner = 32;
+  const size = 220;
+  const cx = size / 2;
+  const cy = size / 2;
+  const rOuter = 105;
+  const rInner = 62;
 
   let angle = -Math.PI / 2;
   const slices = counts.map(([vertical, count], i) => {
@@ -70,38 +54,67 @@ export function VerticalDonut({
 
   return (
     <div>
-      <p className="font-data text-[0.65rem] uppercase tracking-wider mb-3" style={{ color: "var(--ink-faint)" }}>
-        Target vertical mix
-        <span className="normal-case" style={{ color: "var(--ink-faint)" }}> · ◇ derived, not verified</span>
+      <p className="text-[14px] leading-6 font-semibold uppercase tracking-[1.12px] mb-6" style={{ color: "var(--ink-faint)" }}>
+        Derived, not verified
       </p>
-      <div className="flex items-start gap-5">
-        <svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true">
+      <div className="flex items-center gap-12 flex-wrap">
+        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0" role="img" aria-label="Target vertical mix">
           {slices.map((s) => (
             <path
               key={s.vertical}
               d={s.d}
               fill={s.color}
-              opacity={selected && selected !== s.vertical ? 0.25 : 1}
+              opacity={selected && selected !== s.vertical ? 0.2 : 1}
               style={{ cursor: "pointer", transition: "opacity 120ms ease" }}
               onClick={() => onSelect(selected === s.vertical ? null : s.vertical)}
-            />
+            >
+              <title>
+                {s.vertical}: {s.count} deal{s.count === 1 ? "" : "s"}
+              </title>
+            </path>
           ))}
+          <text
+            x={cx}
+            y={cy - 4}
+            textAnchor="middle"
+            style={{ fill: "var(--ink)", fontSize: "56px", fontFamily: "var(--font-display)" }}
+          >
+            {total}
+          </text>
+          <text
+            x={cx}
+            y={cy + 26}
+            textAnchor="middle"
+            style={{
+              fill: "var(--ink-faint)",
+              fontSize: "11px",
+              fontFamily: "var(--font-sans)",
+              fontWeight: 600,
+              letterSpacing: "1.12px",
+            }}
+          >
+            DEALS
+          </text>
         </svg>
-        <ul className="text-[0.8rem] space-y-1">
+
+        <ul className="text-[16px] leading-6 flex-1 min-w-[15rem]">
           {slices.map((s) => (
-            <li key={s.vertical}>
+            <li key={s.vertical} style={{ borderBottom: "1px solid var(--rule)" }}>
               <button
                 type="button"
                 onClick={() => onSelect(selected === s.vertical ? null : s.vertical)}
-                className="flex items-center gap-2 text-left"
-                style={{ opacity: selected && selected !== s.vertical ? 0.4 : 1 }}
+                className="flex items-center gap-3 text-left w-full py-3"
+                style={{ opacity: selected && selected !== s.vertical ? 0.35 : 1 }}
               >
                 <span
-                  className="inline-block rounded-full shrink-0"
-                  style={{ width: "0.6rem", height: "0.6rem", background: s.color }}
+                  className="inline-block shrink-0"
+                  style={{ width: "0.75rem", height: "0.75rem", background: s.color }}
                 />
-                <span>{s.vertical}</span>
-                <span className="font-data" style={{ color: "var(--ink-faint)" }}>
+                <span className="flex-1">{s.vertical}</span>
+                <span className="tabular-nums" style={{ color: "var(--ink-soft)" }}>
+                  {s.count}
+                </span>
+                <span className="tabular-nums w-10 text-right" style={{ color: "var(--ink-faint)" }}>
                   {Math.round((s.count / total) * 100)}%
                 </span>
               </button>
