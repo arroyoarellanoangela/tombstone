@@ -17,9 +17,14 @@ async function fetchJson<T>(url: string, fallback: T): Promise<T> {
   }
 }
 
-export function loadDeals(): Promise<Deal[]> {
+export async function loadDeals(): Promise<Deal[]> {
   const url = API_URL ? `${API_URL}/deals` : "/data/snapshot.json";
-  return fetchJson<Deal[]>(url, []);
+  const deals = await fetchJson<Deal[]>(url, []);
+  // Snapshots are files on disk that outlive the code reading them — one
+  // written before `conflicts` existed is still perfectly valid data, and
+  // the client may well open the dashboard against an older committed run.
+  // Normalising here means the rest of the app can trust the type.
+  return deals.map((deal) => ({ ...deal, conflicts: deal.conflicts ?? [] }));
 }
 
 export function loadOmissions(): Promise<Omission[]> {

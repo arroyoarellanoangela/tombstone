@@ -30,6 +30,10 @@ export type Deal = {
   deal_id: string;
   confidence: number | null;
   source_urls: string[];
+  // Claims the Verifier rejected, and why. Surfaced in the UI rather than
+  // hidden: a field that reads empty because a quote failed re-checking is
+  // a different story from one no source ever mentioned.
+  conflicts: string[];
 } & Record<ClaimField, Claim>;
 
 export interface Omission {

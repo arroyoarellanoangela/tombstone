@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import type { ClaimField, Deal } from "../types";
 import { ClaimCell } from "./ClaimCell";
 
@@ -69,23 +70,64 @@ export function DealsTable({ deals }: { deals: Deal[] }) {
         </thead>
         <tbody>
           {deals.map((deal) => (
-            <tr key={deal.deal_id}>
-              {COLUMNS.map((col) => (
+            <Fragment key={deal.deal_id}>
+              <tr>
+                {COLUMNS.map((col) => (
+                  <td
+                    key={col.key}
+                    className="px-3 py-3 align-top"
+                    style={{
+                      borderBottom: deal.conflicts.length
+                        ? "none"
+                        : "1px solid var(--rule)",
+                    }}
+                  >
+                    <ClaimCell claim={deal[col.key]} />
+                  </td>
+                ))}
                 <td
-                  key={col.key}
                   className="px-3 py-3 align-top"
-                  style={{ borderBottom: "1px solid var(--rule)" }}
+                  style={{
+                    borderBottom: deal.conflicts.length
+                      ? "none"
+                      : "1px solid var(--rule)",
+                  }}
                 >
-                  <ClaimCell claim={deal[col.key]} />
+                  <ConfidenceBar value={deal.confidence} />
                 </td>
-              ))}
-              <td
-                className="px-3 py-3 align-top"
-                style={{ borderBottom: "1px solid var(--rule)" }}
-              >
-                <ConfidenceBar value={deal.confidence} />
-              </td>
-            </tr>
+              </tr>
+              {deal.conflicts.length > 0 && (
+                <tr>
+                  {/* An empty cell above reads as "no source said this". A
+                      rejected claim is a different story, and the one worth
+                      telling — so it's stated, not left to be inferred. */}
+                  <td
+                    colSpan={COLUMNS.length + 1}
+                    className="px-3 pb-3 align-top"
+                    style={{ borderBottom: "1px solid var(--rule)" }}
+                  >
+                    <details className="text-xs">
+                      <summary
+                        className="cursor-pointer font-data text-[0.65rem] uppercase tracking-wider"
+                        style={{ color: "var(--notfound)" }}
+                      >
+                        {deal.conflicts.length} claim
+                        {deal.conflicts.length === 1 ? "" : "s"} rejected by the
+                        Verifier
+                      </summary>
+                      <ul
+                        className="mt-2 space-y-1 pl-4 list-disc"
+                        style={{ color: "var(--ink-faint)" }}
+                      >
+                        {deal.conflicts.map((conflict, i) => (
+                          <li key={i}>{conflict}</li>
+                        ))}
+                      </ul>
+                    </details>
+                  </td>
+                </tr>
+              )}
+            </Fragment>
           ))}
         </tbody>
       </table>
