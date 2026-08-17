@@ -40,6 +40,14 @@
   allowed: true
   reason: "Adviser's own public transaction page; no scraping prohibition found."
 
+- domain: techma.bakertilly.es
+  allowed: true
+  reason: "Adviser's own public transaction page (Baker Tilly Tech M&A); no scraping prohibition found."
+
+- domain: tec4u-solutions.com
+  allowed: true
+  reason: "Target's own public announcement of being acquired — same category as an acquirer's press room."
+
 # --- Blocked --------------------------------------------------------------
 
 - domain: linkedin.com

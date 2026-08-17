@@ -1,0 +1,11 @@
+name: Everfield
+slug: everfield
+allowed_domains:
+  - everfield.com
+primary_language: en
+source_type: press_room
+notes: >
+  Deferred in the initial five-acquirer coverage plan (see
+  docs/PROJECT_PROPOSAL.md, Section 9) for time, not difficulty — added once
+  real candidate URLs were available to add without spending on a full
+  Discovery pass.

@@ -1,0 +1,1567 @@
+[
+  {
+    "deal_id": "banyan-m3-inform-tica",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "verified",
+      "value": "Banyan Software",
+      "source_url": "https://banyansoftware.com/2026/06/09/m3/",
+      "verbatim_quote": "Banyan Software is pleased to announce the acquisition",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T05:43:32.746412Z",
+      "verified": true
+    },
+    "target": {
+      "field": "target",
+      "status": "verified",
+      "value": "M3 Informática",
+      "source_url": "https://banyansoftware.com/2026/06/09/m3/",
+      "verbatim_quote": "the acquisition of M3 Informática",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T05:43:32.746412Z",
+      "verified": true
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "verified",
+      "value": "2026-06-09",
+      "source_url": "https://banyansoftware.com/2026/06/09/m3/",
+      "verbatim_quote": "Posted on June 9, 2026",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T05:43:32.746412Z",
+      "verified": true
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "develops SAINT, a mission-critical HR and payroll platform for the Spanish Public Administration",
+      "source_url": "https://banyansoftware.com/2026/06/09/m3/",
+      "verbatim_quote": "M3 Informática develops SAINT, a mission-critical HR and payroll platform for the Spanish Public Administration",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T05:43:32.746412Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "Spain",
+      "source_url": "https://banyansoftware.com/2026/06/09/m3/",
+      "verbatim_quote": "Madrid-based software company",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T05:43:32.746412Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T05:43:52.486169Z",
+      "verified": false
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T05:43:32.746412Z",
+      "verified": false
+    },
+    "confidence": 0.7257,
+    "source_urls": [
+      "https://banyansoftware.com/2026/06/09/m3/"
+    ],
+    "conflicts": []
+  },
+  {
+    "deal_id": "banyan-hmm-germany",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "verified",
+      "value": "Banyan Software",
+      "source_url": "https://banyansoftware.com/2026/07/10/hmm/",
+      "verbatim_quote": "Banyan Software, a Canadian-based acquirer and long-term operator of successful software businesses headquartered in Toronto, is pleased to announce the acquisition of HMM Germany",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T05:43:18.477853Z",
+      "verified": true
+    },
+    "target": {
+      "field": "target",
+      "status": "verified",
+      "value": "HMM Germany",
+      "source_url": "https://banyansoftware.com/2026/07/10/hmm/",
+      "verbatim_quote": "the acquisition of HMM Germany",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T05:43:18.477853Z",
+      "verified": true
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "verified",
+      "value": "2026-07-10",
+      "source_url": "https://banyansoftware.com/2026/07/10/hmm/",
+      "verbatim_quote": "Posted on July 10, 2026",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T05:43:18.477853Z",
+      "verified": true
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "a leading B2B eHealth platform that helps health insurers, medical-device makers, and healthcare providers manage the approval, billing, and payment of medical aids",
+      "source_url": "https://banyansoftware.com/2026/07/10/hmm/",
+      "verbatim_quote": "a leading B2B eHealth platform that helps health insurers, medical-device makers, and healthcare providers manage the approval, billing, and payment of medical aids",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T05:43:18.477853Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "Germany",
+      "source_url": "https://banyansoftware.com/2026/07/10/hmm/",
+      "verbatim_quote": "headquartered in Moers, Germany",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T05:43:18.477853Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T05:43:51.795179Z",
+      "verified": false
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T05:43:18.477853Z",
+      "verified": false
+    },
+    "confidence": 0.7257,
+    "source_urls": [
+      "https://banyansoftware.com/2026/07/10/hmm/"
+    ],
+    "conflicts": []
+  },
+  {
+    "deal_id": "tss_topicus-bytemaster",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T07:53:50.008197Z",
+      "verified": false
+    },
+    "target": {
+      "field": "target",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T07:53:50.008197Z",
+      "verified": false
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "verified",
+      "value": "2026-05-12",
+      "source_url": "https://www.totalspecificsolutions.com/insights?nid=179",
+      "verbatim_quote": "May 12, 2026",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T05:52:25.016176Z",
+      "verified": true
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "develops specialized software solutions for large logistics operators, facilitating the comprehensive management of goods, information flows, and customs operations efficiently and securely",
+      "source_url": "https://www.totalspecificsolutions.com/insights?nid=179",
+      "verbatim_quote": "Bytemaster develops specialized software solutions for large logistics operators, facilitating the comprehensive management of goods, information flows, and customs operations efficiently and securely",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T05:52:25.016176Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "Spain and Latin America",
+      "source_url": "https://www.totalspecificsolutions.com/insights?nid=179",
+      "verbatim_quote": "primarily in Spain but also in Latin America",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T05:52:25.016176Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T07:53:49.392653Z",
+      "verified": false
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T05:52:25.016176Z",
+      "verified": false
+    },
+    "confidence": 0.6114,
+    "source_urls": [
+      "https://www.totalspecificsolutions.com/insights?nid=179"
+    ],
+    "conflicts": [
+      "acquirer: quote not found verbatim in re-fetched source, downgraded to not_found",
+      "target: quote not found verbatim in re-fetched source, downgraded to not_found"
+    ]
+  },
+  {
+    "deal_id": "volaris-iv-s",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "verified",
+      "value": "Volaris Group",
+      "source_url": "https://www.volarisgroup.com/press-room/volaris-group-acquires-ives/",
+      "verbatim_quote": "Volaris Group (Volaris) today announced the acquisition",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T07:54:58.638483Z",
+      "verified": true
+    },
+    "target": {
+      "field": "target",
+      "status": "verified",
+      "value": "IVèS",
+      "source_url": "https://www.volarisgroup.com/press-room/volaris-group-acquires-ives/",
+      "verbatim_quote": "acquisition of IVèS and its subsidiaries IVèS Inc and Elioz",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T07:54:58.638483Z",
+      "verified": true
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "verified",
+      "value": "2026-07-09",
+      "source_url": "https://www.volarisgroup.com/press-room/volaris-group-acquires-ives/",
+      "verbatim_quote": "July 9, 2026 – Toronto, ON. Volaris Group (Volaris) today announced the acquisition",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T07:54:58.638483Z",
+      "verified": true
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "a leading provider of software solutions dedicated to accessibility and inclusion, serving deaf and hard-of-hearing individuals and others facing communication barriers",
+      "source_url": "https://www.volarisgroup.com/press-room/volaris-group-acquires-ives/",
+      "verbatim_quote": "Based in France, IVèS is a leading provider of software solutions dedicated to accessibility and inclusion, serving deaf and hard-of-hearing individuals and others facing communication barriers",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T07:54:58.638483Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "France and Canada",
+      "source_url": "https://www.volarisgroup.com/press-room/volaris-group-acquires-ives/",
+      "verbatim_quote": "across France and Canada",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T07:54:58.638483Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T07:55:29.097730Z",
+      "verified": false
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T07:54:58.638483Z",
+      "verified": false
+    },
+    "confidence": 0.7257,
+    "source_urls": [
+      "https://www.volarisgroup.com/press-room/volaris-group-acquires-ives/"
+    ],
+    "conflicts": []
+  },
+  {
+    "deal_id": "volaris-sureview-systems",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "verified",
+      "value": "Volaris Group",
+      "source_url": "https://www.volarisgroup.com/press-room/sureview-systems-acquired-by-volaris-group/",
+      "verbatim_quote": "Volaris Group today announced the acquisition",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T08:05:09.875209Z",
+      "verified": true
+    },
+    "target": {
+      "field": "target",
+      "status": "verified",
+      "value": "SureView Systems",
+      "source_url": "https://www.volarisgroup.com/press-room/sureview-systems-acquired-by-volaris-group/",
+      "verbatim_quote": "the acquisition of SureView Systems",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T08:05:09.875209Z",
+      "verified": true
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "verified",
+      "value": "2026-06-29",
+      "source_url": "https://www.volarisgroup.com/press-room/sureview-systems-acquired-by-volaris-group/",
+      "verbatim_quote": "June 29, 2026",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T08:05:09.875209Z",
+      "verified": true
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "a UK-based provider of enterprise-level, worldwide security monitoring, analysis, and response across both physical and cyber domains",
+      "source_url": "https://www.volarisgroup.com/press-room/sureview-systems-acquired-by-volaris-group/",
+      "verbatim_quote": "a UK-based provider of enterprise-level, worldwide security monitoring, analysis, and response across both physical and cyber domains",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T08:05:09.875209Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "UK",
+      "source_url": "https://www.volarisgroup.com/press-room/sureview-systems-acquired-by-volaris-group/",
+      "verbatim_quote": "a UK-based provider",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T08:05:09.875209Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:11:18.305778Z",
+      "verified": false
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:05:09.875209Z",
+      "verified": false
+    },
+    "confidence": 0.7257,
+    "source_urls": [
+      "https://www.volarisgroup.com/press-room/sureview-systems-acquired-by-volaris-group/"
+    ],
+    "conflicts": []
+  },
+  {
+    "deal_id": "tss_topicus-diffusiondata",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:12:30.706877Z",
+      "verified": false
+    },
+    "target": {
+      "field": "target",
+      "status": "verified",
+      "value": "DiffusionData",
+      "source_url": "https://www.totalspecificsolutions.com/about-us/transaction-updates#diffusiondata",
+      "verbatim_quote": "acquired DiffusionData",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T08:11:42.992473Z",
+      "verified": true
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:11:42.992473Z",
+      "verified": false
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "a software company offering a real-time data platform for mission-critical solutions",
+      "source_url": "https://www.totalspecificsolutions.com/about-us/transaction-updates#diffusiondata",
+      "verbatim_quote": "a software company offering a real-time data platform for mission-critical solutions",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T08:11:42.992473Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "United Kingdom",
+      "source_url": "https://www.totalspecificsolutions.com/about-us/transaction-updates#diffusiondata",
+      "verbatim_quote": "in the United Kingdom has acquired DiffusionData Ltd",
+      "source_language": "en",
+      "extracted_at": "2026-08-17T08:11:42.992473Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:12:30.068579Z",
+      "verified": false
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:11:42.992473Z",
+      "verified": false
+    },
+    "confidence": 0.6114,
+    "source_urls": [
+      "https://www.totalspecificsolutions.com/about-us/transaction-updates#diffusiondata"
+    ],
+    "conflicts": [
+      "acquirer: quote not found verbatim in re-fetched source, downgraded to not_found"
+    ]
+  },
+  {
+    "deal_id": "valsoft-clubspeed",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "verified",
+      "value": "Valsoft",
+      "source_url": "https://www.valsoftcorp.com/news/valsoft-s-manos-software-group-enters-the-venue-management-software-market-with-the-acquisition-of-clubspeed",
+      "verbatim_quote": "today announced the acquisition of Clubspeed",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target": {
+      "field": "target",
+      "status": "verified",
+      "value": "Clubspeed",
+      "source_url": "https://www.valsoftcorp.com/news/valsoft-s-manos-software-group-enters-the-venue-management-software-market-with-the-acquisition-of-clubspeed",
+      "verbatim_quote": "today announced the acquisition of Clubspeed",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "verified",
+      "value": "2026-05-20",
+      "source_url": "https://www.valsoftcorp.com/news/valsoft-s-manos-software-group-enters-the-venue-management-software-market-with-the-acquisition-of-clubspeed",
+      "verbatim_quote": "MONTREAL, May 20, 2026",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "global provider of venue management software for karting tracks, family entertainment centers, trampoline parks, escape rooms and attractions operators",
+      "source_url": "https://www.valsoftcorp.com/news/valsoft-s-manos-software-group-enters-the-venue-management-software-market-with-the-acquisition-of-clubspeed",
+      "verbatim_quote": "a global provider of venue management software for karting tracks, family entertainment centers, trampoline parks, escape rooms and attractions operators",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "Irvine, California, USA",
+      "source_url": "https://www.valsoftcorp.com/news/valsoft-s-manos-software-group-enters-the-venue-management-software-market-with-the-acquisition-of-clubspeed",
+      "verbatim_quote": "Founded in 2005 and headquartered in Irvine, California, Clubspeed",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "confidence": 0.7257,
+    "source_urls": [
+      "https://www.valsoftcorp.com/news/valsoft-s-manos-software-group-enters-the-venue-management-software-market-with-the-acquisition-of-clubspeed"
+    ],
+    "conflicts": []
+  },
+  {
+    "deal_id": "valsoft-countfire",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "verified",
+      "value": "Valsoft",
+      "source_url": "https://www.valsoftcorp.com/news/valsoft-s-tag-software-group-acquires-countfire-a-leading-provider-of-cloud-based-takeoff-and-estimation-software",
+      "verbatim_quote": "is pleased to announce the acquisition of Countfire",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target": {
+      "field": "target",
+      "status": "verified",
+      "value": "Countfire",
+      "source_url": "https://www.valsoftcorp.com/news/valsoft-s-tag-software-group-acquires-countfire-a-leading-provider-of-cloud-based-takeoff-and-estimation-software",
+      "verbatim_quote": "the acquisition of Countfire, a London-based provider",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "verified",
+      "value": "2026-06-05",
+      "source_url": "https://www.valsoftcorp.com/news/valsoft-s-tag-software-group-acquires-countfire-a-leading-provider-of-cloud-based-takeoff-and-estimation-software",
+      "verbatim_quote": "MONTREAL, June 5, 2026",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "London-based provider of cloud-based takeoff and estimation software for electrical, mechanical, and other estimators",
+      "source_url": "https://www.valsoftcorp.com/news/valsoft-s-tag-software-group-acquires-countfire-a-leading-provider-of-cloud-based-takeoff-and-estimation-software",
+      "verbatim_quote": "a London-based provider of cloud-based takeoff and estimation software for electrical, mechanical, and other estimators",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "London, United Kingdom",
+      "source_url": "https://www.valsoftcorp.com/news/valsoft-s-tag-software-group-acquires-countfire-a-leading-provider-of-cloud-based-takeoff-and-estimation-software",
+      "verbatim_quote": "Founded in 2012 and headquartered in London, Countfire",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "verified",
+      "value": "Vista Point Advisors",
+      "source_url": "https://www.valsoftcorp.com/news/valsoft-s-tag-software-group-acquires-countfire-a-leading-provider-of-cloud-based-takeoff-and-estimation-software",
+      "verbatim_quote": "Vista Point Advisors acted as the exclusive financial advisor to Countfire.",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "confidence": 0.7829,
+    "source_urls": [
+      "https://www.valsoftcorp.com/news/valsoft-s-tag-software-group-acquires-countfire-a-leading-provider-of-cloud-based-takeoff-and-estimation-software"
+    ],
+    "conflicts": []
+  },
+  {
+    "deal_id": "valsoft-dispatch",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "verified",
+      "value": "Valsoft",
+      "source_url": "https://www.valsoftcorp.com/news/valsoft%E2%80%99s-manos-software-group-expands-its-field-service-software-portfolio-with-the-acquisition-of-dispatch",
+      "verbatim_quote": "today announced the acquisition of Dispatch",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target": {
+      "field": "target",
+      "status": "verified",
+      "value": "Dispatch",
+      "source_url": "https://www.valsoftcorp.com/news/valsoft%E2%80%99s-manos-software-group-expands-its-field-service-software-portfolio-with-the-acquisition-of-dispatch",
+      "verbatim_quote": "today announced the acquisition of Dispatch, a Boston-based field service software platform",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "verified",
+      "value": "2026-07-10",
+      "source_url": "https://www.valsoftcorp.com/news/valsoft%E2%80%99s-manos-software-group-expands-its-field-service-software-portfolio-with-the-acquisition-of-dispatch",
+      "verbatim_quote": "MONTREAL, July 10, 2026",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "Boston-based field service software platform that helps enterprise brands manage and improve the service delivered across their third-party contractor networks",
+      "source_url": "https://www.valsoftcorp.com/news/valsoft%E2%80%99s-manos-software-group-expands-its-field-service-software-portfolio-with-the-acquisition-of-dispatch",
+      "verbatim_quote": "a Boston-based field service software platform that helps enterprise brands manage and improve the service delivered across their third-party contractor networks",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "Boston, Massachusetts, USA",
+      "source_url": "https://www.valsoftcorp.com/news/valsoft%E2%80%99s-manos-software-group-expands-its-field-service-software-portfolio-with-the-acquisition-of-dispatch",
+      "verbatim_quote": "Founded in 2013 and headquartered in Boston, Massachusetts, Dispatch",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "verified",
+      "value": "Canaccord Genuity",
+      "source_url": "https://www.valsoftcorp.com/news/valsoft%E2%80%99s-manos-software-group-expands-its-field-service-software-portfolio-with-the-acquisition-of-dispatch",
+      "verbatim_quote": "Canaccord Genuity acted as its exclusive financial advisor.",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "confidence": 0.7829,
+    "source_urls": [
+      "https://www.valsoftcorp.com/news/valsoft%E2%80%99s-manos-software-group-expands-its-field-service-software-portfolio-with-the-acquisition-of-dispatch"
+    ],
+    "conflicts": []
+  },
+  {
+    "deal_id": "everfield-ecologic",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "verified",
+      "value": "Everfield",
+      "source_url": "https://everfield.com/knowledge-platform/everfield-acquires-ecologic",
+      "verbatim_quote": "has completed the acquisition of Ecologic",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target": {
+      "field": "target",
+      "status": "verified",
+      "value": "Ecologic",
+      "source_url": "https://everfield.com/knowledge-platform/everfield-acquires-ecologic",
+      "verbatim_quote": "has completed the acquisition of Ecologic, a Warsaw-based fleet management software provider",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "verified",
+      "value": "2026-07-01",
+      "source_url": "https://everfield.com/knowledge-platform/everfield-acquires-ecologic",
+      "verbatim_quote": "1 July 2026 News Everfield Acquires Ecologic",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "Warsaw-based fleet management software provider serving some of Poland's largest corporate car fleets",
+      "source_url": "https://everfield.com/knowledge-platform/everfield-acquires-ecologic",
+      "verbatim_quote": "a Warsaw-based fleet management software provider serving some of Poland’s largest corporate car fleets",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "Warsaw, Poland",
+      "source_url": "https://everfield.com/knowledge-platform/everfield-acquires-ecologic",
+      "verbatim_quote": "Founded in 2013 and headquartered in Warsaw, Ecologic is a Polish provider",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "confidence": 0.7257,
+    "source_urls": [
+      "https://everfield.com/knowledge-platform/everfield-acquires-ecologic"
+    ],
+    "conflicts": []
+  },
+  {
+    "deal_id": "everfield-genero",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "verified",
+      "value": "Everfield",
+      "source_url": "https://everfield.com/knowledge-platform/everfield-to-acquire-genero",
+      "verbatim_quote": "has signed a definitive agreement to acquire Genero",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target": {
+      "field": "target",
+      "status": "verified",
+      "value": "Genero",
+      "source_url": "https://everfield.com/knowledge-platform/everfield-to-acquire-genero",
+      "verbatim_quote": "has signed a definitive agreement to acquire Genero, a leading retail execution software platform",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "verified",
+      "value": "2026-07-06",
+      "source_url": "https://everfield.com/knowledge-platform/everfield-to-acquire-genero",
+      "verbatim_quote": "6 July 2026 News Everfield to Acquire Genero",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "leading retail execution software platform serving consumer product goods companies and retail service providers across Europe",
+      "source_url": "https://everfield.com/knowledge-platform/everfield-to-acquire-genero",
+      "verbatim_quote": "a leading retail execution software platform serving consumer product goods companies and retail service providers across Europe",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "Stockholm, Sweden",
+      "source_url": "https://everfield.com/knowledge-platform/everfield-to-acquire-genero",
+      "verbatim_quote": "Founded in 2001 in Stockholm, the company employs more than 20 people",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "confidence": 0.7257,
+    "source_urls": [
+      "https://everfield.com/knowledge-platform/everfield-to-acquire-genero"
+    ],
+    "conflicts": []
+  },
+  {
+    "deal_id": "everfield-playoff",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "verified",
+      "value": "Everfield",
+      "source_url": "https://everfield.com/knowledge-platform/everfield-acquires-playoff-inform%C3%A1tica",
+      "verbatim_quote": "has completed the acquisition of Playoff",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target": {
+      "field": "target",
+      "status": "verified",
+      "value": "Playoff",
+      "source_url": "https://everfield.com/knowledge-platform/everfield-acquires-playoff-inform%C3%A1tica",
+      "verbatim_quote": "has completed the acquisition of Playoff, the Barcelona-based platform",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "verified",
+      "value": "2026-07-22",
+      "source_url": "https://everfield.com/knowledge-platform/everfield-acquires-playoff-inform%C3%A1tica",
+      "verbatim_quote": "22 July 2026 News Everfield Acquires Playoff",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "Barcelona-based platform that runs the daily operations of more than 1,700 sports clubs, federations, academies, and associations across Spain",
+      "source_url": "https://everfield.com/knowledge-platform/everfield-acquires-playoff-inform%C3%A1tica",
+      "verbatim_quote": "the Barcelona-based platform that runs the daily operations of more than 1,700 sports clubs, federations, academies, and associations across Spain",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "Barcelona, Spain",
+      "source_url": "https://everfield.com/knowledge-platform/everfield-acquires-playoff-inform%C3%A1tica",
+      "verbatim_quote": "Founded in 2006 and headquartered in Barcelona, Playoff provides",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "confidence": 0.7257,
+    "source_urls": [
+      "https://everfield.com/knowledge-platform/everfield-acquires-playoff-inform%C3%A1tica"
+    ],
+    "conflicts": []
+  },
+  {
+    "deal_id": "banyan-arda",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "verified",
+      "value": "Banyan Software",
+      "source_url": "https://banyansoftware.com/2026/06/03/arda/",
+      "verbatim_quote": "is pleased to announce the acquisition of Arda",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target": {
+      "field": "target",
+      "status": "verified",
+      "value": "Arda",
+      "source_url": "https://banyansoftware.com/2026/06/03/arda/",
+      "verbatim_quote": "the acquisition of Arda, a Dutch cybersecurity awareness training platform",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "verified",
+      "value": "2026-06-03",
+      "source_url": "https://banyansoftware.com/2026/06/03/arda/",
+      "verbatim_quote": "Posted on June 3, 2026",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "Dutch cybersecurity awareness training platform serving over 90 thousand users primarily across education, government and healthcare sectors",
+      "source_url": "https://banyansoftware.com/2026/06/03/arda/",
+      "verbatim_quote": "a Dutch cybersecurity awareness training platform serving over 90 thousand users primarily across education, government and healthcare sectors",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "Zoetermeer, Netherlands",
+      "source_url": "https://banyansoftware.com/2026/06/03/arda/",
+      "verbatim_quote": "Founded in 2018 and headquartered in Zoetermeer, Arda is a leading Dutch",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "confidence": 0.7257,
+    "source_urls": [
+      "https://banyansoftware.com/2026/06/03/arda/"
+    ],
+    "conflicts": []
+  },
+  {
+    "deal_id": "banyan-educational-vistas",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "verified",
+      "value": "Banyan Software",
+      "source_url": "https://banyansoftware.com/2026/06/04/educationalvistas/",
+      "verbatim_quote": "is pleased to announce the acquisition of Educational Vistas",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target": {
+      "field": "target",
+      "status": "verified",
+      "value": "Educational Vistas",
+      "source_url": "https://banyansoftware.com/2026/06/04/educationalvistas/",
+      "verbatim_quote": "the acquisition of Educational Vistas, a New York-based provider",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "verified",
+      "value": "2026-06-04",
+      "source_url": "https://banyansoftware.com/2026/06/04/educationalvistas/",
+      "verbatim_quote": "Posted on June 4, 2026",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "New York-based provider of K-12 administrative and assessment management software and services",
+      "source_url": "https://banyansoftware.com/2026/06/04/educationalvistas/",
+      "verbatim_quote": "a New York-based provider of K-12 administrative and assessment management software and services",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "Schenectady, New York, USA",
+      "source_url": "https://banyansoftware.com/2026/06/04/educationalvistas/",
+      "verbatim_quote": "headquartered in Schenectady, New York, Educational Vistas, Inc. provides K-12 school districts",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "verified",
+      "value": "Tyton Partners",
+      "source_url": "https://banyansoftware.com/2026/06/04/educationalvistas/",
+      "verbatim_quote": "Tyton Partners acted as the exclusive financial advisor to Educational Vistas.",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "confidence": 0.7829,
+    "source_urls": [
+      "https://banyansoftware.com/2026/06/04/educationalvistas/"
+    ],
+    "conflicts": []
+  },
+  {
+    "deal_id": "banyan-star-media-enterprises",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "verified",
+      "value": "Banyan Software",
+      "source_url": "https://banyansoftware.com/2026/06/12/starmedia/",
+      "verbatim_quote": "is pleased to announce the acquisition of Star Media Enterprises",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target": {
+      "field": "target",
+      "status": "verified",
+      "value": "Star Media Enterprises",
+      "source_url": "https://banyansoftware.com/2026/06/12/starmedia/",
+      "verbatim_quote": "the acquisition of Star Media Enterprises, Inc. (Star Media)",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "verified",
+      "value": "2026-06-12",
+      "source_url": "https://banyansoftware.com/2026/06/12/starmedia/",
+      "verbatim_quote": "Posted on June 12, 2026",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "leading provider of TV audience measurement and advertising analytics software",
+      "source_url": "https://banyansoftware.com/2026/06/12/starmedia/",
+      "verbatim_quote": "a leading provider of TV audience measurement and advertising analytics software",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "Dunedin, Florida, USA",
+      "source_url": "https://banyansoftware.com/2026/06/12/starmedia/",
+      "verbatim_quote": "Founded in 1988 and headquartered in Dunedin, Florida, Star Media Enterprises, Inc.",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "confidence": 0.7257,
+    "source_urls": [
+      "https://banyansoftware.com/2026/06/12/starmedia/"
+    ],
+    "conflicts": []
+  },
+  {
+    "deal_id": "banyan-tec4u-solutions",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "verified",
+      "value": "Banyan Software",
+      "source_url": "https://www.tec4u-solutions.com/en/banyan-software-welcomes-tec4u-solutions-2/",
+      "verbatim_quote": "Banyan Software Welcomes tec4U-Solutions",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target": {
+      "field": "target",
+      "status": "verified",
+      "value": "tec4U-Solutions",
+      "source_url": "https://www.tec4u-solutions.com/en/banyan-software-welcomes-tec4u-solutions-2/",
+      "verbatim_quote": "the acquisition of tec4U-Solutions, a provider of material compliance software",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "verified",
+      "value": "2026-06-29",
+      "source_url": "https://www.tec4u-solutions.com/en/banyan-software-welcomes-tec4u-solutions-2/",
+      "verbatim_quote": "Banyan Software Welcomes tec4U-Solutions 06/29/2026",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "provider of material compliance software and data services for manufacturers, retailers and product importers",
+      "source_url": "https://www.tec4u-solutions.com/en/banyan-software-welcomes-tec4u-solutions-2/",
+      "verbatim_quote": "a provider of material compliance software and data services for manufacturers, retailers and product importers",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "Saarbrücken, Germany",
+      "source_url": "https://www.tec4u-solutions.com/en/banyan-software-welcomes-tec4u-solutions-2/",
+      "verbatim_quote": "Founded in 2013 in Saarbrücken, tec4U-Solutions has spent",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "confidence": 0.7257,
+    "source_urls": [
+      "https://www.tec4u-solutions.com/en/banyan-software-welcomes-tec4u-solutions-2/"
+    ],
+    "conflicts": []
+  },
+  {
+    "deal_id": "banyan-bitcentral-production-and-playout-business",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "verified",
+      "value": "Banyan Software",
+      "source_url": "https://banyansoftware.com/2026/06/30/bitcentral/",
+      "verbatim_quote": "today announced the acquisition of Bitcentral’s Production and Playout business",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target": {
+      "field": "target",
+      "status": "verified",
+      "value": "Bitcentral's Production and Playout business",
+      "source_url": "https://banyansoftware.com/2026/06/30/bitcentral/",
+      "verbatim_quote": "today announced the acquisition of Bitcentral’s Production and Playout business",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "verified",
+      "value": "2026-06-30",
+      "source_url": "https://banyansoftware.com/2026/06/30/bitcentral/",
+      "verbatim_quote": "Posted on June 30, 2026",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "provider of newsroom production and playout software that powers the “camera-to-air” workflow for leading broadcast television groups, cable news networks, and media organizations",
+      "source_url": "https://banyansoftware.com/2026/06/30/bitcentral/",
+      "verbatim_quote": "Bitcentral is a provider of newsroom production and playout software that powers the “camera-to-air” workflow for leading broadcast television groups, cable news networks, and media organizations",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "Newport Beach, California, USA",
+      "source_url": "https://banyansoftware.com/2026/06/30/bitcentral/",
+      "verbatim_quote": "Headquartered in Newport Beach, California, Bitcentral",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "confidence": 0.7257,
+    "source_urls": [
+      "https://banyansoftware.com/2026/06/30/bitcentral/"
+    ],
+    "conflicts": []
+  },
+  {
+    "deal_id": "banyan-freedom-iot",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "verified",
+      "value": "Banyan Software",
+      "source_url": "https://banyansoftware.com/2026/07/06/freedomiot/",
+      "verbatim_quote": "Freedom IoT Joins Banyan Software",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target": {
+      "field": "target",
+      "status": "verified",
+      "value": "Freedom IoT",
+      "source_url": "https://banyansoftware.com/2026/07/06/freedomiot/",
+      "verbatim_quote": "Freedom IoT, a machine intelligence and OEE platform for discrete manufacturers, has joined its portfolio",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "verified",
+      "value": "2026-07-06",
+      "source_url": "https://banyansoftware.com/2026/07/06/freedomiot/",
+      "verbatim_quote": "Posted on July 6, 2026",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "machine intelligence and OEE platform for discrete manufacturers",
+      "source_url": "https://banyansoftware.com/2026/07/06/freedomiot/",
+      "verbatim_quote": "a machine intelligence and OEE platform for discrete manufacturers",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "USA",
+      "source_url": "https://banyansoftware.com/2026/07/06/freedomiot/",
+      "verbatim_quote": "serving leading manufacturers across aerospace and defense, heavy equipment, medical devices, and consumer products",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "confidence": 0.7257,
+    "source_urls": [
+      "https://banyansoftware.com/2026/07/06/freedomiot/"
+    ],
+    "conflicts": []
+  },
+  {
+    "deal_id": "tss_topicus-operis",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "verified",
+      "value": "Total Specific Solutions",
+      "source_url": "https://www.totalspecificsolutions.com/insights",
+      "verbatim_quote": "Total Specific Solutions (\"TSS\") has acquired Operis",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target": {
+      "field": "target",
+      "status": "verified",
+      "value": "Operis",
+      "source_url": "https://www.totalspecificsolutions.com/insights",
+      "verbatim_quote": "Total Specific Solutions (\"TSS\") has acquired Operis, a specialist in digital solutions for local authorities",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "verified",
+      "value": "2026-05-20",
+      "source_url": "https://www.totalspecificsolutions.com/insights",
+      "verbatim_quote": "May 20, 2026 • France News",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "specialist in digital solutions for local authorities",
+      "source_url": "https://www.totalspecificsolutions.com/insights",
+      "verbatim_quote": "a specialist in digital solutions for local authorities",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "France",
+      "source_url": "https://www.totalspecificsolutions.com/insights",
+      "verbatim_quote": "Operis, the French urban planning software company for local government, has joined Groupe TSS",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "confidence": 0.7257,
+    "source_urls": [
+      "https://www.totalspecificsolutions.com/insights"
+    ],
+    "conflicts": []
+  },
+  {
+    "deal_id": "tss_topicus-ebg-data-gmbh",
+    "acquirer": {
+      "field": "acquirer",
+      "status": "verified",
+      "value": "Total Specific Solutions",
+      "source_url": "https://www.totalspecificsolutions.com/insights",
+      "verbatim_quote": "international software group Total Specific Solutions (“TSS”)",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target": {
+      "field": "target",
+      "status": "verified",
+      "value": "EBG Data GmbH",
+      "source_url": "https://www.totalspecificsolutions.com/insights",
+      "verbatim_quote": "The ANWR GROUP is selling its subsidiary EBG Data GmbH to the international software group",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "date_announced": {
+      "field": "date_announced",
+      "status": "verified",
+      "value": "2026-06-08",
+      "source_url": "https://www.totalspecificsolutions.com/insights",
+      "verbatim_quote": "Jun 08, 2026 • Germany News",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "target_description": {
+      "field": "target_description",
+      "status": "verified",
+      "value": "software company focused on retail management for medium-sized specialty retailers in the DACH region",
+      "source_url": "https://www.totalspecificsolutions.com/insights",
+      "verbatim_quote": "EBG Data GmbH is a software company focused on retail management for medium-sized specialty retailers in the DACH region",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "geography": {
+      "field": "geography",
+      "status": "verified",
+      "value": "Germany",
+      "source_url": "https://www.totalspecificsolutions.com/insights",
+      "verbatim_quote": "Jun 08, 2026 • Germany News",
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": true
+    },
+    "adviser": {
+      "field": "adviser",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "purchase_price": {
+      "field": "purchase_price",
+      "status": "not_found",
+      "value": null,
+      "source_url": null,
+      "verbatim_quote": null,
+      "source_language": null,
+      "extracted_at": "2026-08-17T08:22:59.345511Z",
+      "verified": false
+    },
+    "confidence": 0.7257,
+    "source_urls": [
+      "https://www.totalspecificsolutions.com/insights"
+    ],
+    "conflicts": []
+  }
+]

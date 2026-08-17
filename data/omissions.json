@@ -1,0 +1,202 @@
+[
+  {
+    "url": "https://finance.yahoo.com/technology/articles/banyan-software-welcomes-tec4u-solutions-050000508.html",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://worldbusinessoutlook.com/banyan-software-acquires-tec4u-solutions/",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://autorecyclingworld.com/banyan-software-welcomes-tec4u-solutions/",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://discoperi.com/deals/banyan-software-acquires-freedom-iot-2026/",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://www.yorkshire.com/york/news/business/simunix-holdings-limited-acquired-banyan-software-strategic-2026-deal",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://capital-riesgo.es/en/articles/albia-imap-advises-m3-inform-tica-on-its-sale-to-banyan-software/",
+    "reason": "names an M&A adviser, but domain not in allowlist — treated as disallowed by default",
+    "stage": "adviser_allowlist"
+  },
+  {
+    "url": "https://capital-riesgo.es/es/articles/baker-tilly-tech-m-a-ha-asesorado-a-business-software-group-bsg-en-su-reciente-adquisici-n-de-grupo10/",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://bsg.site/noticia?id=cleverglobal",
+    "reason": "classified as unknown, not a majority acquisition",
+    "stage": "deal_definition"
+  },
+  {
+    "url": "https://bsg.site/noticia?id=nexxia",
+    "reason": "classified as unknown, not a majority acquisition",
+    "stage": "deal_definition"
+  },
+  {
+    "url": "https://bsg.site/noticias/bsg-amplia-su-cartera-con-la-adquisicion-de-otesi-expertos-en-desarrollo-de-software-para-el-reporte-a-banco-de-espana-y-cnmv/",
+    "reason": "classified as unknown, not a majority acquisition",
+    "stage": "deal_definition"
+  },
+  {
+    "url": "https://bsg.site/en/news/bsg-acquires-key-systems-and-strengthens-its-position-as-software-manufacturer-for-the-agri-food-sector/",
+    "reason": "processing failed: Client error '404 Not Found' for url 'https://bsg.site/en/news/bsg-acquires-key-systems-and-strengthens-its-position-as-software-manufacturer-for-the-agri-food-sector/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+    "stage": "error"
+  },
+  {
+    "url": "https://bsg.site/en/news/business-software-group-a-traves-de-clavei-acquires-daf-erp-in-barcelona/",
+    "reason": "processing failed: Client error '404 Not Found' for url 'https://bsg.site/en/news/business-software-group-a-traves-de-clavei-acquires-daf-erp-in-barcelona/'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+    "stage": "error"
+  },
+  {
+    "url": "https://www.trysignalbase.com/news/acquisitions/bytemaster-acquired-by-total-specific-solutions-acquisition",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://auris-finance.fr/en/tss-acquires-operis-public-sector-software/",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://www.distributique.com/actualites/lire-total-specific-solutions-rachete-operis-37257.html",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://app.dealroom.co/news/note/dutch-software-group-tss-snaps-up-french-urban-planning-firm-operis",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://x.com/zeroxpectation/status/2057110372189143118",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://www.globenewswire.com/news-release/2026/06/01/3303973/0/en/topicus-com-inc-announces-a-revised-proposal-to-acquire-readytech.html",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://www.bnnbloomberg.ca/press-releases/2026/06/01/topicuscom-inc-announces-a-revised-proposal-to-acquire-readytech/",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://finance.yahoo.com/markets/stocks/articles/topicus-com-inc-announces-revised-014300412.html",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://www.marketscreener.com/news/topicus-com-inc-announces-a-revised-proposal-to-acquire-readytech-ce7f5dd8df89f427",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://www.investing.com/news/company-news/topicus-submits-revised-200-per-share-proposal-for-readytech-93CH-4717982",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://investingnews.com/topicus-com-inc-announces-a-revised-proposal-to-acquire-readytech/",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://ground.news/article/topicuscom-inc-announces-a-revised-proposal-to-acquire-readytech_d68532",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://www.kavout.com/market-lens/is-topicus-com-s-revised-readytech-bid-a-strategic-masterstroke",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://www.manilatimes.net/2026/06/01/tmt-newswire/globenewswire/topicuscom-inc-announces-a-revised-proposal-to-acquire-readytech/2355309",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://www.textilwirtschaft.de/tech/anwr-group-verkauft-warenwirtschaftstochter-ebg-data-an-total-specific-solutions-160566",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://us.fashionnetwork.com/news/Anwr-sells-its-merchandise-management-subsidiary-ebg-data,1838634.html",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://fashionunited.de/nachrichten/business/anwr-group-verkauft-it-tochter-ebg-data-an-tss/2026060867102",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://ww.fashionnetwork.com/news/Anwr-sells-its-merchandise-management-subsidiary-ebg-data,1838629.html",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://www.schuhkurier.de/anwr-group-verkauft-ebg-data/",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://www.totalspecificsolutions.com/about-us/transaction-updates/page/21",
+    "reason": "classified as unknown, not a majority acquisition",
+    "stage": "deal_definition"
+  },
+  {
+    "url": "https://www.totalspecificsolutions.com/insights?nid=180",
+    "reason": "discovered as a candidate, but no field could be extracted and verified",
+    "stage": "extraction_failed"
+  },
+  {
+    "url": "https://topicus.com/news/topicuscom-inc-announces-a-revised-proposal-to-acquire-readytech",
+    "reason": "discovered as a candidate, but no field could be extracted and verified",
+    "stage": "extraction_failed"
+  },
+  {
+    "url": "https://www.globenewswire.com/news-release/2026/07/09/3324763/0/en/Volaris-Group-Acquires-IVES.html",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://www.manilatimes.net/2026/07/09/tmt-newswire/globenewswire/volaris-group-acquires-ives/2381593/amp",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://tracxn.com/d/acquisitions/acquisitions-by-volaris-group/__SrsDZfYlRRmlnobMkpg__0WwUPxeYBbtxO5vX6u--BI",
+    "reason": "domain not in allowlist — treated as disallowed by default",
+    "stage": "allowlist"
+  },
+  {
+    "url": "https://www.volarisgroup.com/acquired-knowledge/volaris-groups-2026-mid-year-acquisition-update/",
+    "reason": "classified as unknown, not a majority acquisition",
+    "stage": "deal_definition"
+  },
+  {
+    "url": "https://www.fusacq.com/buzz/clairfield-conseille-la-cession-d-ives-a-volaris-constellation-software-a260173_fr_",
+    "reason": "names an M&A adviser, but domain not in allowlist — treated as disallowed by default",
+    "stage": "adviser_allowlist"
+  },
+  {
+    "url": "https://www.totalspecificsolutions.com/about-us/transaction-updates#ebg-data",
+    "reason": "classified as unknown, not a majority acquisition",
+    "stage": "deal_definition"
+  }
+]
