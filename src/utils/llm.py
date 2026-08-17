@@ -42,6 +42,36 @@ _TRANSIENT_SPAWN_MARKERS = (
 )
 
 
+# The CLI reports account-level failures as an ordinary assistant message
+# rather than raising, so "Credit balance is too low" arrives looking exactly
+# like a model that chose to reply in prose. Every agent then treats it as
+# unparseable output and degrades to "found nothing" — which is the most
+# dangerous possible failure here: a client with an exhausted key would see
+# an empty dashboard and conclude their competitors made no acquisitions.
+# These runs must fail loudly instead.
+_ACCOUNT_FAILURE_MARKERS = (
+    "credit balance is too low",
+    "authentication_error",
+    "invalid x-api-key",
+    "rate limit",
+    "quota",
+)
+
+
+class AgentAccountError(RuntimeError):
+    """The account, not the model, refused the call — a run-stopping problem."""
+
+
+def _account_failure(text: str) -> str | None:
+    """The marker matched in `text`, if it reads as an account-level refusal."""
+    lowered = text.strip().lower()
+    # Anchored to short responses: a genuine extraction quoting the phrase
+    # from some article should not take the whole run down.
+    if len(lowered) > 200:
+        return None
+    return next((m for m in _ACCOUNT_FAILURE_MARKERS if m in lowered), None)
+
+
 def _is_transient_spawn_failure(exc: Exception) -> bool:
     """True for failures that happened while starting the subprocess, i.e.
     before the prompt could have been billed."""
@@ -125,7 +155,13 @@ async def run_agent(
                     elif isinstance(message, ResultMessage):
                         if budget is not None and message.total_cost_usd:
                             budget.record_spend(message.total_cost_usd)
-            return "".join(chunks)
+            response = "".join(chunks)
+            if (marker := _account_failure(response)) is not None:
+                raise AgentAccountError(
+                    f"Anthropic account refused the call ({marker}) — stopping the run "
+                    f"rather than reporting an empty result. Full response: {response!r}"
+                )
+            return response
         except Exception as exc:  # noqa: BLE001 — re-raised below if not transient
             if not _is_transient_spawn_failure(exc) or attempt == _SPAWN_ATTEMPTS - 1:
                 raise

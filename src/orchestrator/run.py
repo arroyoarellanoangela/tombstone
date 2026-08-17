@@ -26,7 +26,7 @@ from src.config import settings
 from src.domain.models import AcquirerProfile, ClaimStatus, DealCandidate, DealRecord, Omission
 from src.orchestrator.budget import BudgetExceeded, RunBudget
 from src.orchestrator.cache import Cache
-from src.utils.llm import AgentCaller, run_agent
+from src.utils.llm import AgentAccountError, AgentCaller, run_agent
 
 logger = logging.getLogger(__name__)
 
@@ -255,6 +255,11 @@ async def run_for_acquirer(acquirer_slug: str, budget: RunBudget, cache: Cache) 
             failures.append(
                 Omission(url=candidate.url, reason=str(outcome), stage="budget_exhausted")
             )
+        elif isinstance(outcome, AgentAccountError):
+            # Not this deal's problem — the account is refusing every call.
+            # Recording it as a per-deal omission would bury a run-wide
+            # failure in a list of "we looked and found nothing" entries.
+            raise outcome
         elif isinstance(outcome, BaseException):
             logger.error("Deal %s failed: %s", candidate.url, outcome)
             failures.append(
