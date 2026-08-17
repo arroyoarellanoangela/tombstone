@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { colorForAcquirer } from "../lib/vertical";
 import type { Deal } from "../types";
 
 function acquirerSlugOf(deal: Deal): string {
@@ -22,13 +23,15 @@ export function ActivityBars({ deals }: { deals: Deal[] }) {
     return [...counts.values()].sort((a, b) => b.count - a.count);
   }, [deals]);
 
+  const slugs = useMemo(() => rows.map((r) => r.slug), [rows]);
+
   if (rows.length === 0) return null;
 
   const maxCount = Math.max(...rows.map((r) => r.count));
 
   return (
     <div className="space-y-8">
-      {rows.map((r, index) => (
+      {rows.map((r) => (
         <div key={r.slug}>
           <div className="mb-2 flex items-baseline justify-between gap-6">
             <span className="text-[20px] leading-8 truncate" title={r.name}>
@@ -41,7 +44,7 @@ export function ActivityBars({ deals }: { deals: Deal[] }) {
               className="h-full"
               style={{
                 width: `${(r.count / maxCount) * 100}%`,
-                background: index === 0 ? "var(--accent)" : "var(--black)",
+                background: colorForAcquirer(r.slug, slugs),
               }}
             />
           </div>

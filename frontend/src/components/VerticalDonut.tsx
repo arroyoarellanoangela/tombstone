@@ -2,7 +2,25 @@ import { useMemo } from "react";
 import { dealVertical, type Vertical } from "../lib/vertical";
 import type { Deal } from "../types";
 
-const SLICE_COLORS = ["#ff5e5e", "#000000", "#2c2c2c", "#747474", "#a0a0a0", "#d8d8d8"];
+// A real categorical palette, not a greyscale-plus-one-accent set — with 11
+// verticals in the data, six mostly-grey tones repeating made adjacent
+// slices indistinguishable. Coral leads (it's the brand accent, and the
+// most active vertical should read as the "headline" colour), the rest are
+// genuinely different hues so every slice is legible at a glance.
+const SLICE_COLORS = [
+  "#ff5e5e",
+  "#2c2c2c",
+  "#4a90d9",
+  "#e8a33d",
+  "#5fa36a",
+  "#9b6bce",
+  "#d94f8c",
+  "#3ab0a2",
+  "#c9962c",
+  "#7a8ca8",
+  "#b85c3e",
+  "#8a8a8a",
+];
 
 function arcPath(cx: number, cy: number, r: number, startAngle: number, endAngle: number): string {
   const start = { x: cx + r * Math.cos(startAngle), y: cy + r * Math.sin(startAngle) };

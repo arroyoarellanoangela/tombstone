@@ -118,14 +118,15 @@ export default function App() {
     <>
       <header className="site-header">
         <div className="page-inner flex h-full items-center justify-between gap-10">
-          <button
-            type="button"
-            onClick={() => setTab("overview")}
-            className="text-[20px] leading-8 font-medium"
-          >
-            Tombstone
+          <button type="button" onClick={() => setTab("overview")} className="shrink-0 text-left">
+            <span className="font-display block" style={{ fontSize: "26px", lineHeight: "30px", fontWeight: 400 }}>
+              Competitor Acquisition Intelligence
+            </span>
+            <span className="block mt-0.5 text-[13px] leading-4" style={{ color: "var(--ink-soft)" }}>
+              A source-grounded view of Abingdon Software Group's competitors.
+            </span>
           </button>
-          <nav className="flex items-center gap-8 text-[20px] leading-6 font-medium uppercase tracking-[0.2px]">
+          <nav className="flex items-center gap-8 text-[16px] leading-6 font-medium uppercase tracking-[0.2px] shrink-0">
             {(
               [
                 ["overview", "Overview"],
@@ -144,7 +145,7 @@ export default function App() {
               </button>
             ))}
           </nav>
-          <p className="text-[14px] leading-6 font-semibold uppercase tracking-[1.12px] shrink-0" style={{ color: "var(--accent)" }}>
+          <p className="text-[10px] leading-4 font-semibold uppercase tracking-[0.8px] shrink-0" style={{ color: "var(--accent)" }}>
             {dataMode === "static-snapshot" ? "Committed snapshot / no live API" : "Reading the live API"}
           </p>
         </div>
@@ -158,19 +159,6 @@ export default function App() {
         )}
 
         <main className="flex-1 min-w-0">
-          <section className="page-shell dashboard-section">
-            <div className="page-inner">
-              <div className="content-column">
-                <h1 className="font-display text-[32px] leading-[38px] font-normal">
-                  Competitor Acquisition Intelligence
-                </h1>
-                <p className="mt-4 text-[18px] leading-7 font-medium tracking-[0.2px]" style={{ color: "var(--ink-soft)" }}>
-                  A source-grounded view of acquisitions announced by Abingdon Software Group's competitors.
-                </p>
-              </div>
-            </div>
-          </section>
-
           {loading ? (
             <section className="page-shell dashboard-section">
               <div className="page-inner">
@@ -219,16 +207,18 @@ export default function App() {
               )}
 
               {tab === "deals" && (
-                <section className="page-shell dashboard-section">
-                  <div className="page-inner">
-                    <div className="content-column mb-12">
-                      <h2 className="section-title">Deals</h2>
-                      <p className="section-copy mt-4">
-                        Hover any cell for the source quote, or open Evidence for the full provenance.
-                      </p>
-                    </div>
-                    <DealsTable deals={visible} onSelect={setSelectedDeal} />
+                <section className="dashboard-section" style={{ paddingInline: "40px" }}>
+                  <div className="content-column mb-12">
+                    <h2 className="section-title">Deals</h2>
+                    <p className="section-copy mt-4">
+                      Hover any cell for the source quote, or open Evidence for the full provenance.
+                    </p>
                   </div>
+                  {/* A tighter 40px gutter, not the standard 104px — a
+                      ten-column evidence table needs the room a prose
+                      section doesn't, and the extra space is what removes
+                      the horizontal scrollbar at normal desktop widths. */}
+                  <DealsTable deals={visible} onSelect={setSelectedDeal} />
                 </section>
               )}
 

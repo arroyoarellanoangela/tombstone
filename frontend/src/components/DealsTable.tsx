@@ -121,7 +121,7 @@ export function DealsTable({
                 borderBottom: "1px solid var(--rule-strong)",
               }}
             >
-              Confidence
+              Valuation signal
             </th>
             <th
               className="font-data text-[0.65rem] uppercase tracking-wider font-medium text-left px-3 py-2 align-bottom"
@@ -130,7 +130,7 @@ export function DealsTable({
                 borderBottom: "1px solid var(--rule-strong)",
               }}
             >
-              Valuation signal
+              Confidence
             </th>
             <th
               className="font-data text-[0.65rem] uppercase tracking-wider font-medium text-left px-3 py-2 align-bottom"
@@ -168,7 +168,7 @@ export function DealsTable({
                       : "1px solid var(--rule)",
                   }}
                 >
-                  <ConfidenceBar value={deal.confidence} />
+                  <ValuationCell deal={deal} />
                 </td>
                 <td
                   className="px-3 py-3 align-top"
@@ -178,7 +178,7 @@ export function DealsTable({
                       : "1px solid var(--rule)",
                   }}
                 >
-                  <ValuationCell deal={deal} />
+                  <ConfidenceBar value={deal.confidence} />
                 </td>
                 <td
                   className="px-3 py-3 align-top"

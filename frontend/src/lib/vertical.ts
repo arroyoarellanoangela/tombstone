@@ -57,7 +57,15 @@ export function dealVertical(deal: Deal): Vertical {
 
 // Stable colour per acquirer slug, reused across the timeline and the
 // competitor activity bars so a colour always means the same acquirer.
-const PALETTE = ["#1e3a5f", "#8a6d1f", "#1f6f54", "#8a3b3b", "#5c4a8a", "#2f6b8a", "#8a5c2f"];
+const PALETTE = [
+  "#ff5e5e",
+  "#2c2c2c",
+  "#4a90d9",
+  "#e8a33d",
+  "#5fa36a",
+  "#9b6bce",
+  "#3ab0a2",
+];
 
 export function colorForAcquirer(slug: string, allSlugs: string[]): string {
   const idx = allSlugs.indexOf(slug);

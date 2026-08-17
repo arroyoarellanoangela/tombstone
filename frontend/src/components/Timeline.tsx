@@ -26,22 +26,15 @@ export function Timeline({
     [deals],
   );
 
-  if (dated.length === 0) {
-    return null;
-  }
-
-  const minTime = dated[0].date.getTime();
-  const maxTime = dated[dated.length - 1].date.getTime();
+  // minTime/maxTime/span only mean something once there's at least one dated
+  // deal — computed here, before any hook that depends on them, rather than
+  // after the empty-state guard below, which every hook in this component
+  // must come before (React requires the same hooks in the same order on
+  // every render — an empty filter result can't skip a hook the next render
+  // will call).
+  const minTime = dated.length > 0 ? dated[0].date.getTime() : 0;
+  const maxTime = dated.length > 0 ? dated[dated.length - 1].date.getTime() : 0;
   const span = Math.max(1, maxTime - minTime);
-
-  // Stack same-day deals vertically so they don't overlap into one dot.
-  const dayCounts = new Map<string, number>();
-  const positioned = dated.map(({ deal, date }) => {
-    const key = date.toISOString().slice(0, 10);
-    const row = dayCounts.get(key) ?? 0;
-    dayCounts.set(key, row + 1);
-    return { deal, date, xPct: ((date.getTime() - minTime) / span) * 100, row };
-  });
 
   const months = useMemo(() => {
     const set = new Set<string>();
@@ -53,6 +46,19 @@ export function Timeline({
       return { label: d.toLocaleDateString("en-US", { month: "short" }), xPct: Math.max(0, xPct) };
     });
   }, [dated, minTime, span]);
+
+  if (dated.length === 0) {
+    return null;
+  }
+
+  // Stack same-day deals vertically so they don't overlap into one dot.
+  const dayCounts = new Map<string, number>();
+  const positioned = dated.map(({ deal, date }) => {
+    const key = date.toISOString().slice(0, 10);
+    const row = dayCounts.get(key) ?? 0;
+    dayCounts.set(key, row + 1);
+    return { deal, date, xPct: ((date.getTime() - minTime) / span) * 100, row };
+  });
 
   return (
     <div>
