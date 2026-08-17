@@ -1,11 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
+import { Competitors } from "./components/Competitors";
+import { DealDetail } from "./components/DealDetail";
 import { DealsTable } from "./components/DealsTable";
 import { EMPTY_FILTERS, Filters, type FilterState } from "./components/Filters";
 import { OmissionsTable } from "./components/OmissionsTable";
 import { dataMode, loadDeals, loadOmissions } from "./services/data";
 import type { Deal, Omission } from "./types";
 
-type Tab = "deals" | "omissions";
+type Tab = "deals" | "competitors" | "omissions";
+
+// High-confidence threshold for the KPI strip — matches the scoring rubric's
+// own framing (source_tier + corroboration + verifier_pass_rate weigh most
+// heavily), not an arbitrary round number picked for the UI.
+const HIGH_CONFIDENCE = 0.7;
 
 /**
  * Group by the deal_id's acquirer slug, not the extracted acquirer name:
@@ -25,17 +32,13 @@ function acquirerLabel(slug: string, deals: Deal[]): string {
 
 function Summary({ deals }: { deals: Deal[] }) {
   const stats = useMemo(() => {
-    const priced = deals.filter((d) => d.purchase_price.status === "verified").length;
-    const undisclosed = deals.filter(
-      (d) => d.purchase_price.status === "explicitly_undisclosed",
-    ).length;
     const advisers = deals.filter((d) => d.adviser.status === "verified").length;
+    const highConfidence = deals.filter((d) => (d.confidence ?? 0) >= HIGH_CONFIDENCE).length;
     return [
-      { label: "Deals", value: String(deals.length) },
-      { label: "Acquirers", value: String(new Set(deals.map(acquirerSlugOf)).size) },
-      { label: "Price disclosed", value: `${priced} of ${deals.length}` },
-      { label: "Price undisclosed", value: `${undisclosed} of ${deals.length}` },
+      { label: "Deals found", value: String(deals.length) },
+      { label: "Active acquirers", value: `${new Set(deals.map(acquirerSlugOf)).size} of 7` },
       { label: "Adviser identified", value: `${advisers} of ${deals.length}` },
+      { label: "High confidence", value: `${highConfidence} of ${deals.length}` },
     ];
   }, [deals]);
 
@@ -69,6 +72,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<Tab>("deals");
   const [filters, setFilters] = useState<FilterState>(EMPTY_FILTERS);
+  const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null);
 
   useEffect(() => {
     Promise.all([loadDeals(), loadOmissions()]).then(([d, o]) => {
@@ -139,6 +143,7 @@ export default function App() {
             {(
               [
                 ["deals", `Deals (${deals.length})`],
+                ["competitors", "Competitors"],
                 ["omissions", `Omissions (${omissions.length})`],
               ] as const
             ).map(([key, label]) => (
@@ -158,16 +163,28 @@ export default function App() {
             ))}
           </nav>
 
-          {tab === "deals" ? (
+          {tab === "deals" && (
             <>
               <Filters acquirers={acquirers} value={filters} onChange={setFilters} />
-              <DealsTable deals={visible} />
+              <DealsTable deals={visible} onSelect={setSelectedDeal} />
               <p className="font-data text-[0.65rem] mt-4" style={{ color: "var(--ink-faint)" }}>
-                Hover any cell to see the verbatim source quote behind it. An empty cell means no
-                source supported that field — never a guess.
+                Hover any cell for the source quote inline, or open Evidence for the full picture.
+                An empty cell means no source supported that field — never a guess.
               </p>
             </>
-          ) : (
+          )}
+
+          {tab === "competitors" && (
+            <Competitors
+              deals={deals}
+              onSelect={(slug) => {
+                setFilters({ ...EMPTY_FILTERS, acquirer: slug });
+                setTab("deals");
+              }}
+            />
+          )}
+
+          {tab === "omissions" && (
             <>
               <p className="text-sm py-4 max-w-[62ch]" style={{ color: "var(--ink-soft)" }}>
                 Sources the pipeline deliberately excluded, and why. Blocked domains (LinkedIn,
@@ -180,6 +197,8 @@ export default function App() {
           )}
         </>
       )}
+
+      {selectedDeal && <DealDetail deal={selectedDeal} onClose={() => setSelectedDeal(null)} />}
     </div>
   );
 }

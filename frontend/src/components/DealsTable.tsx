@@ -31,7 +31,13 @@ function ConfidenceBar({ value }: { value: number | null }) {
   );
 }
 
-export function DealsTable({ deals }: { deals: Deal[] }) {
+export function DealsTable({
+  deals,
+  onSelect,
+}: {
+  deals: Deal[];
+  onSelect: (deal: Deal) => void;
+}) {
   if (deals.length === 0) {
     return (
       <p className="py-12 text-center text-sm" style={{ color: "var(--ink-faint)" }}>
@@ -66,6 +72,15 @@ export function DealsTable({ deals }: { deals: Deal[] }) {
             >
               Confidence
             </th>
+            <th
+              className="font-data text-[0.65rem] uppercase tracking-wider font-medium text-left px-3 py-2 align-bottom"
+              style={{
+                color: "var(--ink-faint)",
+                borderBottom: "1px solid var(--rule-strong)",
+              }}
+            >
+              <span className="sr-only">Evidence</span>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -95,6 +110,23 @@ export function DealsTable({ deals }: { deals: Deal[] }) {
                 >
                   <ConfidenceBar value={deal.confidence} />
                 </td>
+                <td
+                  className="px-3 py-3 align-top"
+                  style={{
+                    borderBottom: deal.conflicts.length
+                      ? "none"
+                      : "1px solid var(--rule)",
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => onSelect(deal)}
+                    className="font-data text-[0.7rem] underline whitespace-nowrap"
+                    style={{ color: "var(--accent)" }}
+                  >
+                    Evidence →
+                  </button>
+                </td>
               </tr>
               {deal.conflicts.length > 0 && (
                 <tr>
@@ -102,7 +134,7 @@ export function DealsTable({ deals }: { deals: Deal[] }) {
                       rejected claim is a different story, and the one worth
                       telling — so it's stated, not left to be inferred. */}
                   <td
-                    colSpan={COLUMNS.length + 1}
+                    colSpan={COLUMNS.length + 2}
                     className="px-3 pb-3 align-top"
                     style={{ borderBottom: "1px solid var(--rule)" }}
                   >
