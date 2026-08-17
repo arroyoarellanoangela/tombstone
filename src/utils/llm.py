@@ -94,6 +94,37 @@ AgentCaller = Callable[..., Awaitable[str]]
 _ISOLATED_HOME = tempfile.mkdtemp(prefix="tombstone_claude_home_")
 
 
+def _subprocess_env() -> dict[str, str]:
+    """Environment for the `claude` CLI subprocess — isolated from any
+    developer login, forced into UTF-8 mode, and scrubbed of this process's
+    own Claude Code session identity if it happens to be running inside one.
+    """
+    return {
+        "ANTHROPIC_API_KEY": settings.anthropic_api_key,
+        "HOME": _ISOLATED_HOME,
+        "USERPROFILE": _ISOLATED_HOME,
+        # A live run produced accented text ("Informática", "IVèS") that
+        # came back mojibake'd — the classic signature of UTF-8 bytes
+        # decoded as the Windows console's ANSI codepage somewhere
+        # between the CLI subprocess and this process. Forcing UTF-8
+        # mode removes that ambiguity regardless of exactly which layer
+        # (this process, the subprocess, or something it spawns) would
+        # otherwise fall back to a locale default.
+        "PYTHONUTF8": "1",
+        "PYTHONIOENCODING": "utf-8",
+        # If this process is itself running inside a Claude Code session
+        # (e.g. launched from a dev's own terminal session), these leak
+        # into os.environ and the nested CLI gets confused trying to
+        # attach to that outer session instead of starting cleanly.
+        # A real deployment (fresh container) never has these set.
+        "CLAUDECODE": "",
+        "CLAUDE_CODE_SESSION_ID": "",
+        "CLAUDE_CODE_CHILD_SESSION": "",
+        "CLAUDE_CODE_HOST_SESSION_ID": "",
+        "CLAUDE_CODE_EXECPATH": "",
+    }
+
+
 async def run_agent(
     prompt: str,
     system_prompt: str,
@@ -115,21 +146,7 @@ async def run_agent(
         system_prompt=system_prompt,
         allowed_tools=allowed_tools or [],
         model=model,
-        env={
-            "ANTHROPIC_API_KEY": settings.anthropic_api_key,
-            "HOME": _ISOLATED_HOME,
-            "USERPROFILE": _ISOLATED_HOME,
-            # If this process is itself running inside a Claude Code session
-            # (e.g. launched from a dev's own terminal session), these leak
-            # into os.environ and the nested CLI gets confused trying to
-            # attach to that outer session instead of starting cleanly.
-            # A real deployment (fresh container) never has these set.
-            "CLAUDECODE": "",
-            "CLAUDE_CODE_SESSION_ID": "",
-            "CLAUDE_CODE_CHILD_SESSION": "",
-            "CLAUDE_CODE_HOST_SESSION_ID": "",
-            "CLAUDE_CODE_EXECPATH": "",
-        },
+        env=_subprocess_env(),
         # Runs unattended (orchestrator, CI, tests) — nobody is present to
         # approve tool calls interactively, so permission prompts must be
         # bypassed rather than hanging forever waiting for a human.

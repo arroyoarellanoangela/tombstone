@@ -75,7 +75,8 @@
     "source_urls": [
       "https://banyansoftware.com/2026/06/09/m3/"
     ],
-    "conflicts": []
+    "conflicts": [],
+    "valuation_estimate": null
   },
   {
     "deal_id": "banyan-hmm-germany",
@@ -153,7 +154,8 @@
     "source_urls": [
       "https://banyansoftware.com/2026/07/10/hmm/"
     ],
-    "conflicts": []
+    "conflicts": [],
+    "valuation_estimate": null
   },
   {
     "deal_id": "tss_topicus-bytemaster",
@@ -234,7 +236,8 @@
     "conflicts": [
       "acquirer: quote not found verbatim in re-fetched source, downgraded to not_found",
       "target: quote not found verbatim in re-fetched source, downgraded to not_found"
-    ]
+    ],
+    "valuation_estimate": null
   },
   {
     "deal_id": "volaris-iv-s",
@@ -312,7 +315,8 @@
     "source_urls": [
       "https://www.volarisgroup.com/press-room/volaris-group-acquires-ives/"
     ],
-    "conflicts": []
+    "conflicts": [],
+    "valuation_estimate": null
   },
   {
     "deal_id": "volaris-sureview-systems",
@@ -390,7 +394,8 @@
     "source_urls": [
       "https://www.volarisgroup.com/press-room/sureview-systems-acquired-by-volaris-group/"
     ],
-    "conflicts": []
+    "conflicts": [],
+    "valuation_estimate": null
   },
   {
     "deal_id": "tss_topicus-diffusiondata",
@@ -470,7 +475,8 @@
     ],
     "conflicts": [
       "acquirer: quote not found verbatim in re-fetched source, downgraded to not_found"
-    ]
+    ],
+    "valuation_estimate": null
   },
   {
     "deal_id": "valsoft-clubspeed",
@@ -548,7 +554,15 @@
     "source_urls": [
       "https://www.valsoftcorp.com/news/valsoft-s-manos-software-group-enters-the-venue-management-software-market-with-the-acquisition-of-clubspeed"
     ],
-    "conflicts": []
+    "conflicts": [],
+    "valuation_estimate": {
+      "value": "USD 15-29M implied range",
+      "kind": "implied_valuation_range",
+      "method": "Tombstone model: Growjo estimated annual revenue of USD 4.9M multiplied by a conservative 3-6x revenue range for small vertical SaaS; not a disclosed deal price.",
+      "source_url": "https://growjo.com/company/Clubspeed",
+      "verbatim_quote": "Clubspeed's estimated annual revenue is currently $4.9M per year.",
+      "confidence": "low"
+    }
   },
   {
     "deal_id": "valsoft-countfire",
@@ -626,7 +640,8 @@
     "source_urls": [
       "https://www.valsoftcorp.com/news/valsoft-s-tag-software-group-acquires-countfire-a-leading-provider-of-cloud-based-takeoff-and-estimation-software"
     ],
-    "conflicts": []
+    "conflicts": [],
+    "valuation_estimate": null
   },
   {
     "deal_id": "valsoft-dispatch",
@@ -704,7 +719,8 @@
     "source_urls": [
       "https://www.valsoftcorp.com/news/valsoft%E2%80%99s-manos-software-group-expands-its-field-service-software-portfolio-with-the-acquisition-of-dispatch"
     ],
-    "conflicts": []
+    "conflicts": [],
+    "valuation_estimate": null
   },
   {
     "deal_id": "everfield-ecologic",
@@ -782,7 +798,8 @@
     "source_urls": [
       "https://everfield.com/knowledge-platform/everfield-acquires-ecologic"
     ],
-    "conflicts": []
+    "conflicts": [],
+    "valuation_estimate": null
   },
   {
     "deal_id": "everfield-genero",
@@ -860,7 +877,8 @@
     "source_urls": [
       "https://everfield.com/knowledge-platform/everfield-to-acquire-genero"
     ],
-    "conflicts": []
+    "conflicts": [],
+    "valuation_estimate": null
   },
   {
     "deal_id": "everfield-playoff",
@@ -938,7 +956,8 @@
     "source_urls": [
       "https://everfield.com/knowledge-platform/everfield-acquires-playoff-inform%C3%A1tica"
     ],
-    "conflicts": []
+    "conflicts": [],
+    "valuation_estimate": null
   },
   {
     "deal_id": "banyan-arda",
@@ -1016,7 +1035,15 @@
     "source_urls": [
       "https://banyansoftware.com/2026/06/03/arda/"
     ],
-    "conflicts": []
+    "conflicts": [],
+    "valuation_estimate": {
+      "value": "EUR 5-25M",
+      "kind": "deal_value_range",
+      "method": "Third-party public deal database range; treated as a valuation signal, not a confirmed purchase price.",
+      "source_url": "https://www.dealmaker.nl/company/banyan-software-netherlands-b-v/deals",
+      "verbatim_quote": "Deal value EUR 5 - 25 M",
+      "confidence": "medium"
+    }
   },
   {
     "deal_id": "banyan-educational-vistas",
@@ -1094,7 +1121,8 @@
     "source_urls": [
       "https://banyansoftware.com/2026/06/04/educationalvistas/"
     ],
-    "conflicts": []
+    "conflicts": [],
+    "valuation_estimate": null
   },
   {
     "deal_id": "banyan-star-media-enterprises",
@@ -1172,7 +1200,8 @@
     "source_urls": [
       "https://banyansoftware.com/2026/06/12/starmedia/"
     ],
-    "conflicts": []
+    "conflicts": [],
+    "valuation_estimate": null
   },
   {
     "deal_id": "banyan-tec4u-solutions",
@@ -1250,7 +1279,8 @@
     "source_urls": [
       "https://www.tec4u-solutions.com/en/banyan-software-welcomes-tec4u-solutions-2/"
     ],
-    "conflicts": []
+    "conflicts": [],
+    "valuation_estimate": null
   },
   {
     "deal_id": "banyan-bitcentral-production-and-playout-business",
@@ -1328,7 +1358,8 @@
     "source_urls": [
       "https://banyansoftware.com/2026/06/30/bitcentral/"
     ],
-    "conflicts": []
+    "conflicts": [],
+    "valuation_estimate": null
   },
   {
     "deal_id": "banyan-freedom-iot",
@@ -1406,7 +1437,8 @@
     "source_urls": [
       "https://banyansoftware.com/2026/07/06/freedomiot/"
     ],
-    "conflicts": []
+    "conflicts": [],
+    "valuation_estimate": null
   },
   {
     "deal_id": "tss_topicus-operis",
@@ -1484,7 +1516,8 @@
     "source_urls": [
       "https://www.totalspecificsolutions.com/insights"
     ],
-    "conflicts": []
+    "conflicts": [],
+    "valuation_estimate": null
   },
   {
     "deal_id": "tss_topicus-ebg-data-gmbh",
@@ -1562,6 +1595,7 @@
     "source_urls": [
       "https://www.totalspecificsolutions.com/insights"
     ],
-    "conflicts": []
+    "conflicts": [],
+    "valuation_estimate": null
   }
 ]

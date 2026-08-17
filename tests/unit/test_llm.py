@@ -5,6 +5,7 @@ wrapped around otherwise-valid JSON, so its edge cases are worth pinning.
 
 import json
 
+from src.utils import llm
 from src.utils.llm import _account_failure, _is_transient_spawn_failure, strip_json_fences
 
 
@@ -90,3 +91,20 @@ class TestAccountFailureDetection:
             'year, according to the filing published alongside the announcement"}}'
         )
         assert _account_failure(text) is None
+
+
+class TestSubprocessEnvironment:
+    """A live run produced 'Informática'/'IVèS' back as mojibake — the
+    classic UTF-8-decoded-as-Windows-codepage signature. Forcing UTF-8 mode
+    on the subprocess is the fix; this pins it so a future refactor can't
+    quietly drop it."""
+
+    def test_forces_utf8_mode(self):
+        env = llm._subprocess_env()
+        assert env["PYTHONUTF8"] == "1"
+        assert env["PYTHONIOENCODING"] == "utf-8"
+
+    def test_still_isolates_from_a_developer_login(self):
+        env = llm._subprocess_env()
+        assert env["HOME"] == env["USERPROFILE"] == llm._ISOLATED_HOME
+        assert env["CLAUDECODE"] == ""
