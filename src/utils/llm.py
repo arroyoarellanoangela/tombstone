@@ -100,6 +100,12 @@ def _subprocess_env() -> dict[str, str]:
     developer login, forced into UTF-8 mode, and scrubbed of this process's
     own Claude Code session identity if it happens to be running inside one.
     """
+    if not settings.anthropic_api_key:
+        raise AgentAccountError(
+            "No ANTHROPIC_API_KEY is configured, so no agent call can be made. "
+            "Copy .env.example to .env and set the key (or run Tombstone.exe, "
+            "which prompts for it). Browsing the committed snapshot needs no key."
+        )
     return {
         "ANTHROPIC_API_KEY": settings.anthropic_api_key,
         "HOME": _ISOLATED_HOME,

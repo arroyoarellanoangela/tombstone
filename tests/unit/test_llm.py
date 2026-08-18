@@ -5,6 +5,8 @@ wrapped around otherwise-valid JSON, so its edge cases are worth pinning.
 
 import json
 
+import pytest
+
 from src.utils import llm
 from src.utils.llm import _account_failure, _is_transient_spawn_failure, strip_json_fences
 
@@ -99,6 +101,13 @@ class TestSubprocessEnvironment:
     on the subprocess is the fix; this pins it so a future refactor can't
     quietly drop it."""
 
+    @pytest.fixture(autouse=True)
+    def _with_a_key(self, monkeypatch):
+        # These assert on the env dict itself, which is only built once a key
+        # exists — CI has no .env, so it has to be supplied here rather than
+        # inherited from the developer's own environment.
+        monkeypatch.setattr(llm.settings, "anthropic_api_key", "sk-ant-test")
+
     def test_forces_utf8_mode(self):
         env = llm._subprocess_env()
         assert env["PYTHONUTF8"] == "1"
@@ -108,3 +117,23 @@ class TestSubprocessEnvironment:
         env = llm._subprocess_env()
         assert env["HOME"] == env["USERPROFILE"] == llm._ISOLATED_HOME
         assert env["CLAUDECODE"] == ""
+
+
+class TestMissingApiKey:
+    """The key is optional to import and to test with, and demanded only when
+    a call is actually about to be spawned. CI has no .env at all, so a
+    required-at-import key meant the suite could not even be collected."""
+
+    def test_importing_and_testing_needs_no_key(self):
+        from src.config import Settings
+
+        assert Settings(_env_file=None).anthropic_api_key == ""
+
+    def test_spawning_a_call_without_a_key_fails_loudly(self, monkeypatch):
+        monkeypatch.setattr(llm.settings, "anthropic_api_key", "")
+        with pytest.raises(llm.AgentAccountError, match="No ANTHROPIC_API_KEY"):
+            llm._subprocess_env()
+
+    def test_a_configured_key_is_passed_through(self, monkeypatch):
+        monkeypatch.setattr(llm.settings, "anthropic_api_key", "sk-ant-test")
+        assert llm._subprocess_env()["ANTHROPIC_API_KEY"] == "sk-ant-test"
