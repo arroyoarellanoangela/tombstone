@@ -22,3 +22,9 @@ strict = true
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_default_fixture_loop_scope = "function"
+# This project is imported as `from src...` without being pip-installed, so
+# the repo root has to be on sys.path. `python -m pytest` puts it there as a
+# side effect of the -m flag, which is why this was invisible locally; bare
+# `pytest` (what CI and the Makefile run) does not, and failed on `import
+# src`. Setting it here makes both invocations behave the same.
+pythonpath = ["."]
