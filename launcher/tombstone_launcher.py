@@ -16,6 +16,7 @@ from __future__ import annotations
 import contextlib
 import subprocess
 import sys
+import textwrap
 import time
 import urllib.error
 import urllib.request
@@ -71,8 +72,11 @@ def die(message: str, *, hint: str = "") -> NoReturn:
     print(f"  ERROR: {message}")
     if hint:
         print()
-        for line in hint.strip().splitlines():
-            print(f"  {line.strip()}")
+        # dedent, not strip-per-line: hints contain numbered lists whose
+        # continuation lines are hanging-indented, and stripping each line
+        # individually flattens them into an unreadable block.
+        for line in textwrap.dedent(hint).strip("\n").splitlines():
+            print(f"  {line}" if line.strip() else "")
     print()
     with contextlib.suppress(EOFError, KeyboardInterrupt):
         input("  Press Enter to close...")
@@ -93,12 +97,20 @@ def find_project_root() -> Path:
         if (candidate / "docker-compose.yml").is_file():
             return candidate
     die(
-        "Could not find the Tombstone project files.",
+        "Could not find the Tombstone project files (docker-compose.yml).",
         hint="""
-        Tombstone.exe must stay inside the repository folder - it starts the
-        stack described by docker-compose.yml, which lives alongside it.
-        If you moved the .exe somewhere else, move it back next to
-        docker-compose.yml (or into dist/) and run it again.
+        Tombstone.exe is a launcher, not a self-contained application, so it
+        has to sit inside the project folder to have anything to launch.
+
+        The two usual causes:
+
+        1. The .exe was moved out on its own (to the Desktop, or Downloads).
+           Move it back beside docker-compose.yml and run it again.
+
+        2. The download was never unzipped. Windows can open a .zip as if it
+           were an ordinary folder, and running the .exe from inside that
+           preview does not work. Right-click the .zip, choose "Extract
+           All...", then run the .exe from the extracted folder.
         """,
     )
 

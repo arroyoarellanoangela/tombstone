@@ -10,9 +10,17 @@ Three ways to look at this, easiest first:
 
 **1. Double-click `Tombstone.exe` (Windows)**
 
-Prompts for your Anthropic API key, writes it into `.env`, starts the stack and opens the dashboard. Press Enter at the key prompt to skip it and browse the committed results read-only — that costs nothing and needs no key.
+1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) and start it — wait for the whale icon to stop animating.
+2. Download this repository: green **Code** button → **Download ZIP** (or `git clone`).
+3. **Unzip it.** Windows lets you open a ZIP as though it were a folder; running the `.exe` from inside that preview will not work.
+4. Open the unzipped `tombstone-main` folder and double-click **`Tombstone.exe`**, leaving it where it is.
 
-Requires [Docker Desktop](https://www.docker.com/products/docker-desktop/) running; the launcher checks and tells you if it isn't. Keep the `.exe` inside the project folder — it starts the stack described by `docker-compose.yml` and finds it relative to itself. Source: [`launcher/tombstone_launcher.py`](launcher/tombstone_launcher.py); rebuild with `make launcher`.
+> ⚠️ **Do not move `Tombstone.exe` out of the folder** — not to your Desktop, not to Downloads.
+> It is a launcher, not a self-contained application. It starts the containers defined in `docker-compose.yml`, which it locates by looking in its own folder and the folders above it. On its own it has nothing to launch, and it will say so rather than fail silently.
+
+The launcher checks Docker, prompts for your Anthropic API key, writes it into `.env`, brings the stack up and opens the dashboard. Press Enter at the key prompt to skip it: the dashboard then opens read-only against the results committed to this repo, which costs nothing and needs no key. The first run builds the images and takes a few minutes; later runs start in seconds. Press Enter in the launcher window to stop everything and clean up the containers.
+
+Source: [`launcher/tombstone_launcher.py`](launcher/tombstone_launcher.py); rebuild with `make launcher`. On macOS or Linux, use option 3 below — the `.exe` is Windows-only.
 
 **2. Just browse the results (no setup, no cost)**
 Open the dashboard link in the walkthrough invite — it's a static site reading the committed `data/snapshot_*.json`, no API key required, no cost to you.
