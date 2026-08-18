@@ -2,6 +2,8 @@
 
 A multi-agent system that tracks acquisitions announced by Abingdon Software Group's competitors, researches each deal, verifies every extracted fact against its cited source, and publishes the result to a filterable dashboard.
 
+**Live dashboard: [arroyoarellanoangela.github.io/tombstone](https://arroyoarellanoangela.github.io/tombstone/)**
+
 Prepared for Abingdon Software Group by Angela Arroyo. Full reasoning and architecture: [docs/PROJECT_PROPOSAL.md](docs/PROJECT_PROPOSAL.md) · [docs/ARCHITECTURE_NOTE.html](docs/ARCHITECTURE_NOTE.html).
 
 ## Quick start
@@ -22,8 +24,11 @@ The launcher checks Docker, prompts for your Anthropic API key, writes it into `
 
 Source: [`launcher/tombstone_launcher.py`](launcher/tombstone_launcher.py); rebuild with `make launcher`. On macOS or Linux, use option 3 below — the `.exe` is Windows-only.
 
-**2. Just browse the results (no setup, no cost)**
-Open the dashboard link in the walkthrough invite — it's a static site reading the committed `data/snapshot_*.json`, no API key required, no cost to you.
+**2. Just browse the results — nothing to install**
+
+**→ [arroyoarellanoangela.github.io/tombstone](https://arroyoarellanoangela.github.io/tombstone/)**
+
+A static site reading the committed `data/snapshot_*.json`. No API key, no backend, nothing anyone can spend — deliberately, since the API can trigger paid runs and is never deployed publicly.
 
 **3. Run the full pipeline yourself**
 
