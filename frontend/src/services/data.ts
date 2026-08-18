@@ -7,6 +7,12 @@ import type { Deal, Omission } from "../types";
 
 const API_URL: string | undefined = import.meta.env.VITE_API_URL;
 
+// Vite fills this with the configured `base`, always with a trailing slash.
+// The snapshot paths have to be relative to it: on GitHub Pages the site
+// lives under /tombstone/, where an absolute "/data/snapshot.json" resolves
+// to the domain root and 404s.
+const BASE = import.meta.env.BASE_URL;
+
 async function fetchJson<T>(url: string, fallback: T): Promise<T> {
   try {
     const res = await fetch(url);
@@ -18,7 +24,7 @@ async function fetchJson<T>(url: string, fallback: T): Promise<T> {
 }
 
 export async function loadDeals(): Promise<Deal[]> {
-  const url = API_URL ? `${API_URL}/deals` : "/data/snapshot.json";
+  const url = API_URL ? `${API_URL}/deals` : `${BASE}data/snapshot.json`;
   const deals = await fetchJson<Deal[]>(url, []);
   // Snapshots are files on disk that outlive the code reading them — one
   // written before `conflicts` existed is still perfectly valid data, and
@@ -32,7 +38,7 @@ export async function loadDeals(): Promise<Deal[]> {
 }
 
 export function loadOmissions(): Promise<Omission[]> {
-  const url = API_URL ? `${API_URL}/omissions` : "/data/omissions.json";
+  const url = API_URL ? `${API_URL}/omissions` : `${BASE}data/omissions.json`;
   return fetchJson<Omission[]>(url, []);
 }
 
